@@ -5,9 +5,10 @@
     $aktif = $pf['year'] || $pf['month'];
 @endphp
 <form method="GET" action="{{ url()->current() }}#paretoCard" class="flex flex-wrap items-center gap-2 mb-4 text-xs">
-    {{-- Preserve pareto customer filter params --}}
-    @if (request('pareto_cust_year'))<input type="hidden" name="pareto_cust_year" value="{{ request('pareto_cust_year') }}">@endif
-    @if (request('pareto_cust_month'))<input type="hidden" name="pareto_cust_month" value="{{ request('pareto_cust_month') }}">@endif
+    {{-- Preserve other filter params --}}
+    @foreach (['cs_mode','pareto_detail_year','pareto_detail_month','pareto_cust_year','pareto_cust_month','pareto_cause_year','pareto_cause_month'] as $p)
+        @if (request($p))<input type="hidden" name="{{ $p }}" value="{{ request($p) }}">@endif
+    @endforeach
 
     <span class="text-slate-500">Periode:</span>
     <select name="pareto_year" onchange="this.form.submit()"
@@ -24,8 +25,9 @@
             <option value="{{ $n }}" @selected((int) $pf['month'] === (int) $n)>{{ $label }}</option>
         @endforeach
     </select>
+
     @if ($aktif)
-        <a href="{{ url()->current() }}#paretoCard" class="text-slate-400 hover:text-rose-500">reset</a>
+        <a href="{{ url()->current() }}?{{ http_build_query(request()->except(['pareto_year','pareto_month'])) }}#paretoCard" class="text-slate-400 hover:text-rose-500">reset</a>
         <span class="text-slate-400">· {{ $pf['count'] }} complaint</span>
     @endif
 </form>

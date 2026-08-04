@@ -76,37 +76,46 @@ class SevenToolsService
     // ====== 1. CHECK SHEET (tabulasi jenis ketidaksesuaian x bulan) ======
     public function checkSheet(): array
     {
+        return $this->checkSheetByField('jenis_ketidaksesuaian');
+    }
+
+    /**
+     * Check Sheet berdasarkan field tertentu dari complaint_items.
+     * Mode 'jenis_ketidaksesuaian' = tabulasi per jenis ketidaksesuaian.
+     * Mode 'detail_ketidaksesuaian' = tabulasi per detail ketidaksesuaian.
+     */
+    public function checkSheetByField(string $field = 'jenis_ketidaksesuaian'): array
+    {
         $bulanLabels = $this->bulanLabels();
 
-        // defect => [Y-m => jumlah]; satu complaint bisa menyumbang ke beberapa defect
         $matrix = [];
         $grandTotal = 0;
         foreach ($this->data as $c) {
             $k = $c->tanggal_complain?->format('Y-m');
             foreach ($c->items as $item) {
-                $defect = trim((string) $item->jenis_ketidaksesuaian);
-                if ($defect === '' || $defect === '-') continue;
-                if (! isset($matrix[$defect])) {
-                    $matrix[$defect] = array_fill_keys(array_keys($bulanLabels), 0);
+                $value = trim((string) $item->{$field});
+                if ($value === '' || $value === '-') continue;
+
+                if (! isset($matrix[$value])) {
+                    $matrix[$value] = array_fill_keys(array_keys($bulanLabels), 0);
                 }
-                if ($k !== null && isset($matrix[$defect][$k])) {
-                    $matrix[$defect][$k]++;
+                if ($k !== null && isset($matrix[$value][$k])) {
+                    $matrix[$value][$k]++;
                 }
                 $grandTotal++;
             }
         }
 
         $rows = [];
-        foreach ($matrix as $defect => $perBulan) {
+        foreach ($matrix as $label => $perBulan) {
             $rows[] = [
-                'kategori'  => $defect,
+                'kategori'  => $label,
                 'per_bulan' => array_values($perBulan),
                 'total'     => array_sum($perBulan),
             ];
         }
         usort($rows, fn ($a, $b) => $b['total'] <=> $a['total']);
 
-        // total kemunculan defect per bulan
         $totalPerBulan = array_fill_keys(array_keys($bulanLabels), 0);
         foreach ($matrix as $perBulan) {
             foreach ($perBulan as $bln => $n) $totalPerBulan[$bln] += $n;
@@ -150,6 +159,50 @@ class SevenToolsService
 
         return [
             'pareto' => self::make($filtered)->pareto($field),
+            'filter' => [
+                'year'  => $year,
+                'month' => $month,
+                'years' => $years,
+                'count' => $filtered->count(),
+            ],
+        ];
+    }
+
+    /**
+     * Paket Pareto Detail Ketidaksesuaian + metadata filter.
+     * Menampilkan frekuensi detail ketidaksesuaian, dengan filter periode bulan/tahun.
+     */
+    public static function paretoBundleDetail(Collection $data, ?int $year, ?int $month): array
+    {
+        $years = $data->pluck('tanggal_complain')->filter()
+            ->map(fn ($d) => (int) $d->format('Y'))->unique()->sort()->values()->all();
+
+        $filtered = self::filterPeriode($data, $year, $month);
+
+        return [
+            'pareto' => self::make($filtered)->pareto('detail_ketidaksesuaian'),
+            'filter' => [
+                'year'  => $year,
+                'month' => $month,
+                'years' => $years,
+                'count' => $filtered->count(),
+            ],
+        ];
+    }
+
+    /**
+     * Paket Pareto Penyebab Masalah + metadata filter.
+     * Menampilkan frekuensi jenis penyebab, dengan filter periode bulan/tahun.
+     */
+    public static function paretoBundleCause(Collection $data, ?int $year, ?int $month): array
+    {
+        $years = $data->pluck('tanggal_complain')->filter()
+            ->map(fn ($d) => (int) $d->format('Y'))->unique()->sort()->values()->all();
+
+        $filtered = self::filterPeriode($data, $year, $month);
+
+        return [
+            'pareto' => self::make($filtered)->pareto('penyebab'),
             'filter' => [
                 'year'  => $year,
                 'month' => $month,
@@ -266,37 +319,48 @@ class SevenToolsService
         return ['labels' => $labels, 'values' => $values, 'min' => $min, 'max' => $max];
     }
 
-    // ====== 4. CONTROL CHART (c-chart: jumlah complaint per bulan) ======
-    public function controlChart(): array
+    // ====== 4. TREND COMPLAINT (Bulanan / Tahunan) ======
+    public function trendChart(string $type = 'bulan'): array
     {
-        $bulanLabels = $this->bulanLabels();
-        $perBulan = array_fill_keys(array_keys($bulanLabels), 0);
-        foreach ($this->data as $it) {
-            $k = $it->tanggal_complain?->format('Y-m');
-            if ($k !== null && isset($perBulan[$k])) {
-                $perBulan[$k]++;
-            }
-        }
-        $values = array_values($perBulan);
-        $n = count($values);
-        $mean = $n ? array_sum($values) / $n : 0;        // CL
-        $sigma = sqrt(max(0, $mean));                      // c-chart: sigma = sqrt(c-bar)
-        $ucl = $mean + 3 * $sigma;
-        $lcl = max(0, $mean - 3 * $sigma);
+        $labels = [];
+        $values = [];
 
-        // titik out-of-control
-        $ooc = [];
-        foreach ($values as $i => $v) {
-            if ($v > $ucl || $v < $lcl) $ooc[] = $i;
+        if ($type === 'tahun') {
+            $dates = $this->data->pluck('tanggal_complain')->filter();
+            if ($dates->isNotEmpty()) {
+                $min = (int) $dates->min()->format('Y');
+                $max = (int) $dates->max()->format('Y');
+                $perTahun = [];
+                for ($y = $min; $y <= $max; $y++) {
+                    $perTahun[$y] = 0;
+                }
+                foreach ($this->data as $it) {
+                    $k = $it->tanggal_complain?->format('Y');
+                    if ($k !== null && isset($perTahun[$k])) {
+                        $perTahun[$k]++;
+                    }
+                }
+                foreach ($perTahun as $y => $v) {
+                    $labels[] = (string) $y;
+                    $values[] = $v;
+                }
+            }
+        } else {
+            $bulanLabels = $this->bulanLabels();
+            $perBulan = array_fill_keys(array_keys($bulanLabels), 0);
+            foreach ($this->data as $it) {
+                $k = $it->tanggal_complain?->format('Y-m');
+                if ($k !== null && isset($perBulan[$k])) {
+                    $perBulan[$k]++;
+                }
+            }
+            $labels = array_values($bulanLabels);
+            $values = array_values($perBulan);
         }
 
         return [
-            'labels' => array_values($bulanLabels),
+            'labels' => $labels,
             'values' => $values,
-            'cl'     => round($mean, 2),
-            'ucl'    => round($ucl, 2),
-            'lcl'    => round($lcl, 2),
-            'ooc'    => $ooc,
         ];
     }
 
@@ -321,7 +385,28 @@ class SevenToolsService
     // ====== 6. FISHBONE / ISHIKAWA (penyebab dikelompokkan 6M) ======
     public function fishbone(): array
     {
-        $causeCounts = $this->countItemField('penyebab');
+        // 1. Tentukan defect dengan frekuensi tertinggi (Pareto)
+        $efek = $this->countItemField('jenis_ketidaksesuaian')->keys()->first();
+        $namaEfek = $efek ?? 'Customer Complaint / NCR';
+
+        // 2. Filter data penyebab HANYA untuk defect tertinggi tersebut
+        $causeCounts = [];
+        if ($efek) {
+            foreach ($this->data as $c) {
+                foreach ($c->items as $item) {
+                    $jenis = trim((string) $item->jenis_ketidaksesuaian);
+                    if ($jenis === $efek) {
+                        $p = trim((string) $item->penyebab);
+                        if ($p !== '' && $p !== '-') {
+                            $causeCounts[$p] = ($causeCounts[$p] ?? 0) + 1;
+                        }
+                    }
+                }
+            }
+        } else {
+            // Fallback jika tidak ada data
+            $causeCounts = $this->countItemField('penyebab')->all();
+        }
 
         $categories = [];
         $assigned = [];
@@ -354,10 +439,8 @@ class SevenToolsService
             $categories[] = ['kategori' => 'Lainnya', 'total' => array_sum(array_column($lain, 'jumlah')), 'causes' => $lain];
         }
 
-        $efek = $this->countItemField('jenis_ketidaksesuaian')->keys()->first();
-
         return [
-            'efek' => $efek ?? 'Customer Complaint / NCR',
+            'efek' => $namaEfek,
             'categories' => $categories,
         ];
     }
@@ -386,6 +469,21 @@ class SevenToolsService
     }
 
     // ===================== helper =====================
+
+    /**
+     * Daftar distinct detail_ketidaksesuaian dari complaint_items (untuk dropdown filter).
+     */
+    public static function detailKetidaksesuaianList(): array
+    {
+        return \App\Models\ComplaintItem::query()
+            ->whereNotNull('detail_ketidaksesuaian')
+            ->where('detail_ketidaksesuaian', '!=', '')
+            ->where('detail_ketidaksesuaian', '!=', '-')
+            ->distinct()
+            ->orderBy('detail_ketidaksesuaian')
+            ->pluck('detail_ketidaksesuaian')
+            ->all();
+    }
 
     /** Daftar bulan (Y-m => label) dari rentang data. */
     protected function bulanLabels(): array

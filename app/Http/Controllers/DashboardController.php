@@ -30,13 +30,16 @@ class DashboardController extends Controller
         $apriori = (new AprioriService(0.05, 0.5))->buildTransactions(ComplaintItem::all());
         $rules = $apriori->associationRules();
 
+        $trendType = $request->input('trend_type', 'bulan');
+
         return view('dashboard', [
             'kpi'              => $tools->kpi(),
             'pareto'           => $bundle['pareto'],
             'paretoFilter'     => $bundle['filter'],
             'paretoCust'       => $bundleCust['pareto'],
             'paretoCustFilter' => $bundleCust['filter'],
-            'control'          => $tools->controlChart(),
+            'trend'            => $tools->trendChart($trendType),
+            'trendType'        => $trendType,
             'strat'            => $tools->stratifikasi(),
             'topRules'         => array_slice($rules, 0, 5),
             'totalTrx'         => $apriori->transactionCount(),

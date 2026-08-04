@@ -13,29 +13,52 @@ class SevenToolsController extends Controller
         $data = Complaint::with('items')->get();
         $tools = SevenToolsService::make($data);
 
+        // --- CheckSheet mode ---
+        $csMode = $request->input('cs_mode', 'jenis_ketidaksesuaian');
+        if (!in_array($csMode, ['jenis_ketidaksesuaian', 'detail_ketidaksesuaian'])) {
+            $csMode = 'jenis_ketidaksesuaian';
+        }
+
+        // --- Pareto Defect filters (periode) ---
         $bundle = SevenToolsService::paretoBundle(
             $data,
             $request->integer('pareto_year') ?: null,
             $request->integer('pareto_month') ?: null,
         );
 
+        // --- Pareto Detail filters (periode) ---
+        $bundleDetail = SevenToolsService::paretoBundleDetail(
+            $data,
+            $request->integer('pareto_detail_year') ?: null,
+            $request->integer('pareto_detail_month') ?: null,
+        );
+
+        // --- Pareto Customer filters ---
         $bundleCust = SevenToolsService::paretoBundleCustomer(
             $data,
             $request->integer('pareto_cust_year') ?: null,
             $request->integer('pareto_cust_month') ?: null,
         );
 
+        // --- Pareto Penyebab Masalah (BARU) ---
+        $bundleCause = SevenToolsService::paretoBundleCause(
+            $data,
+            $request->integer('pareto_cause_year') ?: null,
+            $request->integer('pareto_cause_month') ?: null,
+        );
+
         return view('seven-tools', [
-            'checkSheet'       => $tools->checkSheet(),
-            'pareto'           => $bundle['pareto'],
-            'paretoFilter'     => $bundle['filter'],
-            'paretoCust'       => $bundleCust['pareto'],
-            'paretoCustFilter' => $bundleCust['filter'],
-            'histogram'        => $tools->histogram(),
-            'control'          => $tools->controlChart(),
-            'scatter'          => $tools->scatter(),
-            'fishbone'         => $tools->fishbone(),
-            'strat'            => $tools->stratifikasi(),
+            'checkSheet'        => $tools->checkSheetByField($csMode),
+            'csMode'            => $csMode,
+            'pareto'            => $bundle['pareto'],
+            'paretoFilter'      => $bundle['filter'],
+            'paretoDetail'      => $bundleDetail['pareto'],
+            'paretoDetailFilter'=> $bundleDetail['filter'],
+            'paretoCust'        => $bundleCust['pareto'],
+            'paretoCustFilter'  => $bundleCust['filter'],
+            'paretoCause'       => $bundleCause['pareto'],
+            'paretoCauseFilter' => $bundleCause['filter'],
+            'fishbone'          => $tools->fishbone(),
         ]);
     }
 }

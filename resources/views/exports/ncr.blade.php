@@ -28,12 +28,18 @@
     /* Fishbone halaman 2 */
     .fb-page { page-break-before: always; }
     .fb-title { font-weight: bold; margin: 6px 0 12px; }
-    .fb-cat { border: 1px solid #000; padding: 4px 6px; vertical-align: top; width: 33%; }
-    .fb-cat .cat { font-weight: bold; background: #e5e7eb; padding: 2px 4px; text-align: center; margin-bottom: 3px; font-size: 10px; }
-    .fb-cat ul { margin: 0; padding-left: 14px; }
-    .fb-cat li { font-size: 10px; margin-bottom: 2px; }
-    .fb-effect { border: 2px solid #000; background: #fde68a; text-align: center; font-weight: bold; padding: 10px; font-size: 12px; }
     .muted { color: #555; }
+    
+    .fb-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    .fb-td { width: 26%; padding: 0 6px; }
+    .fb-td-top { vertical-align: bottom; }
+    .fb-td-bot { vertical-align: top; }
+    .box { border: 1px solid #333; background: #fff; padding: 4px; min-height: 45px; border-radius: 2px; }
+    .box .cat { font-weight: bold; background: #3b82f6; color: #fff; text-align: center; font-size: 10px; padding: 3px; margin-bottom: 4px; }
+    .box ul { margin: 0; padding-left: 14px; }
+    .box li { font-size: 9px; margin-bottom: 2px; }
+    .stem { margin: 0 auto; width: 2px; height: 35px; background: #333; }
+    .effect-box { border: 2px solid #333; background: #fde68a; text-align: center; font-weight: bold; padding: 12px 6px; font-size: 11px; border-radius: 4px; width: 100%; box-sizing: border-box; box-shadow: 2px 2px 0px rgba(0,0,0,0.2); }
 </style>
 </head>
 <body>
@@ -130,36 +136,67 @@
         <img src="{{ public_path('images/logowb.png') }}" style="height: 70px;">
         <div class="fb-title">Lampiran 1 — Fishbone (6M)</div>
 
-        <table style="width:100%; margin-bottom:10px;"><tr>
-            <td style="width:70%; vertical-align:middle;">
-                <div class="muted" style="font-size:10px;">Diagram sebab-akibat ketidaksesuaian:</div>
-            </td>
-            <td style="width:30%;"><div class="fb-effect">Akibat:<br>{{ $efek }}</div></td>
-        </tr></table>
+        <div style="margin-bottom:10px;">
+            <div class="muted" style="font-size:10px;">Diagram sebab-akibat ketidaksesuaian:</div>
+        </div>
 
-        {{-- 3 kategori atas --}}
-        <table style="width:100%; margin-bottom:8px;"><tr>
-            @foreach (['Man', 'Machine', 'Material'] as $kat)
-                <td class="fb-cat">
-                    <div class="cat">{{ $fbLabel[$kat] ?? $kat }}</div>
-                    @if (! empty($fishbone[$kat]))
-                        <ul>@foreach ($fishbone[$kat] as $cause)<li>{{ $cause }}</li>@endforeach</ul>
-                    @else <div class="muted" style="font-size:9px; text-align:center;">—</div> @endif
-                </td>
-            @endforeach
-        </tr></table>
+        @php
+            $topCategories = ['Man', 'Machine', 'Material'];
+            $bottomCategories = ['Method', 'Environment', 'Measurement'];
+        @endphp
 
-        {{-- 3 kategori bawah --}}
-        <table style="width:100%;"><tr>
-            @foreach (['Method', 'Environment', 'Measurement'] as $kat)
-                <td class="fb-cat">
-                    <div class="cat">{{ $fbLabel[$kat] ?? $kat }}</div>
-                    @if (! empty($fishbone[$kat]))
-                        <ul>@foreach ($fishbone[$kat] as $cause)<li>{{ $cause }}</li>@endforeach</ul>
-                    @else <div class="muted" style="font-size:9px; text-align:center;">—</div> @endif
+        <table class="fb-table">
+            <!-- TOP BRANCHES -->
+            <tr>
+                @foreach ($topCategories as $kat)
+                    <td class="fb-td fb-td-top">
+                        <div class="box">
+                            <div class="cat">{{ $fbLabel[$kat] ?? $kat }}</div>
+                            @if (! empty($fishbone[$kat]))
+                                <ul>@foreach ($fishbone[$kat] as $cause)<li>{{ $cause }}</li>@endforeach</ul>
+                            @else
+                                <div class="muted" style="font-size:9px; text-align:center;">Tidak ada data</div>
+                            @endif
+                        </div>
+                        <div class="stem"></div>
+                    </td>
+                @endforeach
+                <td style="width: 2%;"></td>
+                <td rowspan="3" style="width: 20%; vertical-align: middle;">
+                    <div class="effect-box">
+                        Akibat:<br><span style="font-size:12px; margin-top:4px; display:block;">{{ $efek }}</span>
+                    </div>
                 </td>
-            @endforeach
-        </tr></table>
+            </tr>
+            
+            <!-- SPINE -->
+            <tr>
+                <td colspan="4" style="padding: 0;">
+                    <div style="width: 100%; height: 12px;">
+                        <div style="float: right; width: 0; height: 0; border-top: 6px solid transparent; border-bottom: 6px solid transparent; border-left: 12px solid #333;"></div>
+                        <div style="height: 4px; background: #333; margin-right: 12px; margin-top: 4px;"></div>
+                    </div>
+                </td>
+            </tr>
+            
+            <!-- BOTTOM BRANCHES -->
+            <tr>
+                @foreach ($bottomCategories as $kat)
+                    <td class="fb-td fb-td-bot">
+                        <div class="stem"></div>
+                        <div class="box">
+                            <div class="cat">{{ $fbLabel[$kat] ?? $kat }}</div>
+                            @if (! empty($fishbone[$kat]))
+                                <ul>@foreach ($fishbone[$kat] as $cause)<li>{{ $cause }}</li>@endforeach</ul>
+                            @else
+                                <div class="muted" style="font-size:9px; text-align:center;">Tidak ada data</div>
+                            @endif
+                        </div>
+                    </td>
+                @endforeach
+                <td></td>
+            </tr>
+        </table>
 
         <div class="footer">
             <div class="ftname">PT WAHANA BERMUDA NUSANTARA</div>

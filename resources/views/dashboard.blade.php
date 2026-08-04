@@ -36,6 +36,27 @@
     @endforeach
 </div>
 
+<div class="grid grid-cols-1 gap-6 mb-6">
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+            <div>
+                <h2 class="font-semibold text-slate-800 mb-1">Trend Complaint</h2>
+                <p class="text-xs text-slate-500">Menampilkan perkembangan jumlah customer complaint sebagai indikator performa kualitas produk.</p>
+            </div>
+            <form method="GET" action="{{ route('dashboard') }}" class="flex items-center gap-2">
+                @foreach (request()->except('trend_type') as $k => $v)
+                    <input type="hidden" name="{{ $k }}" value="{{ $v }}">
+                @endforeach
+                <select name="trend_type" onchange="this.form.submit()" class="text-xs font-medium rounded-lg border-slate-200 focus:ring-sky-500 focus:border-sky-500 bg-slate-50">
+                    <option value="bulan" {{ $trendType === 'bulan' ? 'selected' : '' }}>Trend Bulanan</option>
+                    <option value="tahun" {{ $trendType === 'tahun' ? 'selected' : '' }}>Trend Tahunan</option>
+                </select>
+            </form>
+        </div>
+        <div class="relative h-72"><canvas id="trendChart"></canvas></div>
+    </div>
+</div>
+
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
     <div id="paretoCard" class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 scroll-mt-6">
         <h2 class="font-semibold text-slate-800 mb-1">Diagram Pareto — Jenis Ketidaksesuaian</h2>
@@ -49,14 +70,7 @@
             @endif
         </div>
     </div>
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
-        <h2 class="font-semibold text-slate-800 mb-1">Peta Kendali (c-chart) — Complaint per Bulan</h2>
-        <p class="text-xs text-slate-500 mb-4">Memantau kestabilan jumlah complaint terhadap batas kendali (UCL/LCL).</p>
-        <div class="relative h-72"><canvas id="controlChart"></canvas></div>
-    </div>
-</div>
-
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    
     <div id="paretoCustCard" class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 scroll-mt-6">
         <h2 class="font-semibold text-slate-800 mb-1">Diagram Pareto — Frekuensi Customer</h2>
         <p class="text-xs text-slate-500 mb-4">Customer dengan complaint terbanyak (aturan 80/20).</p>
@@ -113,7 +127,7 @@
 <script>
 const pareto = @json($pareto);
 const paretoCust = @json($paretoCust);
-const control = @json($control);
+const trend = @json($trend);
 const strat = @json($strat);
 
 const paretoCanvas = document.getElementById('paretoChart');
@@ -160,18 +174,13 @@ if (paretoCustCanvas) new Chart(paretoCustCanvas, {
     }
 });
 
-new Chart(document.getElementById('controlChart'), {
+new Chart(document.getElementById('trendChart'), {
     type: 'line',
     data: {
-        labels: control.labels,
+        labels: trend.labels,
         datasets: [
-            { label: 'Complaint', data: control.values, borderColor: '#0ea5e9', backgroundColor: 'rgba(14,165,233,.1)',
-              tension: 0.25, fill: true,
-              pointBackgroundColor: control.values.map((v,i)=> control.ooc.includes(i) ? '#ef4444' : '#0ea5e9'),
-              pointRadius: control.values.map((v,i)=> control.ooc.includes(i) ? 6 : 3) },
-            { label: 'UCL', data: control.labels.map(()=>control.ucl), borderColor: '#ef4444', borderDash:[6,4], pointRadius:0 },
-            { label: 'CL',  data: control.labels.map(()=>control.cl),  borderColor: '#10b981', borderDash:[4,4], pointRadius:0 },
-            { label: 'LCL', data: control.labels.map(()=>control.lcl), borderColor: '#ef4444', borderDash:[6,4], pointRadius:0 },
+            { label: 'Jumlah Complaint', data: trend.values, borderColor: '#0ea5e9', backgroundColor: 'rgba(14,165,233,.1)',
+              tension: 0.25, fill: true, pointBackgroundColor: '#0ea5e9', pointRadius: 4 }
         ]
     },
     options: {

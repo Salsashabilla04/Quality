@@ -3,6 +3,10 @@
 @section('subtitle', 'Daftar seluruh Customer Complaint & Non-Conformance Report')
 
 @section('actions')
+    <button type="button" onclick="document.getElementById('importModal').classList.remove('hidden')"
+       class="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium px-4 py-2 rounded-lg">
+        Import Excel
+    </button>
     <a href="{{ route('export.complaints.excel') }}"
        class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-lg">
         Export Excel
@@ -11,10 +15,14 @@
 
 @section('content')
 
+@php
+    $namaBulan = [1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',
+                 7=>'Juli',8=>'Agustus',9=>'September',10=>'Oktober',11=>'November',12=>'Desember'];
+@endphp
 <form method="GET" class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mb-5 flex flex-wrap gap-3 items-end">
     <div>
         <label class="block text-xs font-medium text-slate-600 mb-1">Cari</label>
-        <input type="text" name="q" value="{{ request('q') }}" placeholder="customer / defect / penyebab"
+        <input type="text" name="q" value="{{ request('q') }}" placeholder="customer / defect / penyebab / detail"
                class="rounded-lg border border-slate-300 px-3 py-2 text-sm w-64 focus:ring-sky-500 focus:border-sky-500">
     </div>
     <div>
@@ -27,6 +35,15 @@
         </select>
     </div>
     <div>
+        <label class="block text-xs font-medium text-slate-600 mb-1">Detail Ketidaksesuaian</label>
+        <select name="detail_defect" class="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500">
+            <option value="">Semua</option>
+            @foreach ($detailDefects as $dd)
+                <option value="{{ $dd }}" @selected(request('detail_defect')===$dd)>{{ $dd }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div>
         <label class="block text-xs font-medium text-slate-600 mb-1">Status</label>
         <select name="status" class="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500">
             <option value="">Semua</option>
@@ -34,8 +51,26 @@
             <option value="Close" @selected(request('status')==='Close')>Close</option>
         </select>
     </div>
+    <div>
+        <label class="block text-xs font-medium text-slate-600 mb-1">Tahun</label>
+        <select name="tahun" class="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500">
+            <option value="">Semua</option>
+            @foreach ($years as $y)
+                <option value="{{ $y }}" @selected(request()->integer('tahun') === (int) $y)>{{ $y }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div>
+        <label class="block text-xs font-medium text-slate-600 mb-1">Bulan</label>
+        <select name="bulan" class="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500">
+            <option value="">Semua</option>
+            @foreach ($namaBulan as $n => $label)
+                <option value="{{ $n }}" @selected(request()->integer('bulan') === $n)>{{ $label }}</option>
+            @endforeach
+        </select>
+    </div>
     <button class="bg-slate-800 hover:bg-slate-900 text-white text-sm px-4 py-2 rounded-lg">Filter</button>
-    @if (request()->hasAny(['q','defect','status']))
+    @if (request()->hasAny(['q','defect','detail_defect','status','tahun','bulan']))
         <a href="{{ route('complaints.index') }}" class="text-sm text-slate-500 hover:text-slate-700">Reset</a>
     @endif
 </form>
@@ -169,6 +204,40 @@
                 <div class="flex items-center justify-end gap-3 pt-2">
                     <button type="button" class="text-sm text-slate-500 hover:text-slate-700" data-close>Batal</button>
                     <button type="submit" class="bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg">Download PDF</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- ===== Modal Import Excel ===== --}}
+<div id="importModal" class="hidden fixed inset-0 z-50">
+    <div class="absolute inset-0 bg-black/40" onclick="document.getElementById('importModal').classList.add('hidden')"></div>
+    <div class="absolute inset-0 flex items-start justify-center p-6 overflow-y-auto mt-20">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md my-6 relative z-10">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+                <h3 class="font-semibold text-slate-800">Import Data Excel</h3>
+                <button type="button" class="text-slate-400 hover:text-slate-600 text-xl" onclick="document.getElementById('importModal').classList.add('hidden')">&times;</button>
+            </div>
+            <form method="POST" action="{{ route('complaints.import') }}" enctype="multipart/form-data" class="px-6 py-5 space-y-4">
+                @csrf
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">File Excel (.xlsx, .xls)</label>
+                    <input type="file" name="file" accept=".xlsx, .xls, .csv" required class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 border border-slate-200 rounded-lg p-1">
+                </div>
+                <div class="text-xs text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                    <p class="font-semibold text-slate-600 mb-1">Format kolom (sesuai hasil export):</p>
+                    <ul class="list-disc ml-4 mt-1 space-y-1">
+                        <li>A: No Customer (kosongkan jika urut otomatis)</li>
+                        <li>B: Nama Customer</li>
+                        <li>C: Tgl Complain</li>
+                        <li>F: Ketidaksesuaian (pisah koma)</li>
+                        <li>H: Penyebab (pisah koma)</li>
+                    </ul>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="document.getElementById('importModal').classList.add('hidden')" class="text-sm text-slate-500 hover:text-slate-700 px-4">Batal</button>
+                    <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg shadow-sm">Upload Data</button>
                 </div>
             </form>
         </div>

@@ -18,22 +18,53 @@ class ComplaintController extends Controller
                   ->orWhere('no_customer', 'like', "%{$s}%")
                   ->orWhereHas('items', function ($iq) use ($s) {
                       $iq->where('jenis_ketidaksesuaian', 'like', "%{$s}%")
-                         ->orWhere('penyebab', 'like', "%{$s}%");
+                         ->orWhere('penyebab', 'like', "%{$s}%")
+                         ->orWhere('detail_ketidaksesuaian', 'like', "%{$s}%");
                   });
             });
         }
         if ($d = $request->input('defect')) {
             $q->whereHas('items', fn ($iq) => $iq->where('jenis_ketidaksesuaian', $d));
         }
+        if ($dd = $request->input('detail_defect')) {
+            $q->whereHas('items', fn ($iq) => $iq->where('detail_ketidaksesuaian', $dd));
+        }
         if ($st = $request->input('status')) {
             $q->where('status', $st);
+        }
+        if ($tahun = $request->integer('tahun')) {
+            $q->whereYear('tanggal_complain', $tahun);
+        }
+        if ($bulan = $request->integer('bulan')) {
+            $q->whereMonth('tanggal_complain', $bulan);
         }
 
         $complaints = $q->orderByDesc('tanggal_complain')->orderByDesc('id')->paginate(20)->withQueryString();
 
+        // Daftar detail ketidaksesuaian untuk dropdown
+        $detailDefects = ComplaintItem::query()
+            ->whereNotNull('detail_ketidaksesuaian')
+            ->where('detail_ketidaksesuaian', '!=', '')
+            ->where('detail_ketidaksesuaian', '!=', '-')
+            ->distinct()
+            ->orderBy('detail_ketidaksesuaian')
+            ->pluck('detail_ketidaksesuaian')
+            ->all();
+
+        // Daftar tahun untuk dropdown
+        $years = Complaint::query()
+            ->whereNotNull('tanggal_complain')
+            ->selectRaw('YEAR(tanggal_complain) as y')
+            ->distinct()
+            ->orderBy('y')
+            ->pluck('y')
+            ->all();
+
         return view('complaints.index', [
-            'complaints' => $complaints,
-            'defects'    => Complaint::KETIDAKSESUAIAN,
+            'complaints'    => $complaints,
+            'defects'       => Complaint::KETIDAKSESUAIAN,
+            'detailDefects' => $detailDefects,
+            'years'         => $years,
         ]);
     }
 

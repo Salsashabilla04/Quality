@@ -28,7 +28,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('complaints', ComplaintController::class)->except(['show']);
 
-    // Export
+    // Export & Import
+    Route::post('/complaints/import', [\App\Http\Controllers\ImportController::class, 'importExcel'])->name('complaints.import');
     Route::get('/export/apriori/excel', [ExportController::class, 'aprioriExcel'])->name('export.apriori.excel');
     Route::get('/export/complaints/excel', [ExportController::class, 'complaintsExcel'])->name('export.complaints.excel');
     Route::get('/export/laporan/pdf', [ExportController::class, 'laporanPdf'])->name('export.laporan.pdf');
