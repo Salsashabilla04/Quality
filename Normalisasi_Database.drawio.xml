@@ -1,0 +1,119 @@
+<mxfile host="app.diagrams.net" modified="2026-09-04T12:45:00.000Z" agent="Mozilla/5.0" version="21.6.8" type="device">
+  <diagram id="normalization-diagram" name="Bagan Normalisasi Database">
+    <mxGraphModel dx="1600" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1300" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- BORDER UTAMA LUAR -->
+        <mxCell id="outer_frame" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="30" y="30" width="1680" height="1180" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== 1. UNNORMALISASI ==================== -->
+        <!-- Header -->
+        <mxCell id="hdr_unf" value="UNNORMALISASI" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontStyle=1;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="60" y="220" width="260" height="40" as="geometry" />
+        </mxCell>
+        <!-- Body -->
+        <mxCell id="body_unf" value="*id_user&#10;name&#10;email&#10;password&#10;role&#10;*id_komplain&#10;no_customer&#10;nama_customer&#10;deskripsi_customer&#10;ukuran&#10;qty&#10;tanggal_complain&#10;tanggal_produksi&#10;tanggal_kirim&#10;area&#10;status&#10;lead_time&#10;deskripsi_penyebab&#10;fishbone&#10;corrective_action&#10;preventive_action&#10;perlu_visit&#10;tanggal_visit&#10;jam_visit&#10;catatan_visit&#10;supervisor_approval&#10;catatan_supervisor&#10;approved_at&#10;*id_item&#10;jenis_ketidaksesuaian&#10;detail_ketidaksesuaian&#10;penyebab&#10;detail_penyebab&#10;*id_kamus_cacat&#10;definisi&#10;detail_standar&#10;penyebab_terkait&#10;tindakan_rekomendasi" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="60" y="260" width="260" height="710" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== 2. 1 NF ==================== -->
+        <!-- Header -->
+        <mxCell id="hdr_1nf" value="1 NF" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontStyle=1;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="450" y="220" width="260" height="40" as="geometry" />
+        </mxCell>
+        <!-- Body -->
+        <mxCell id="body_1nf" value="*id_user&#10;name&#10;email&#10;password&#10;role&#10;*id_komplain&#10;no_customer&#10;nama_customer&#10;deskripsi_customer&#10;ukuran&#10;qty&#10;tanggal_complain&#10;tanggal_produksi&#10;tanggal_kirim&#10;area&#10;status&#10;lead_time&#10;deskripsi_penyebab&#10;fishbone&#10;corrective_action&#10;preventive_action&#10;perlu_visit&#10;tanggal_visit&#10;jam_visit&#10;catatan_visit&#10;supervisor_approval&#10;catatan_supervisor&#10;approved_at&#10;*id_item&#10;jenis_ketidaksesuaian&#10;detail_ketidaksesuaian&#10;penyebab&#10;detail_penyebab&#10;*id_kamus_cacat&#10;definisi&#10;detail_standar&#10;penyebab_terkait&#10;tindakan_rekomendasi" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="450" y="260" width="260" height="710" as="geometry" />
+        </mxCell>
+
+        <!-- ARROW: UNNORMALISASI -> 1 NF -->
+        <mxCell id="arrow_unf_1nf" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1" source="hdr_unf" target="hdr_1nf">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== 3. 2 NF ==================== -->
+        <!-- 2 NF: Box Atas (User) -->
+        <mxCell id="hdr_2nf_user" value="2 NF" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontStyle=1;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="840" y="120" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="body_2nf_user" value="*id_user&#10;name&#10;email&#10;password&#10;role" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="840" y="160" width="250" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- 2 NF: Box Bawah (Transaksi & Mutu) -->
+        <mxCell id="hdr_2nf_trans" value="2 NF" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontStyle=1;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="840" y="420" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="body_2nf_trans" value="*id_komplain&#10;*id_user&#10;no_customer&#10;nama_customer&#10;deskripsi_customer&#10;ukuran&#10;qty&#10;tanggal_complain&#10;tanggal_produksi&#10;tanggal_kirim&#10;area&#10;status&#10;lead_time&#10;deskripsi_penyebab&#10;fishbone&#10;corrective_action&#10;preventive_action&#10;perlu_visit&#10;tanggal_visit&#10;jam_visit&#10;catatan_visit&#10;supervisor_approval&#10;catatan_supervisor&#10;approved_at&#10;*id_item&#10;jenis_ketidaksesuaian&#10;detail_ketidaksesuaian&#10;penyebab&#10;detail_penyebab&#10;*id_kamus_cacat&#10;definisi&#10;detail_standar&#10;penyebab_terkait&#10;tindakan_rekomendasi" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="840" y="460" width="250" height="630" as="geometry" />
+        </mxCell>
+
+        <!-- ARROW: 1 NF -> 2 NF (Atas) -->
+        <mxCell id="arrow_1nf_2nf_user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1" source="hdr_1nf" target="hdr_2nf_user">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ARROW: 1 NF -> 2 NF (Bawah) -->
+        <mxCell id="arrow_1nf_2nf_trans" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1" source="hdr_1nf" target="hdr_2nf_trans">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== 4. 3 NF ==================== -->
+        <!-- 3 NF: User -->
+        <mxCell id="hdr_3nf_user" value="3 NF&#10;User" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontStyle=1;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="80" width="250" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="body_3nf_user" value="*id&#10;name&#10;email&#10;password&#10;role" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="125" width="250" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- 3 NF: Complaints -->
+        <mxCell id="hdr_3nf_complaints" value="3 NF&#10;Complaints" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontStyle=1;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="320" width="250" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="body_3nf_complaints" value="*id&#10;*user_id&#10;no_customer&#10;nama_customer&#10;deskripsi_customer&#10;ukuran&#10;qty&#10;tanggal_complain&#10;tanggal_produksi&#10;tanggal_kirim&#10;area&#10;status&#10;lead_time&#10;deskripsi_penyebab&#10;fishbone&#10;corrective_action&#10;preventive_action&#10;perlu_visit&#10;tanggal_visit&#10;jam_visit&#10;catatan_visit&#10;supervisor_approval&#10;catatan_supervisor&#10;approved_at" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="365" width="250" height="440" as="geometry" />
+        </mxCell>
+
+        <!-- 3 NF: Complaint Items -->
+        <mxCell id="hdr_3nf_items" value="3 NF&#10;Complaint Items" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontStyle=1;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="850" width="250" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="body_3nf_items" value="*id&#10;*complaint_id&#10;jenis_ketidaksesuaian&#10;detail_ketidaksesuaian&#10;penyebab&#10;detail_penyebab" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="895" width="250" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- 3 NF: Defect Dictionary -->
+        <mxCell id="hdr_3nf_dict" value="3 NF&#10;Defect Dictionary" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontStyle=1;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="1060" width="250" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="body_3nf_dict" value="*id&#10;jenis_ketidaksesuaian&#10;definisi&#10;detail_standar&#10;penyebab_terkait&#10;tindakan_rekomendasi" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="1105" width="250" height="85" as="geometry" />
+        </mxCell>
+
+        <!-- ARROW: 2 NF User -> 3 NF User -->
+        <mxCell id="arrow_2nf_3nf_user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1" source="hdr_2nf_user" target="hdr_3nf_user">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ARROWS: 2 NF Trans -> 3 NF (Complaints, Items, Dict) -->
+        <mxCell id="arrow_2nf_3nf_complaints" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1" source="hdr_2nf_trans" target="hdr_3nf_complaints">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arrow_2nf_3nf_items" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1" source="hdr_2nf_trans" target="hdr_3nf_items">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arrow_2nf_3nf_dict" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1" source="hdr_2nf_trans" target="hdr_3nf_dict">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

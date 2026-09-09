@@ -5,19 +5,31 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AdminSeeder extends Seeder
 {
     public function run(): void
     {
+        // Staff QA (Operasional) & Supervisor QC (Approval / Monitoring)
         User::updateOrCreate(
-            ['email' => 'admin@wbn.test'],
+            ['email' => 'qa@wbn.com'],
             [
-                'name'     => 'Admin QC',
-                'password' => Hash::make('admin123'),
+                'name'     => 'Staff QA',
+                'password' => Hash::make('password'),
+                'role'     => 'qa',
             ]
         );
 
-        $this->command->info('Akun admin: admin@wbn.test / admin123');
+        User::updateOrCreate(
+            ['email' => 'spv@wbn.com'],
+            [
+                'name'     => 'Supervisor QC',
+                'password' => Hash::make('password'),
+                'role'     => 'supervisor',
+            ]
+        );
+
+        $this->command->info('Berhasil membuat akun Staff QA (qa@wbn.com) dan Supervisor QC (spv@wbn.com) - Password: password');
     }
 }

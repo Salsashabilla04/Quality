@@ -21,6 +21,41 @@ class AprioriService
     /** @var array<int, array<int, string>> daftar transaksi (tiap transaksi = list item) */
     protected array $transactions = [];
 
+    /** @var Collection|null simpan raw items untuk extract detail breakdown */
+    protected ?Collection $rawItems = null;
+
+    /**
+     * Cache hasil perhitungan Apriori menggunakan Laravel Cache (Memory/Redis).
+     * Mencegah pemrosesan ulang (on-the-fly) yang berat jika data komplain sangat besar.
+     *
+     * @return array{rules: array, frequent: array, totalTrx: int, calculated_at: string}
+     */
+    public static function getCachedResult(float $minSupport = 0.05, float $minConfidence = 0.5): array
+    {
+        $key = "apriori_results_v2_{$minSupport}_{$minConfidence}";
+
+        return \Illuminate\Support\Facades\Cache::remember($key, now()->addHours(2), function () use ($minSupport, $minConfidence) {
+            $service = (new self($minSupport, $minConfidence))->buildTransactions();
+            $frequent = $service->frequentItemsets();
+            $rules = $service->associationRules($frequent);
+
+            return [
+                'rules'         => $rules,
+                'frequent'      => $frequent,
+                'totalTrx'      => $service->transactionCount(),
+                'calculated_at' => now()->toDateTimeString(),
+            ];
+        });
+    }
+
+    /**
+     * Hapus Cache Apriori otomatis ketika ada data komplain baru ditambah/diperbarui/dihapus.
+     */
+    public static function clearCache(float $minSupport = 0.05, float $minConfidence = 0.5): void
+    {
+        \Illuminate\Support\Facades\Cache::forget("apriori_results_{$minSupport}_{$minConfidence}");
+    }
+
     public function __construct(float $minSupport = 0.05, float $minConfidence = 0.5)
     {
         $this->minSupport = $minSupport;
@@ -35,8 +70,8 @@ class AprioriService
      */
     public function buildTransactions(?Collection $items = null): self
     {
-        $items = $items ?? ComplaintItem::all();
-        $grouped = $items->groupBy('complaint_id');
+        $this->rawItems = $items ?? ComplaintItem::all();
+        $grouped = $this->rawItems->groupBy('complaint_id');
 
         $this->transactions = [];
         foreach ($grouped as $complaintId => $group) {
@@ -204,19 +239,66 @@ class AprioriService
 
                 $lift = $confidence / $supC;
 
+                $antClean = $this->bersih($antecedent);
+                $conClean = $this->bersih($consequent);
+
+                // Deteksi jenis item (Ketidaksesuaian vs Penyebab) untuk label UI yang logis
+                $antHasKet = false; $antHasPen = false;
+                foreach ($antecedent as $ai) {
+                    if (str_starts_with($ai, 'Ketidaksesuaian=')) $antHasKet = true;
+                    if (str_starts_with($ai, 'Penyebab=')) $antHasPen = true;
+                }
+                $conHasKet = false; $conHasPen = false;
+                foreach ($consequent as $ci) {
+                    if (str_starts_with($ci, 'Ketidaksesuaian=')) $conHasKet = true;
+                    if (str_starts_with($ci, 'Penyebab=')) $conHasPen = true;
+                }
+
+                if ($antHasKet && $conHasPen) {
+                    $ruleType  = 'defect_to_cause';
+                    $antLabel  = 'JIKA TERJADI CACAT';
+                    $conLabel  = 'MAKA AKAR PENYEBABNYA';
+                    $arrowText = 'Peluang Berakar Dari';
+                    $saranText = "Fokuskan perbaikan preventif pada faktor <strong class=\"text-slate-900\">{$conClean}</strong> untuk menekan timbulnya cacat <strong class=\"text-slate-900\">{$antClean}</strong>.";
+                } elseif ($antHasPen && $conHasKet) {
+                    $ruleType  = 'cause_to_defect';
+                    $antLabel  = 'JIKA FAKTOR PENYEBAB';
+                    $conLabel  = 'MAKA BERDAMPAK CACAT';
+                    $arrowText = 'Berdampak Memicu Cacat';
+                    $saranText = "Fokuskan perbaikan preventif pada faktor <strong class=\"text-slate-900\">{$antClean}</strong> untuk menekan timbulnya cacat <strong class=\"text-slate-900\">{$conClean}</strong>.";
+                } elseif ($antHasKet && $conHasKet) {
+                    $ruleType  = 'defect_to_defect';
+                    $antLabel  = 'JIKA TERJADI CACAT';
+                    $conLabel  = 'MAKA SERING DISERTAI CACAT';
+                    $arrowText = 'Cenderung Diikuti Cacat';
+                    $saranText = "Pemeriksaan komprehensif pada cacat <strong class=\"text-slate-900\">{$antClean}</strong> dan <strong class=\"text-slate-900\">{$conClean}</strong>.";
+                } else {
+                    $ruleType  = 'general';
+                    $antLabel  = 'JIKA TERJADI FAKTOR';
+                    $conLabel  = 'MAKA TERHUBUNG FAKTOR';
+                    $arrowText = 'Terkait Dengan';
+                    $saranText = "Perbaiki faktor <strong class=\"text-slate-900\">{$conClean}</strong> dan <strong class=\"text-slate-900\">{$antClean}</strong> secara berkala.";
+                }
+
                 $rules[] = [
-                    'antecedents' => $this->bersih($antecedent),
-                    'consequents' => $this->bersih($consequent),
-                    'support'     => round($supportAll, 6),
-                    'confidence'  => round($confidence, 6),
-                    'lift'        => round($lift, 6),
-                    'kekuatan'    => $this->kekuatan($lift),
-                    'interpretasi' => $this->interpretasi(
-                        $this->bersih($antecedent),
-                        $this->bersih($consequent),
+                    'antecedents'      => $antClean,
+                    'consequents'      => $conClean,
+                    'rule_type'        => $ruleType,
+                    'ant_label'        => $antLabel,
+                    'con_label'        => $conLabel,
+                    'arrow_text'       => $arrowText,
+                    'saran_text'       => $saranText,
+                    'support'          => round($supportAll, 6),
+                    'confidence'       => round($confidence, 6),
+                    'lift'             => round($lift, 6),
+                    'kekuatan'         => $this->kekuatan($lift),
+                    'interpretasi'     => $this->interpretasi(
+                        $antClean,
+                        $conClean,
                         $confidence,
                         $lift
                     ),
+                    'detail_breakdown' => $this->extractDetailBreakdown($antClean, $conClean),
                 ];
             }
         }
@@ -224,6 +306,81 @@ class AprioriService
         // urutkan lift desc
         usort($rules, fn ($a, $b) => $b['lift'] <=> $a['lift']);
         return $rules;
+    }
+
+    /**
+     * Ekstrak frekuensi detail ketidaksesuaian & detail penyebab real dari data complaint_items.
+     */
+    protected function extractDetailBreakdown(string $antecedent, string $consequent): array
+    {
+        if (! $this->rawItems || $this->rawItems->isEmpty()) {
+            return ['detail_ketidaksesuaian' => [], 'detail_penyebab' => [], 'total_matching' => 0];
+        }
+
+        $matching = $this->rawItems->filter(function ($item) use ($antecedent, $consequent) {
+            $ket = trim((string) ($item->jenis_ketidaksesuaian ?? ''));
+            $pen = trim((string) ($item->penyebab ?? ''));
+
+            $aMatch = ($ket !== '' && (str_contains($antecedent, $ket) || str_contains($consequent, $ket)));
+            $pMatch = ($pen !== '' && (str_contains($antecedent, $pen) || str_contains($consequent, $pen)));
+
+            return $aMatch && $pMatch;
+        });
+
+        if ($matching->isEmpty()) {
+            $matching = $this->rawItems->filter(function ($item) use ($antecedent, $consequent) {
+                $ket = trim((string) ($item->jenis_ketidaksesuaian ?? ''));
+                $pen = trim((string) ($item->penyebab ?? ''));
+                return ($ket !== '' && str_contains($antecedent, $ket)) || ($pen !== '' && str_contains($consequent, $pen));
+            });
+        }
+
+        $totalMatching = $matching->count();
+        $divisor = $totalMatching > 0 ? $totalMatching : 1;
+
+        // Detail Ketidaksesuaian
+        $detailKetCounts = [];
+        foreach ($matching as $item) {
+            $dk = trim((string) ($item->detail_ketidaksesuaian ?? ''));
+            if ($dk !== '' && $dk !== '-') {
+                $detailKetCounts[$dk] = ($detailKetCounts[$dk] ?? 0) + 1;
+            }
+        }
+        arsort($detailKetCounts);
+
+        $topDetailKet = [];
+        foreach (array_slice($detailKetCounts, 0, 3, true) as $dk => $cnt) {
+            $topDetailKet[] = [
+                'detail'  => $dk,
+                'count'   => $cnt,
+                'percent' => round(($cnt / $divisor) * 100, 1),
+            ];
+        }
+
+        // Detail Penyebab
+        $detailPenCounts = [];
+        foreach ($matching as $item) {
+            $dp = trim((string) ($item->detail_penyebab ?? ''));
+            if ($dp !== '' && $dp !== '-') {
+                $detailPenCounts[$dp] = ($detailPenCounts[$dp] ?? 0) + 1;
+            }
+        }
+        arsort($detailPenCounts);
+
+        $topDetailPen = [];
+        foreach (array_slice($detailPenCounts, 0, 3, true) as $dp => $cnt) {
+            $topDetailPen[] = [
+                'detail'  => $dp,
+                'count'   => $cnt,
+                'percent' => round(($cnt / $divisor) * 100, 1),
+            ];
+        }
+
+        return [
+            'detail_ketidaksesuaian' => $topDetailKet,
+            'detail_penyebab'        => $topDetailPen,
+            'total_matching'         => $totalMatching,
+        ];
     }
 
     /** Semua proper subset non-kosong (selain himpunan penuh). */

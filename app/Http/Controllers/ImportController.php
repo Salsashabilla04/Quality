@@ -24,6 +24,7 @@ class ImportController extends Controller
 
             $importedCount = 0;
             $itemsCount = 0;
+            $unregisteredCustomers = [];
             
             // 1. Cari baris header (yang mengandung 'Nama Customer')
             $headerRowIndex = -1;
@@ -43,7 +44,7 @@ class ImportController extends Controller
                 }
             }
 
-            if ($headerRowIndex === -1 || empty($colMap['nama customer'])) {
+            if ($headerRowIndex === -1 || !isset($colMap['nama customer'])) {
                 return redirect()->route('complaints.index')->with('error', 'Gagal: Format Excel tidak valid. Pastikan ada baris header dengan kolom "Nama Customer".');
             }
 
@@ -57,6 +58,10 @@ class ImportController extends Controller
                 return null;
             };
 
+            // Ambil meta customer untuk memvalidasi Master Customer
+            $meta = Complaint::noCustomerMeta();
+            $codeByCustomer = $meta['codeByCustomer'];
+
             // 2. Loop data dimulai dari setelah baris header
             for ($i = $headerRowIndex + 1; $i < count($rows); $i++) {
                 $row = $rows[$i];
@@ -66,24 +71,24 @@ class ImportController extends Controller
                     continue;
                 }
 
-                $noCustomer = trim((string)$getVal($row, ['no customer', 'no. customer', 'nomor customer']));
+                // Catat jika ada customer baru yang otomatis didaftarkan
+                $key = mb_strtolower($namaCustomer);
+                if (!isset($codeByCustomer[$key])) {
+                    if (!in_array($namaCustomer, $unregisteredCustomers)) {
+                        $unregisteredCustomers[] = $namaCustomer;
+                    }
+                }
 
                 // Parsing tanggal
                 $tglComplain = $this->parseDate($getVal($row, ['tanggal complain', 'tgl complain']));
                 $tglKirim = $this->parseDate($getVal($row, ['tanggal kirim', 'tgl kirim']));
                 $tglProduksi = $this->parseDate($getVal($row, ['tanggal produksi', 'tgl produksi']));
 
-                if (!empty($noCustomer)) {
-                    $complaint = Complaint::where('no_customer', $noCustomer)->first();
-                } else {
-                    $complaint = null;
-                }
-
-                if (!$complaint) {
-                    $complaint = new Complaint();
-                    $complaint->no_customer = empty($noCustomer) ? Complaint::generateNoCustomer($namaCustomer) : $noCustomer;
-                    $importedCount++;
-                }
+                // Buat data complaint baru
+                $complaint = new Complaint();
+                $complaint->user_id = auth()->id();
+                $complaint->no_customer = Complaint::generateNoCustomer($namaCustomer);
+                $importedCount++;
 
                 $complaint->nama_customer = $namaCustomer;
                 $complaint->tanggal_complain = $tglComplain ?: now(); // fallback to now if empty
@@ -102,10 +107,6 @@ class ImportController extends Controller
                 $complaint->status = (strtolower($statusStr) === 'close') ? 'Close' : 'Open';
 
                 $complaint->save();
-
-                if ($complaint->wasRecentlyCreated === false) {
-                    $complaint->items()->delete();
-                }
 
                 $ketStr = (string)$getVal($row, ['ketidaksesuaian', 'apriori ketidaksesuain', 'apriori ketidaksesuaian']);
                 $detKetStr = (string)$getVal($row, ['detail ketidaksesuaian', 'detail']);
@@ -150,8 +151,18 @@ class ImportController extends Controller
                 $complaint->save();
             }
 
+            // Rekalkulasi penomoran urut agar kronologis sesuai tanggal_complain
+            Complaint::recalculateTransactionNumbers();
+            \App\Services\AprioriService::clearCache();
+
+            $successMessage = "Berhasil mengimpor {$importedCount} data complaint dan {$itemsCount} detail item.";
+            if (count($unregisteredCustomers) > 0) {
+                $names = implode(', ', $unregisteredCustomers);
+                $successMessage .= " Catatan: Customer baru otomatis didaftarkan: {$names}.";
+            }
+
             return redirect()->route('complaints.index')
-                ->with('success', "Berhasil mengimpor {$importedCount} data complaint dan {$itemsCount} detail item.");
+                ->with('success', $successMessage);
         } catch (\Exception $e) {
             return redirect()->route('complaints.index')
                 ->with('error', 'Gagal mengimpor data: ' . $e->getMessage());

@@ -121,9 +121,9 @@
 
     {{-- ===== TANDA TANGAN ===== --}}
     <table class="sign"><tr>
-        <td>QC</td>
-        <td>Spv Prod / Spv Qc</td>
-        <td>QA</td>
+        <td style="width:33%;">QC</td>
+        <td style="width:34%;">Spv Prod / Spv Qc</td>
+        <td style="width:33%;">QA</td>
     </tr></table>
 
     <div class="footer">

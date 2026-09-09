@@ -56,7 +56,7 @@ class ComplaintSeeder extends Seeder
             }
 
             $leadTime = ($tglComplain && $tglProduksi)
-                ? $tglProduksi->diffInDays($tglComplain, false)
+                ? $tglProduksi->diffInDays($tglComplain)
                 : null;
 
             // Insert 1 baris ke complaints (header transaksi)

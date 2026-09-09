@@ -5,7 +5,7 @@ from mlxtend.frequent_patterns import apriori, association_rules
 # ---- 1. Baca data (header ada di baris ke-2, baris pertama kosong) ----
 FILE = "DataWBERPACK24.xlsx"
 df = pd.read_excel(FILE, skiprows=1)
-df.columns = df.columns.str.strip()
+df.columns = df.columns.str.strip() 
 
 # ---- 2. Pilih kolom yang dijadikan item ----
 KOLOM_ITEM = [

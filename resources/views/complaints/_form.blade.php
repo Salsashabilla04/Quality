@@ -3,6 +3,45 @@
     $isEdit = $complaint->exists;
 @endphp
 
+@if ($isEdit)
+    @php
+        $step1 = true;
+        $step2 = !empty($complaint->fishbone) || !empty($complaint->corrective_action);
+        $step3 = $complaint->supervisor_approval === 'Approved';
+        $step4 = $step3;
+    @endphp
+    <div class="mb-6 bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+        <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Indikator Progress Alur Mutu (Process Tracker)</div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-center text-xs">
+            <div class="p-2.5 rounded-xl font-bold border bg-emerald-100 text-emerald-800 border-emerald-300">
+                1. Input Data QA ✅
+            </div>
+            <div class="p-2.5 rounded-xl font-bold border {{ $step2 ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-amber-100 text-amber-800 border-amber-300 animate-pulse' }}">
+                2. Analisis 6M & CAPA {{ $step2 ? '✅' : '⏳' }}
+            </div>
+            <div class="p-2.5 rounded-xl font-bold border {{ $step3 ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : ($complaint->supervisor_approval === 'Rejected' ? 'bg-rose-100 text-rose-800 border-rose-300' : 'bg-purple-100 text-purple-800 border-purple-300') }}">
+                3. Validasi SPV {{ $step3 ? '✅' : ($complaint->supervisor_approval === 'Rejected' ? '🔴 Revisi' : '⏳ Pending') }}
+            </div>
+            <div class="p-2.5 rounded-xl font-bold border {{ $step4 ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-slate-100 text-slate-400 border-slate-200' }}">
+                4. Ready Print NCR {{ $step4 ? '📄' : '🔒' }}
+            </div>
+        </div>
+    </div>
+@endif
+
+@if ($isEdit && $complaint->supervisor_approval === 'Rejected')
+    <div class="mb-6 rounded-xl bg-rose-50 border-2 border-rose-300 text-rose-800 p-5 shadow-sm flex items-start gap-3.5">
+        <div class="w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center shrink-0 font-bold text-lg">!</div>
+        <div>
+            <div class="font-bold text-sm text-rose-900">⚠️ PERLU REVISI DARI SUPERVISOR QC</div>
+            <div class="text-xs text-rose-700 mt-1 leading-relaxed">
+                Catatan Supervisor: <strong>"{{ $complaint->catatan_supervisor ?: 'Silakan periksa kembali analisis 6M Fishbone dan tindakan perbaikan (CAPA).' }}"</strong>
+            </div>
+            <div class="text-[11px] text-rose-500 mt-1.5 italic">Direvisi pada: {{ optional($complaint->approved_at)->format('d F Y H:i') }}</div>
+        </div>
+    </div>
+@endif
+
 @if ($errors->any())
     <div class="mb-6 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 px-4 py-3 text-sm">
         <ul class="list-disc pl-5">
@@ -11,15 +50,16 @@
     </div>
 @endif
 
-<form method="POST" action="{{ $action }}" class="space-y-8">
+<form method="POST" action="{{ $action }}" enctype="multipart/form-data" class="space-y-8">
     @csrf
     @if ($isEdit) @method('PUT') @endif
 
-    <!-- Keterangan input vs otomatis -->
+    @can('manage-complaints')
     <div class="flex flex-wrap gap-4 text-xs">
         <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-sky-500"></span> Diisi manual</span>
         <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-slate-400"></span> Terisi otomatis (tidak bisa diubah)</span>
     </div>
+    @endcan
 
     <!-- Identitas -->
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
@@ -41,6 +81,7 @@
                 </label>
                 <input type="text" name="nama_customer" id="namaCustomer" list="customerList" required autocomplete="off"
                        value="{{ old('nama_customer', $complaint->nama_customer) }}"
+                       placeholder="Pilih atau ketik nama customer..."
                        class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500">
                 <datalist id="customerList">
                     @foreach ($customers ?? [] as $c)<option value="{{ $c }}">@endforeach
@@ -51,13 +92,14 @@
                     <span class="w-2 h-2 rounded-full bg-sky-500"></span> Tanggal Complain <span class="text-rose-500">*</span>
                 </label>
                 <input type="date" name="tanggal_complain" required
-                       value="{{ old('tanggal_complain', optional($complaint->tanggal_complain)->format('Y-m-d')) }}"
+                       value="{{ old('tanggal_complain', optional($complaint->tanggal_complain)->format('Y-m-d') ?: now()->format('Y-m-d')) }}"
                        class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500">
             </div>
         </div>
     </div>
 
-    <!-- Produk -->
+    {{-- Detail Produk: hanya tampil untuk QA/Admin --}}
+    @can('manage-complaints')
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
         <h3 class="text-sm font-semibold text-slate-700 mb-4">Detail Produk</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -86,8 +128,27 @@
             </div>
         </div>
     </div>
+    @endcan
+
+    <!-- Deskripsi Ketidaksesuaian & Penyebab NCR -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-4">
+        <div>
+            <h3 class="text-sm font-semibold text-slate-700 mb-1">Deskripsi &amp; Rincian Ketidaksesuaian</h3>
+            <p class="text-xs text-slate-500 mb-2">Jelaskan secara detail masalah ketidaksesuaian produk yang dilaporkan oleh customer.</p>
+            <textarea name="deskripsi_customer" rows="3" placeholder="Jelaskan secara rinci bentuk cacat, klaim customer, atau spesifikasi yang tidak sesuai…"
+                      class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500">{{ old('deskripsi_customer', $complaint->deskripsi_customer) }}</textarea>
+        </div>
+
+        <div class="border-t border-slate-100 pt-4">
+            <h3 class="text-sm font-semibold text-slate-700 mb-1">Deskripsi Narasi Penyebab (Khusus Cetak Surat NCR PDF)</h3>
+            <p class="text-xs text-slate-500 mb-2">Tuliskan kronologi/penjelasan panjang penyebab masalah untuk dicetak pada dokumen Surat NCR PDF.</p>
+            <textarea name="deskripsi_penyebab" rows="3" placeholder="Contoh: Terjadi benturan saat penataan armada akibat penumpukan barang yang terlalu tinggi di lokasi customer..."
+                      class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500">{{ old('deskripsi_penyebab', $complaint->deskripsi_penyebab) }}</textarea>
+        </div>
+    </div>
 
     <!-- Klasifikasi: 1 tabel, tiap baris = 1 cacat + 1 penyebab -->
+    @can('manage-complaints')
     @php
         $ketOptions = $ketidaksesuaianList ?? [];
         $penOptions = $penyebabList ?? [];
@@ -146,6 +207,16 @@
                 'penDet'     => '',
             ])
         </template>
+        <datalist id="detailKetList">
+            @foreach ($detailKetidaksesuaianOptions ?? [] as $dk)
+                <option value="{{ $dk }}">
+            @endforeach
+        </datalist>
+        <datalist id="detailPenList">
+            @foreach ($detailPenyebabOptions ?? [] as $dp)
+                <option value="{{ $dp }}">
+            @endforeach
+        </datalist>
     </div>
 
     <!-- Rekomendasi otomatis -->
@@ -208,27 +279,33 @@
             </div>
             <div>
                 <label class="flex items-center gap-1.5 text-xs font-medium text-slate-600 mb-1">
-                    <span class="w-2 h-2 rounded-full bg-sky-500"></span> Keterangan
+                    <span class="w-2 h-2 rounded-full bg-slate-400"></span> Keterangan Penyelesaian
                 </label>
-                <select name="keterangan"
-                        class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500">
-                    <option value="">— pilih —</option>
-                    @foreach (Complaint::KETERANGAN as $opt)
-                        <option value="{{ $opt }}" @selected(old('keterangan', $complaint->keterangan) === $opt)>{{ $opt }}</option>
-                    @endforeach
-                </select>
+                {{-- Hanya bisa diisi oleh Supervisor saat Validasi NCR --}}
+                <div class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm flex items-center justify-between">
+                    @if($complaint->keterangan && $complaint->keterangan !== '-')
+                        <span class="font-bold {{ $complaint->keterangan === 'Retur' ? 'text-rose-600' : 'text-emerald-600' }}">
+                            {{ $complaint->keterangan === 'Retur' ? '🔴 Retur' : '🟢 Feedback' }}
+                        </span>
+                    @else
+                        <span class="text-slate-400 italic text-xs">Belum ditentukan — menunggu keputusan Supervisor QC</span>
+                    @endif
+                    <span class="text-[10px] text-slate-400 font-semibold bg-slate-200 px-2 py-0.5 rounded">🔒 Wewenang SPV</span>
+                </div>
             </div>
             <div>
                 <label class="flex items-center gap-1.5 text-xs font-medium text-slate-600 mb-1">
-                    <span class="w-2 h-2 rounded-full bg-sky-500"></span> Status
+                    <span class="w-2 h-2 rounded-full bg-slate-400"></span> Status Dokumen (Otomatis)
                 </label>
-                <select name="status"
-                        class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500">
-                    @foreach (Complaint::STATUS as $opt)
-                        <option value="{{ $opt }}" @selected(old('status', $complaint->status ?: 'Open') === $opt)>{{ $opt }}</option>
-                    @endforeach
-                </select>
-                <p class="text-[11px] text-slate-400 mt-1">Default otomatis: Open. Ubah ke Close jika sudah selesai.</p>
+                <div class="w-full rounded-lg border border-slate-200 bg-slate-100 px-3 py-2 text-sm font-bold text-amber-700 flex items-center justify-between">
+                    <span class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+                        <span>{{ old('status', $complaint->status ?: 'Open') }}</span>
+                    </span>
+                    <span class="text-[11px] text-slate-400 font-medium font-sans">Validasi SPV QC</span>
+                </div>
+                <input type="hidden" name="status" value="{{ old('status', $complaint->status ?: 'Open') }}">
+                <p class="text-[11px] text-slate-400 mt-1">Status otomatis 'Open'. Penanganan &amp; persetujuan status selanjutnya divalidasi oleh Supervisor QC.</p>
             </div>
         </div>
         <p class="text-[11px] text-slate-400 mt-4">
@@ -263,6 +340,7 @@
             @endforeach
         </div>
     </div>
+    @endcan
 
     <div class="flex items-center gap-3">
         <button class="bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold px-6 py-2.5 rounded-lg">
@@ -373,6 +451,269 @@
     updateRemoveButtons();
     itemList.querySelectorAll('.cr-select').forEach(syncNew);
 
+    // ---- Kamus & Auto-Fill Pintar (Bahasa Awam / Natural Language) ----
+    const DETAIL_TO_JENIS = @json(\App\Models\Complaint::DETAIL_TO_JENIS_MAP);
+    const SYNONYM_MAP = @json(\App\Models\Complaint::SYNONYM_MAP);
+    const PENYEBAB_TO_DETAIL = @json(\App\Models\Complaint::PENYEBAB_TO_DETAIL_MAP);
+
+    const synonymKeys = Object.keys(SYNONYM_MAP).sort((a, b) => b.length - a.length);
+
+    /**
+     * Resolve input text → { jenis, detail, keyword }
+     */
+    function resolveKeyword(input) {
+        const clean = input.trim();
+        if (!clean) return null;
+        const lower = clean.toLowerCase();
+
+        // 1. Exact match di DETAIL_TO_JENIS (case-insensitive)
+        for (const [detail, jenis] of Object.entries(DETAIL_TO_JENIS)) {
+            if (detail.toLowerCase() === lower) {
+                return { jenis, detail, keyword: detail };
+            }
+        }
+
+        // 2. Partial match di SYNONYM_MAP
+        for (const keyword of synonymKeys) {
+            if (lower.includes(keyword)) {
+                const detail = SYNONYM_MAP[keyword];
+                const jenis = DETAIL_TO_JENIS[detail] || null;
+                return { jenis, detail, keyword };
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Resolve detail penyebab → { penyebab, detail }
+     */
+    function resolvePenyebabKeyword(input) {
+        const clean = input.trim().toLowerCase();
+        if (!clean) return null;
+
+        for (const [penyebab, details] of Object.entries(PENYEBAB_TO_DETAIL)) {
+            for (const d of details) {
+                if (d.toLowerCase() === clean || d.toLowerCase().includes(clean) || clean.includes(d.toLowerCase())) {
+                    return { penyebab, detail: d };
+                }
+            }
+        }
+        return null;
+    }
+
+    const ALL_DETAIL_KETIDAKSESUAIAN = @json($detailKetidaksesuaianOptions ?? []);
+    const ALL_DETAIL_PENYEBAB = @json($detailPenyebabOptions ?? []);
+
+    /**
+     * Update dropdown pilihan detail (cr-ket-det-select & cr-pen-det-select) berdasarkan jenis/penyebab terpilih.
+     */
+    function updateRowDetailSelects(row) {
+        if (!row) return;
+
+        // 1. Ketidaksesuaian Detail Select
+        const ketSelect = row.querySelector('.cr-ket-select');
+        const ketDetSelect = row.querySelector('.cr-ket-det-select');
+        const ketDetailInput = row.querySelector('.cr-ket-detail');
+
+        if (ketSelect && ketDetSelect && ketDetailInput) {
+            const selectedJenis = ketSelect.value;
+            let options = [];
+            if (selectedJenis && selectedJenis !== '__new__') {
+                options = Object.entries(DETAIL_TO_JENIS)
+                    .filter(([d, j]) => j === selectedJenis)
+                    .map(([d]) => d);
+            } else {
+                options = ALL_DETAIL_KETIDAKSESUAIAN;
+            }
+
+            const currentVal = ketDetailInput.value.trim();
+
+            let html = '<option value="">— pilih detail ketidaksesuaian —</option>';
+            options.forEach(opt => {
+                const isSelected = currentVal.toLowerCase() === opt.toLowerCase();
+                html += `<option value="${opt}" ${isSelected ? 'selected' : ''}>${opt}</option>`;
+            });
+            html += `<option value="__custom__" ${currentVal && !options.some(o => o.toLowerCase() === currentVal.toLowerCase()) ? 'selected' : ''}>✍️ Ketik manual / bahasa awam…</option>`;
+
+            ketDetSelect.innerHTML = html;
+
+            // Jika nilai saat ini adalah custom/bahasa awam yang tidak ada di daftar baku, tampilkan input manual
+            if (ketDetSelect.value === '__custom__') {
+                ketDetailInput.classList.remove('hidden');
+            } else {
+                ketDetailInput.classList.add('hidden');
+                if (ketDetSelect.value) ketDetailInput.value = ketDetSelect.value;
+            }
+        }
+
+        // 2. Penyebab Detail Select
+        const penSelect = row.querySelector('.cr-pen-select');
+        const penDetSelect = row.querySelector('.cr-pen-det-select');
+        const penDetailInput = row.querySelector('.cr-pen-detail');
+
+        if (penSelect && penDetSelect && penDetailInput) {
+            const selectedPen = penSelect.value;
+            let options = (selectedPen && selectedPen !== '__new__' && PENYEBAB_TO_DETAIL[selectedPen])
+                ? PENYEBAB_TO_DETAIL[selectedPen]
+                : ALL_DETAIL_PENYEBAB;
+
+            const currentVal = penDetailInput.value.trim();
+
+            let html = '<option value="">— pilih detail penyebab —</option>';
+            options.forEach(opt => {
+                const isSelected = currentVal.toLowerCase() === opt.toLowerCase();
+                html += `<option value="${opt}" ${isSelected ? 'selected' : ''}>${opt}</option>`;
+            });
+            html += `<option value="__custom__" ${currentVal && !options.some(o => o.toLowerCase() === currentVal.toLowerCase()) ? 'selected' : ''}>✍️ Ketik manual / bahasa awam…</option>`;
+
+            penDetSelect.innerHTML = html;
+
+            if (penDetSelect.value === '__custom__') {
+                penDetailInput.classList.remove('hidden');
+            } else {
+                penDetailInput.classList.add('hidden');
+                if (penDetSelect.value) penDetailInput.value = penDetSelect.value;
+            }
+        }
+    }
+
+    /**
+     * Auto-fill pintar Ketidaksesuaian saat QA mengetik bahasa awam
+     */
+    function handleDetailAutoFill(detailInput) {
+        const row = detailInput.closest('.item-row');
+        if (!row) return;
+
+        const ketSelect = row.querySelector('.cr-ket-select');
+        const hint = detailInput.closest('.space-y-2').querySelector('.cr-ket-hint');
+        if (!ketSelect) return;
+
+        const result = resolveKeyword(detailInput.value);
+
+        if (result && result.jenis) {
+            const targetJenis = result.jenis.toLowerCase().replace(/_/g, ' ');
+            for (let i = 0; i < ketSelect.options.length; i++) {
+                const optVal = ketSelect.options[i].value.toLowerCase().replace(/_/g, ' ');
+                if (optVal === targetJenis) {
+                    ketSelect.selectedIndex = i;
+                    break;
+                }
+            }
+            updateRowDetailSelects(row);
+            ketSelect.dispatchEvent(new Event('change', { bubbles: true }));
+
+            if (hint) {
+                const detailLabel = result.detail !== detailInput.value.trim() ? ` · Standard: <strong>${result.detail}</strong>` : '';
+                hint.innerHTML = `💡 Sistem Pintar → Jenis: <strong>${result.jenis.replace(/_/g, ' ')}</strong>${detailLabel}`;
+                hint.classList.remove('hidden');
+            }
+        } else {
+            updateRowDetailSelects(row);
+            if (hint) {
+                hint.classList.add('hidden');
+                hint.innerHTML = '';
+            }
+        }
+    }
+
+    /**
+     * Auto-fill pintar Penyebab saat QA mengetik bahasa awam
+     */
+    function handlePenDetailAutoFill(detailInput) {
+        const row = detailInput.closest('.item-row');
+        if (!row) return;
+
+        const penSelect = row.querySelector('.cr-pen-select');
+        const hint = detailInput.closest('.space-y-2').querySelector('.cr-pen-hint');
+        if (!penSelect) return;
+
+        const result = resolvePenyebabKeyword(detailInput.value);
+
+        if (result && result.penyebab) {
+            const targetPen = result.penyebab.toLowerCase().replace(/\s+/g, ' ');
+            for (let i = 0; i < penSelect.options.length; i++) {
+                const optVal = penSelect.options[i].value.toLowerCase().replace(/\s+/g, ' ');
+                if (optVal === targetPen) {
+                    penSelect.selectedIndex = i;
+                    break;
+                }
+            }
+            updateRowDetailSelects(row);
+            penSelect.dispatchEvent(new Event('change', { bubbles: true }));
+
+            if (hint) {
+                const detailLabel = result.detail !== detailInput.value.trim() ? ` · Standard: <strong>${result.detail}</strong>` : '';
+                hint.innerHTML = `💡 Sistem Pintar → Penyebab: <strong>${result.penyebab}</strong>${detailLabel}`;
+                hint.classList.remove('hidden');
+            }
+        } else {
+            updateRowDetailSelects(row);
+            if (hint) {
+                hint.classList.add('hidden');
+                hint.innerHTML = '';
+            }
+        }
+    }
+
+    // Event delegation untuk select detail (cr-ket-det-select & cr-pen-det-select)
+    itemList.addEventListener('change', (e) => {
+        const row = e.target.closest('.item-row');
+        if (!row) return;
+
+        if (e.target.matches('.cr-ket-select') || e.target.matches('.cr-pen-select')) {
+            updateRowDetailSelects(row);
+        }
+
+        if (e.target.matches('.cr-ket-det-select')) {
+            const ketDetailInput = row.querySelector('.cr-ket-detail');
+            if (e.target.value === '__custom__') {
+                ketDetailInput.classList.remove('hidden');
+                ketDetailInput.focus();
+            } else {
+                ketDetailInput.classList.add('hidden');
+                ketDetailInput.value = e.target.value;
+                handleDetailAutoFill(ketDetailInput);
+            }
+        }
+
+        if (e.target.matches('.cr-pen-det-select')) {
+            const penDetailInput = row.querySelector('.cr-pen-detail');
+            if (e.target.value === '__custom__') {
+                penDetailInput.classList.remove('hidden');
+                penDetailInput.focus();
+            } else {
+                penDetailInput.classList.add('hidden');
+                penDetailInput.value = e.target.value;
+                handlePenDetailAutoFill(penDetailInput);
+            }
+        }
+
+        if (e.target.matches('.cr-ket-detail')) handleDetailAutoFill(e.target);
+        if (e.target.matches('.cr-pen-detail')) handlePenDetailAutoFill(e.target);
+    });
+
+    itemList.addEventListener('input', (e) => {
+        if (e.target.matches('.cr-ket-detail')) handleDetailAutoFill(e.target);
+        if (e.target.matches('.cr-pen-detail')) handlePenDetailAutoFill(e.target);
+    });
+    itemList.addEventListener('keyup', (e) => {
+        if (e.target.matches('.cr-ket-detail')) handleDetailAutoFill(e.target);
+        if (e.target.matches('.cr-pen-detail')) handlePenDetailAutoFill(e.target);
+    });
+
+    // Initialize all existing rows
+    itemList.querySelectorAll('.item-row').forEach(row => {
+        updateRowDetailSelects(row);
+        const ketInp = row.querySelector('.cr-ket-detail');
+        if (ketInp && ketInp.value.trim()) handleDetailAutoFill(ketInp);
+        const penInp = row.querySelector('.cr-pen-detail');
+        if (penInp && penInp.value.trim()) handlePenDetailAutoFill(penInp);
+    });
+
+
+
+
     let timer = null;
     function fetchReco() {
         const ket = distinctValues('.cr-ket-select');
@@ -436,5 +777,18 @@
     }
 @endunless
 })();
+
+// Remove existing photo helper
+function removeExistingPhoto(btn, path) {
+    const container = document.getElementById('removeFotoInputs');
+    if (container) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'remove_foto[]';
+        input.value = path;
+        container.appendChild(input);
+    }
+    btn.closest('[data-photo]').remove();
+}
 </script>
 @endpush

@@ -58,8 +58,29 @@ class SevenToolsService
 
         $avgLead = round((float) $this->data->whereNotNull('lead_time')->avg('lead_time'), 1);
 
+        $now = now();
+        $thisMonthStr = $now->format('Y-m');
+        $lastMonthStr = $now->copy()->subMonth()->format('Y-m');
+
+        $thisMonth = 0;
+        $lastMonth = 0;
+        foreach ($this->data as $c) {
+            $d = $c->tanggal_complain?->format('Y-m');
+            if ($d === $thisMonthStr) $thisMonth++;
+            else if ($d === $lastMonthStr) $lastMonth++;
+        }
+
+        $trendPersen = 0;
+        if ($lastMonth > 0) {
+            $trendPersen = round(($thisMonth - $lastMonth) / $lastMonth * 100, 1);
+        } else if ($thisMonth > 0) {
+            $trendPersen = 100; // Jika bulan lalu 0, berarti naik 100%
+        }
+
         return [
             'total_complaint' => $total,
+            'this_month'      => $thisMonth,
+            'trend_persen'    => $trendPersen,
             'open'            => $open,
             'close'           => $close,
             'persen_close'    => $total ? round($close / $total * 100, 1) : 0,
@@ -364,6 +385,59 @@ class SevenToolsService
         ];
     }
 
+    // ====== 4b. PETA KENDALI / CONTROL CHART (c-chart) ======
+    public function controlChart(): array
+    {
+        $bulanLabels = $this->bulanLabels();
+        $counts = array_fill_keys(array_keys($bulanLabels), 0);
+        foreach ($this->data as $it) {
+            $k = $it->tanggal_complain?->format('Y-m');
+            if ($k !== null && isset($counts[$k])) {
+                $counts[$k]++;
+            }
+        }
+
+        $labels = array_values($bulanLabels);
+        $values = array_values($counts);
+        $k = count($values);
+
+        if ($k === 0) {
+            return [
+                'labels' => [], 'values' => [],
+                'cl' => 0, 'ucl' => 0, 'lcl' => 0,
+                'ucl_line' => [], 'cl_line' => [], 'lcl_line' => [],
+                'out_of_control' => 0, 'total_sample' => 0,
+            ];
+        }
+
+        $totalC = array_sum($values);
+        $cBar = $totalC / $k;
+        $sigma = sqrt($cBar);
+        $ucl = round($cBar + 3 * $sigma, 2);
+        $lcl = round(max(0, $cBar - 3 * $sigma), 2);
+        $cl = round($cBar, 2);
+
+        $outCount = 0;
+        foreach ($values as $v) {
+            if ($v > $ucl || $v < $lcl) {
+                $outCount++;
+            }
+        }
+
+        return [
+            'labels'         => $labels,
+            'values'         => $values,
+            'cl'             => $cl,
+            'ucl'            => $ucl,
+            'lcl'            => $lcl,
+            'ucl_line'       => array_fill(0, $k, $ucl),
+            'cl_line'        => array_fill(0, $k, $cl),
+            'lcl_line'       => array_fill(0, $k, $lcl),
+            'out_of_control' => $outCount,
+            'total_sample'   => $k,
+        ];
+    }
+
     // ====== 5. SCATTER (Qty vs Lead Time) ======
     public function scatter(): array
     {
@@ -383,64 +457,127 @@ class SevenToolsService
     }
 
     // ====== 6. FISHBONE / ISHIKAWA (penyebab dikelompokkan 6M) ======
-    public function fishbone(): array
+    public function fishbone(?string $selectedEfek = null, string $level = 'detail', int $limit = 3): array
     {
-        // 1. Tentukan defect dengan frekuensi tertinggi (Pareto)
-        $efek = $this->countItemField('jenis_ketidaksesuaian')->keys()->first();
-        $namaEfek = $efek ?? 'Customer Complaint / NCR';
+        // 1. Ambil daftar Jenis Ketidaksesuaian & Detail Ketidaksesuaian
+        $allJenisCounts = $this->countItemField('jenis_ketidaksesuaian');
+        $allDetailCounts = $this->countItemField('detail_ketidaksesuaian');
 
-        // 2. Filter data penyebab HANYA untuk defect tertinggi tersebut
-        $causeCounts = [];
-        if ($efek) {
-            foreach ($this->data as $c) {
-                foreach ($c->items as $item) {
-                    $jenis = trim((string) $item->jenis_ketidaksesuaian);
-                    if ($jenis === $efek) {
-                        $p = trim((string) $item->penyebab);
-                        if ($p !== '' && $p !== '-') {
-                            $causeCounts[$p] = ($causeCounts[$p] ?? 0) + 1;
-                        }
+        $availableJenis = $allJenisCounts->keys()->values()->all();
+        $availableDetail = $allDetailCounts->keys()->values()->all();
+        $topEfek = $allJenisCounts->keys()->first();
+
+        $activeEfek = $selectedEfek;
+        if (empty($activeEfek) || $activeEfek === 'AUTO') {
+            $activeEfek = $topEfek;
+        }
+
+        // Tentukan label & pengumpulan data
+        $namaEfek = '';
+        if ($activeEfek === 'ALL') {
+            $namaEfek = 'Semua Masalah (Global)';
+        } elseif ($activeEfek) {
+            $namaEfek = $activeEfek;
+        } else {
+            $namaEfek = 'Customer Complaint / NCR';
+        }
+
+        // 2. Mapping kategori 6M
+        $sixM = Complaint::FISHBONE_6M;
+        $penyebabTo6M = [];
+        foreach ($sixM as $kat => $list) {
+            foreach ($list as $p) {
+                $penyebabTo6M[trim($p)] = $kat;
+            }
+        }
+
+        $causeGroup = [];
+
+        foreach ($this->data as $c) {
+            foreach ($c->items as $item) {
+                $jenis = trim((string) $item->jenis_ketidaksesuaian);
+                $detailJenis = trim((string) $item->detail_ketidaksesuaian);
+                $penyebabUmum = trim((string) $item->penyebab);
+                $detailPenyebab = trim((string) $item->detail_penyebab);
+
+                // Filter berdasarkan jenis / detail ketidaksesuaian
+                if ($activeEfek !== 'ALL' && $activeEfek !== null && $activeEfek !== '') {
+                    if ($jenis !== $activeEfek && $detailJenis !== $activeEfek) {
+                        continue;
                     }
                 }
-            }
-        } else {
-            // Fallback jika tidak ada data
-            $causeCounts = $this->countItemField('penyebab')->all();
-        }
 
-        $categories = [];
-        $assigned = [];
-        foreach (Complaint::FISHBONE_6M as $kategori => $penyebabList) {
-            $causes = [];
-            foreach ($penyebabList as $p) {
-                $n = (int) ($causeCounts[$p] ?? 0);
-                if ($n > 0) {
-                    $causes[] = ['nama' => $p, 'jumlah' => $n];
-                    $assigned[$p] = true;
+                if ($penyebabUmum === '' || $penyebabUmum === '-') continue;
+
+                // Tentukan nama penyebab (General vs Detail)
+                $causeName = $penyebabUmum;
+                if ($level === 'detail' && $detailPenyebab !== '' && $detailPenyebab !== '-') {
+                    $causeName = $detailPenyebab;
                 }
+
+                $kat6M = $penyebabTo6M[$penyebabUmum] ?? 'Lainnya';
+
+                if (! isset($causeGroup[$kat6M])) {
+                    $causeGroup[$kat6M] = [];
+                }
+
+                if (! isset($causeGroup[$kat6M][$causeName])) {
+                    $causeGroup[$kat6M][$causeName] = [
+                        'nama' => $causeName,
+                        'penyebab_induk' => $penyebabUmum,
+                        'jumlah' => 0,
+                        'complaints' => [],
+                    ];
+                }
+
+                $causeGroup[$kat6M][$causeName]['jumlah']++;
+                $causeGroup[$kat6M][$causeName]['complaints'][] = [
+                    'id' => $c->id,
+                    'no_customer' => $c->no_customer,
+                    'nama_customer' => $c->nama_customer,
+                    'tanggal_complain' => $c->tanggal_complain ? $c->tanggal_complain->format('d/m/Y') : '-',
+                    'jenis_ketidaksesuaian' => $jenis,
+                    'detail_ketidaksesuaian' => $detailJenis,
+                    'qty' => $c->qty,
+                    'area' => $c->area,
+                    'corrective_action' => $c->corrective_action ?: '-',
+                    'preventive_action' => $c->preventive_action ?: '-',
+                ];
             }
-            usort($causes, fn ($a, $b) => $b['jumlah'] <=> $a['jumlah']);
-            $categories[] = [
-                'kategori' => $kategori,
-                'total' => array_sum(array_column($causes, 'jumlah')),
-                'causes' => $causes,
-            ];
         }
 
-        // penyebab yang belum termasuk 6M -> kategori "Lainnya"
-        $lain = [];
-        foreach ($causeCounts as $p => $n) {
-            if (! isset($assigned[$p]) && $n > 0) {
-                $lain[] = ['nama' => $p, 'jumlah' => (int) $n];
+        $orderCategories = array_merge(array_keys($sixM), ['Lainnya']);
+        $categories = [];
+
+        foreach ($orderCategories as $kat) {
+            $causesMap = $causeGroup[$kat] ?? [];
+            $causesList = array_values($causesMap);
+            usort($causesList, fn ($a, $b) => $b['jumlah'] <=> $a['jumlah']);
+
+            $total = array_sum(array_column($causesList, 'jumlah'));
+            if ($total > 0 || $kat !== 'Lainnya') {
+                $topCauses = $limit > 0 ? array_slice($causesList, 0, $limit) : $causesList;
+                $otherCauses = $limit > 0 ? array_slice($causesList, $limit) : [];
+
+                $categories[] = [
+                    'kategori' => $kat,
+                    'total' => $total,
+                    'causes' => $causesList,
+                    'top_causes' => $topCauses,
+                    'other_causes' => $otherCauses,
+                    'other_count' => count($otherCauses),
+                ];
             }
-        }
-        if (! empty($lain)) {
-            usort($lain, fn ($a, $b) => $b['jumlah'] <=> $a['jumlah']);
-            $categories[] = ['kategori' => 'Lainnya', 'total' => array_sum(array_column($lain, 'jumlah')), 'causes' => $lain];
         }
 
         return [
             'efek' => $namaEfek,
+            'top_efek' => $topEfek,
+            'selected_efek' => $selectedEfek ?? 'AUTO',
+            'level' => $level,
+            'limit' => $limit,
+            'available_jenis' => $availableJenis,
+            'available_detail' => $availableDetail,
             'categories' => $categories,
         ];
     }

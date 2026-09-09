@@ -1,0 +1,116 @@
+<mxfile host="app.diagrams.net" modified="2026-08-17T18:35:00.000Z" agent="Mozilla/5.0" version="21.6.8" type="device">
+  <diagram id="activity-sistem-manual" name="Activity Diagram - Sistem Berjalan (Sebelum Ada Aplikasi)">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- SWIMLANES (ALUR MANUAL) -->
+        <mxCell id="swimlane_customer" value="Pelanggan (Customer)" style="swimlane;html=1;startSize=30;horizontal=1;fillColor=#f8fafc;strokeColor=#475569;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="340" height="1260" as="geometry" />
+        </mxCell>
+
+        <mxCell id="swimlane_qa" value="Staff Quality Assurance (QA)" style="swimlane;html=1;startSize=30;horizontal=1;fillColor=#f0fdf4;strokeColor=#16a34a;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="380" y="40" width="440" height="1260" as="geometry" />
+        </mxCell>
+
+        <mxCell id="swimlane_spv" value="Supervisor SPV / Manajer QC" style="swimlane;html=1;startSize=30;horizontal=1;fillColor=#fff7ed;strokeColor=#ea580c;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="820" y="40" width="400" height="1260" as="geometry" />
+        </mxCell>
+
+        <!-- START NODE -->
+        <mxCell id="start_node" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#0f172a;strokeColor=#0f172a;" vertex="1" parent="swimlane_customer">
+          <mxGeometry x="155" y="50" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- STEP 1: E-mail / Telepon Komplain -->
+        <mxCell id="act_cust_komplain" value="Menghubungi QA via Telepon / E-mail&#10;Melaporkan Produk Cacat &amp; Qty NG" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;fontStyle=1;" vertex="1" parent="swimlane_customer">
+          <mxGeometry x="60" y="110" width="220" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- STEP 2: QA Catat Formulir Kertas -->
+        <mxCell id="act_qa_catat_manual" value="Mencatat Data Komplain Manual&#10;di Formulir Kertas / Excel Lokal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#16a34a;fontStyle=1;" vertex="1" parent="swimlane_qa">
+          <mxGeometry x="100" y="110" width="240" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- STEP 3: Inspeksi Barang & Penyebab Manual -->
+        <mxCell id="act_qa_inspeksi" value="Inspeksi Sampel Fisik Cacat &amp; Analisis&#10;Penyebab Masalah (Tanpa Sistem)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#16a34a;fontStyle=1;" vertex="1" parent="swimlane_qa">
+          <mxGeometry x="100" y="200" width="240" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- STEP 4: Tulis Usulan CAPA Kertas -->
+        <mxCell id="act_qa_capa_manual" value="Menulis Draf Tindakan Perbaikan (CAPA)&#10;secara Manual pada Formulir NCR Kertas" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#16a34a;fontStyle=1;" vertex="1" parent="swimlane_qa">
+          <mxGeometry x="90" y="290" width="260" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- STEP 5: Serahkan Berkas Fisik ke SPV -->
+        <mxCell id="act_qa_serah_berkas" value="Menyerahkan Dokumen Fisik NCR Kertas&#10;ke Meja Supervisor (SPV)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#16a34a;fontStyle=1;" vertex="1" parent="swimlane_qa">
+          <mxGeometry x="100" y="380" width="240" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- STEP 6: SPV Review Formulir Manual -->
+        <mxCell id="act_spv_review" value="Memeriksa Dokumen Fisik NCR &amp; CAPA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ea580c;fontStyle=1;" vertex="1" parent="swimlane_spv">
+          <mxGeometry x="90" y="380" width="220" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- DECISION SPV APPROVE -->
+        <mxCell id="dec_spv_setuju" value="Setuju?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#ea580c;fontStyle=1;" vertex="1" parent="swimlane_spv">
+          <mxGeometry x="150" y="470" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- REJECT BACK TO QA -->
+        <mxCell id="act_qa_revisi" value="Menerima Berkas Fisik &amp; Revisi Ulang Draf CAPA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#16a34a;fontStyle=1;" vertex="1" parent="swimlane_qa">
+          <mxGeometry x="90" y="472.5" width="260" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- STEP 7: SPV Tanda Tangan Basah -->
+        <mxCell id="act_spv_ttd" value="Tanda Tangan Basah Dokumen NCR Kertas&#10;&amp; Menghubungi Pelanggan via Telepon" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ea580c;fontStyle=1;" vertex="1" parent="swimlane_spv">
+          <mxGeometry x="80" y="570" width="240" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- STEP 8: Sepakati Jadwal Kunjungan Manual -->
+        <mxCell id="act_cust_sepakat_visit" value="Menyepakati Tanggal &amp; Jam Kunjungan Visit&#10;(Dicatat Manual di Buku Agenda Telepon)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;fontStyle=1;" vertex="1" parent="swimlane_customer">
+          <mxGeometry x="50" y="570" width="240" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- STEP 9: SPV & QA Kunjungan Visit Ke Pelanggan -->
+        <mxCell id="act_spv_visit_fisik" value="Melakukan Kunjungan Visit Lapangan Ke Pelanggan&#10;&amp; Konfirmasi Penyelesaian Masalah" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ea580c;fontStyle=1;" vertex="1" parent="swimlane_spv">
+          <mxGeometry x="70" y="670" width="260" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- STEP 10: QA Simpan Berkas di Map Fisik & Rekap Manual Excel -->
+        <mxCell id="act_qa_rekap_excel" value="Menyimpan Berkas NCR di Lemari Arsip&#10;&amp; Mengisi Rekap Data Komplain di Excel Lokal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#16a34a;fontStyle=1;" vertex="1" parent="swimlane_qa">
+          <mxGeometry x="90" y="770" width="260" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- STEP 11: Rekap Laporan Bulanan Manual Untuk Manajemen -->
+        <mxCell id="act_spv_laporan_manual" value="Membuat Laporan Grafik Bulanan Manual di Excel&#10;serta Mengurutkan Tren Masalah Secara Manual" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ea580c;fontStyle=1;" vertex="1" parent="swimlane_spv">
+          <mxGeometry x="70" y="870" width="260" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- END NODE -->
+        <mxCell id="end_node" value="" style="ellipse;html=1;shape=endState;fillColor=#0f172a;strokeColor=#0f172a;" vertex="1" parent="swimlane_spv">
+          <mxGeometry x="185" y="970" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ALUR HUBUNGAN (CONNECTORS) -->
+        <mxCell id="c1" edge="1" parent="1" source="start_node" target="act_cust_komplain" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#475569;strokeWidth=1.5;" />
+        <mxCell id="c2" edge="1" parent="1" source="act_cust_komplain" target="act_qa_catat_manual" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#475569;strokeWidth=1.5;" />
+        <mxCell id="c3" edge="1" parent="1" source="act_qa_catat_manual" target="act_qa_inspeksi" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#16a34a;strokeWidth=1.5;" />
+        <mxCell id="c4" edge="1" parent="1" source="act_qa_inspeksi" target="act_qa_capa_manual" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#16a34a;strokeWidth=1.5;" />
+        <mxCell id="c5" edge="1" parent="1" source="act_qa_capa_manual" target="act_qa_serah_berkas" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#16a34a;strokeWidth=1.5;" />
+        <mxCell id="c6" edge="1" parent="1" source="act_qa_serah_berkas" target="act_spv_review" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#16a34a;strokeWidth=1.5;" />
+        <mxCell id="c7" edge="1" parent="1" source="act_spv_review" target="dec_spv_setuju" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#ea580c;strokeWidth=1.5;" />
+        <mxCell id="c8" edge="1" parent="1" source="dec_spv_setuju" target="act_qa_revisi" value="Tidak (Revisi)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#ef4444;strokeWidth=1.5;" />
+        <mxCell id="c9" edge="1" parent="1" source="act_qa_revisi" target="act_qa_serah_berkas" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#16a34a;strokeWidth=1.5;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" />
+        <mxCell id="c10" edge="1" parent="1" source="dec_spv_setuju" target="act_spv_ttd" value="Ya (Disetujui)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#10b981;strokeWidth=1.5;" />
+        <mxCell id="c11" edge="1" parent="1" source="act_spv_ttd" target="act_cust_sepakat_visit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#ea580c;strokeWidth=1.5;" />
+        <mxCell id="c12" edge="1" parent="1" source="act_cust_sepakat_visit" target="act_spv_visit_fisik" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#64748b;strokeWidth=1.5;" />
+        <mxCell id="c13" edge="1" parent="1" source="act_spv_visit_fisik" target="act_qa_rekap_excel" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#ea580c;strokeWidth=1.5;" />
+        <mxCell id="c14" edge="1" parent="1" source="act_qa_rekap_excel" target="act_spv_laporan_manual" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#16a34a;strokeWidth=1.5;" />
+        <mxCell id="c15" edge="1" parent="1" source="act_spv_laporan_manual" target="end_node" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#ea580c;strokeWidth=1.5;" />
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

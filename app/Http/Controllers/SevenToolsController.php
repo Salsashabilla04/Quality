@@ -47,6 +47,11 @@ class SevenToolsController extends Controller
             $request->integer('pareto_cause_month') ?: null,
         );
 
+        // --- Fishbone filter (pilih masalah, level detail, & limit penyebab dominan) ---
+        $fishboneEfek  = $request->input('fishbone_efek', 'AUTO');
+        $fishboneLevel = $request->input('fishbone_level', 'detail');
+        $fishboneLimit = $request->integer('fishbone_limit', 3);
+
         return view('seven-tools', [
             'checkSheet'        => $tools->checkSheetByField($csMode),
             'csMode'            => $csMode,
@@ -58,7 +63,11 @@ class SevenToolsController extends Controller
             'paretoCustFilter'  => $bundleCust['filter'],
             'paretoCause'       => $bundleCause['pareto'],
             'paretoCauseFilter' => $bundleCause['filter'],
-            'fishbone'          => $tools->fishbone(),
+            'histogram'         => $tools->histogram(),
+            'controlChart'      => $tools->controlChart(),
+            'scatter'           => $tools->scatter(),
+            'fishbone'          => $tools->fishbone($fishboneEfek, $fishboneLevel, $fishboneLimit),
+            'strat'             => $tools->stratifikasi(),
         ]);
     }
 }

@@ -23,9 +23,14 @@
         <input type="text" name="complaint_items[{{ $i }}][ket_new]" autocomplete="off"
                class="cr-new cr-ket-new hidden w-full rounded-lg border border-sky-300 bg-sky-50 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500"
                placeholder="Ketik jenis baru…">
-        <input type="text" name="complaint_items[{{ $i }}][ket_det]" value="{{ $ketDet }}"
-               class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-600 focus:ring-sky-500 focus:border-sky-500"
-               placeholder="Detail ketidaksesuaian (mis. L(-))">
+        <select class="cr-ket-det-select w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-700 focus:ring-sky-500 focus:border-sky-500">
+            <option value="">— pilih detail ketidaksesuaian —</option>
+            <option value="__custom__">✍️ Ketik manual / bahasa awam…</option>
+        </select>
+        <input type="text" name="complaint_items[{{ $i }}][ket_det]" value="{{ $ketDet }}" autocomplete="off"
+               class="cr-ket-detail hidden w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-600 focus:ring-sky-500 focus:border-sky-500"
+               placeholder="Ketik detail (mis. panjang kurang, ngelupas, kotor…)">
+        <div class="cr-ket-hint hidden text-[11px] mt-1 px-2 py-1 rounded-md bg-sky-50 text-sky-800 border border-sky-200 font-medium"></div>
     </div>
 
     {{-- Kolom Penyebab --}}
@@ -41,9 +46,18 @@
         <input type="text" name="complaint_items[{{ $i }}][pen_new]" autocomplete="off"
                class="cr-new cr-pen-new hidden w-full rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500"
                placeholder="Ketik penyebab baru…">
-        <input type="text" name="complaint_items[{{ $i }}][pen_det]" value="{{ $penDet }}"
-               class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-600 focus:ring-sky-500 focus:border-sky-500"
-               placeholder="Detail penyebab (mis. Nilon aus)">
+        <select class="cr-pen-det-select w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-700 focus:ring-sky-500 focus:border-sky-500">
+            <option value="">— pilih detail penyebab —</option>
+            <option value="__custom__">✍️ Ketik manual / bahasa awam…</option>
+        </select>
+        <input type="text" name="complaint_items[{{ $i }}][pen_det]" value="{{ $penDet }}" autocomplete="off"
+               class="cr-pen-detail hidden w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-600 focus:ring-sky-500 focus:border-sky-500"
+               placeholder="Ketik detail penyebab (mis. nilon aus, handling…)">
+        <div class="cr-pen-hint hidden text-[11px] mt-1 px-2 py-1 rounded-md bg-amber-50 text-amber-800 border border-amber-200 font-medium"></div>
+
+
+
+
     </div>
 
     {{-- Tombol hapus baris --}}

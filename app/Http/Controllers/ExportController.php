@@ -60,8 +60,58 @@ class ExportController extends Controller
         return $this->streamXlsx($ss, 'hasil_apriori_' . date('Ymd') . '.xlsx');
     }
 
-    // ============== EXCEL: DATA COMPLAINT ==============
-    public function complaintsExcel(): StreamedResponse
+    // Helper filter query untuk Excel & PDF
+    protected function buildFilteredQuery(Request $request)
+    {
+        $query = Complaint::with('items');
+
+        if ($request->filled('q')) {
+            $q = $request->input('q');
+            $query->where(function ($sub) use ($q) {
+                $sub->where('no_customer', 'like', "%{$q}%")
+                    ->orWhere('nama_customer', 'like', "%{$q}%")
+                    ->orWhere('area', 'like', "%{$q}%")
+                    ->orWhere('keterangan', 'like', "%{$q}%")
+                    ->orWhereHas('items', function ($iq) use ($q) {
+                        $iq->where('jenis_ketidaksesuaian', 'like', "%{$q}%")
+                           ->orWhere('detail_ketidaksesuaian', 'like', "%{$q}%")
+                           ->orWhere('penyebab', 'like', "%{$q}%")
+                           ->orWhere('detail_penyebab', 'like', "%{$q}%");
+                    });
+            });
+        }
+
+        if ($request->filled('customer')) {
+            $query->where('nama_customer', $request->input('customer'));
+        }
+
+        if ($request->filled('tahun') && $request->input('tahun') !== 'all') {
+            $query->whereYear('tanggal_complain', $request->integer('tahun'));
+        }
+
+        if ($request->filled('bulan')) {
+            $query->whereMonth('tanggal_complain', $request->integer('bulan'));
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        if ($request->filled('approval')) {
+            $query->where('supervisor_approval', $request->input('approval'));
+        }
+
+        if ($request->boolean('anomali')) {
+            $query->whereNotNull('tanggal_complain')
+                  ->whereNotNull('tanggal_produksi')
+                  ->whereColumn('tanggal_complain', '<', 'tanggal_produksi');
+        }
+
+        return $query;
+    }
+
+    // ============== EXCEL: DATA COMPLAINT (FILTERABLE) ==============
+    public function complaintsExcel(Request $request): StreamedResponse
     {
         $ss = new Spreadsheet();
         $sheet = $ss->getActiveSheet();
@@ -72,8 +122,10 @@ class ExportController extends Controller
             'Corrective Action', 'Preventive Action', 'Tgl Kirim', 'Tgl Produksi',
             'Lead Time (hari)', 'Area', 'Keterangan', 'Status',
         ]);
+
+        $complaints = $this->buildFilteredQuery($request)->orderBy('tanggal_complain', 'desc')->get();
         $r = 2;
-        foreach (Complaint::with('items')->orderBy('tanggal_complain')->get() as $c) {
+        foreach ($complaints as $c) {
             $ketTags = $c->items->pluck('jenis_ketidaksesuaian')->filter()->unique()->implode(', ');
             $detKet  = $c->items->pluck('detail_ketidaksesuaian')->filter()->unique()->implode('; ');
             $penTags = $c->items->pluck('penyebab')->filter()->unique()->implode(', ');
@@ -90,15 +142,20 @@ class ExportController extends Controller
         }
         foreach (range('A', 'Q') as $col) $sheet->getColumnDimension($col)->setAutoSize(true);
 
-        return $this->streamXlsx($ss, 'data_complaint_' . date('Ymd') . '.xlsx');
+        $filenameSuffix = '';
+        if ($request->filled('customer')) $filenameSuffix .= '_' . \Str::slug($request->input('customer'));
+        if ($request->filled('tahun')) $filenameSuffix .= '_' . $request->integer('tahun');
+        if ($request->filled('bulan')) $filenameSuffix .= '_bln' . $request->integer('bulan');
+
+        return $this->streamXlsx($ss, 'data_complaint' . ($filenameSuffix ?: '_' . date('Ymd')) . '.xlsx');
     }
 
-    // ============== PDF: LAPORAN ANALISIS ==============
-    public function laporanPdf()
+    // ============== PDF: LAPORAN ANALISIS (FILTERABLE) ==============
+    public function laporanPdf(Request $request)
     {
-        $data = Complaint::with('items')->get();
+        $data = $this->buildFilteredQuery($request)->get();
         $tools = SevenToolsService::make($data);
-        $service = (new AprioriService(0.05, 0.5))->buildTransactions(ComplaintItem::all());
+        $service = (new AprioriService(0.05, 0.5))->buildTransactions(ComplaintItem::whereIn('complaint_id', $data->pluck('id'))->get());
 
         $pdf = Pdf::loadView('exports.laporan', [
             'kpi'        => $tools->kpi(),
@@ -117,13 +174,18 @@ class ExportController extends Controller
     // ============== PDF: SURAT NCR per complaint (hal.1 form + hal.2 fishbone) ==============
     public function ncrPdf(Request $request, Complaint $complaint)
     {
+        if ($complaint->supervisor_approval !== 'Approved') {
+            return redirect()->back()
+                ->with('error', "Surat NCR PDF untuk {$complaint->no_customer} hanya dapat diunduh setelah disetujui (Approved) oleh Supervisor QC.");
+        }
+
         $complaint->load('items');
 
         $ketTags = $complaint->items->pluck('jenis_ketidaksesuaian')->filter()->unique();
         $penTags = $complaint->items->pluck('penyebab')->filter()->unique();
 
         // override hanya untuk PDF — TIDAK mengubah data asli
-        $penyebab   = $request->filled('penyebab')   ? $request->input('penyebab')   : $penTags->implode(', ');
+        $penyebab   = $request->filled('penyebab')   ? $request->input('penyebab')   : ($complaint->deskripsi_penyebab ?: $penTags->implode(', '));
         $correction = $request->filled('correction') ? $request->input('correction') : (string) $complaint->corrective_action;
         $corrective = $request->filled('corrective') ? $request->input('corrective') : (string) $complaint->preventive_action;
 
@@ -139,13 +201,15 @@ class ExportController extends Controller
             $fishbone = $complaint->fishboneNormalized();
         }
 
-        // Deskripsi: hanya dari detail ketidaksesuaian (mis. L(+)), tanpa kategori
-        $deskripsi = $complaint->items->pluck('detail_ketidaksesuaian')->filter()->unique()->implode('; ');
+        // Deskripsi: utamakan deskripsi_customer jika ada, atau detail_ketidaksesuaian
+        $deskripsi = $complaint->deskripsi_customer ?: $complaint->items->pluck('detail_ketidaksesuaian')->filter()->unique()->implode('; ');
         $efek      = $ketTags->implode(', ') ?: 'Ketidaksesuaian';
+
+        $noSuratFormatted = $this->nomorNcr($complaint);
 
         $pdf = Pdf::loadView('exports.ncr', [
             'c'          => $complaint,
-            'noNcr'      => $this->nomorNcr($complaint),
+            'noNcr'      => $noSuratFormatted,
             'deskripsi'  => $deskripsi,
             'efek'       => $efek,
             'penyebab'   => $penyebab,
@@ -156,15 +220,29 @@ class ExportController extends Controller
                              'Method' => 'Method', 'Environment' => 'Environment', 'Measurement' => 'Measurement'],
         ])->setPaper('a4', 'portrait');
 
-        return $pdf->download('NCR_' . str_replace(['/', ' '], '-', $complaint->no_customer ?: $complaint->id) . '.pdf');
+        return $pdf->download('Surat_NCR_' . str_replace(['/', ' '], '_', $noSuratFormatted) . '.pdf');
     }
 
     protected function nomorNcr(Complaint $c): string
     {
-        $roman = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
-        $bulan = $c->tanggal_complain ? (int) $c->tanggal_complain->format('n') : (int) date('n');
         $tahun = $c->tanggal_complain ? $c->tanggal_complain->format('Y') : date('Y');
-        return sprintf('%02d/WBN/QC/NCR/%s/%s', $c->id, $roman[$bulan] ?? '', $tahun);
+
+        // Hitung nomor urut surat NCR yang terbit di tahun berjalan (reset tiap pergantian tahun)
+        $seq = Complaint::whereYear('tanggal_complain', $tahun)
+            ->where(function ($q) use ($c) {
+                $q->where('tanggal_complain', '<', $c->tanggal_complain)
+                  ->orWhere(function ($q2) use ($c) {
+                      $q2->where('tanggal_complain', $c->tanggal_complain)
+                         ->where('id', '<=', $c->id);
+                  });
+            })
+            ->count();
+
+        if ($seq === 0) {
+            $seq = 1;
+        }
+
+        return sprintf('%03d/NCR/QA/%s', $seq, $tahun);
     }
 
     // ===================== helper =====================
