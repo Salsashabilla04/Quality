@@ -1,0 +1,366 @@
+<mxfile host="app.diagrams.net" modified="2026-09-18T05:31:00.000Z" agent="Mozilla/5.0" version="21.6.8" type="device">
+  <diagram id="seq-seventools-bce-laravel" name="Sequence Diagram - Analisis Seven Tools QC">
+    <mxGraphModel dx="1200" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="980" pageHeight="1290" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ===== FRAME LUAR DIAGRAM ===== -->
+        <mxCell id="outer_frame" value="sd Sequence Diagram Analisis Seven Tools QC"
+          style="shape=umlFrame;whiteSpace=wrap;html=1;width=320;height=26;fontSize=12;fontStyle=1;align=left;spacingLeft=8;strokeColor=#000000;strokeWidth=1.5;fillColor=none;"
+          vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="920" height="1240" as="geometry" />
+        </mxCell>
+
+        <!-- =========================================================
+             LIFELINES DENGAN STEREOTYPE BCE ASLI SISTEM
+             1. Pengguna (QA/SPV)  : x = 90  (Actor)
+             2. Halaman Seven Tools: x = 260 (Boundary Object)
+             3. Form Filter QC     : x = 430 (Boundary Object)
+             4. SevenToolsService  : x = 610 (Control Object)
+             5. Database MySQL     : x = 810 (Entity Object)
+        ========================================================= -->
+
+        <!-- 1. Pengguna (Actor) -->
+        <mxCell id="h_actor" value="Pengguna&#xa;(QA / SPV)"
+          style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontStyle=1;fontSize=11;labelBackgroundColor=#ffffff;"
+          vertex="1" parent="1">
+          <mxGeometry x="70" y="55" width="40" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 2. Halaman Seven Tools (Boundary Object) -->
+        <mxCell id="h_page" value="Halaman Seven Tools&#xa;&lt;i&gt;&amp;laquo;boundary&amp;raquo;&lt;/i&gt;"
+          style="shape=mxgraph.uml.boundary;verticalLabelPosition=bottom;verticalAlign=top;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontStyle=1;fontSize=10;labelBackgroundColor=#ffffff;"
+          vertex="1" parent="1">
+          <mxGeometry x="238" y="60" width="44" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- 3. Form Filter QC (Boundary Object) -->
+        <mxCell id="h_form" value="Form Filter QC&#xa;&lt;i&gt;&amp;laquo;boundary&amp;raquo;&lt;/i&gt;"
+          style="shape=mxgraph.uml.boundary;verticalLabelPosition=bottom;verticalAlign=top;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontStyle=1;fontSize=10;labelBackgroundColor=#ffffff;"
+          vertex="1" parent="1">
+          <mxGeometry x="408" y="60" width="44" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- 4. SevenToolsService (Control Object) -->
+        <mxCell id="h_ctrl" value="SevenToolsService&#xa;&lt;i&gt;&amp;laquo;control&amp;raquo;&lt;/i&gt;"
+          style="shape=mxgraph.uml.control;verticalLabelPosition=bottom;verticalAlign=top;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontStyle=1;fontSize=10;labelBackgroundColor=#ffffff;"
+          vertex="1" parent="1">
+          <mxGeometry x="588" y="60" width="44" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- 5. Database MySQL (Entity Object) -->
+        <mxCell id="h_db" value="Database MySQL&#xa;&lt;i&gt;&amp;laquo;entity&amp;raquo;&lt;/i&gt;"
+          style="shape=mxgraph.uml.entity;verticalLabelPosition=bottom;verticalAlign=top;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontStyle=1;fontSize=10;labelBackgroundColor=#ffffff;"
+          vertex="1" parent="1">
+          <mxGeometry x="788" y="60" width="44" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- ===== GARIS VERTIKAL PUTUS-PUTUS ===== -->
+        <mxCell id="ll_actor" style="endArrow=none;dashed=1;html=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="90" y="145" as="sourcePoint"/><mxPoint x="90" y="1235" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="ll_page" style="endArrow=none;dashed=1;html=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="260" y="145" as="sourcePoint"/><mxPoint x="260" y="1235" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="ll_form" style="endArrow=none;dashed=1;html=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="430" y="145" as="sourcePoint"/><mxPoint x="430" y="1235" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="ll_ctrl" style="endArrow=none;dashed=1;html=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="610" y="145" as="sourcePoint"/><mxPoint x="610" y="1235" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="ll_db" style="endArrow=none;dashed=1;html=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="810" y="145" as="sourcePoint"/><mxPoint x="810" y="1235" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- =========================================================
+             FRAGMEN 1: alt Rekapitulasi Check Sheet (Lembar Periksa)
+        ========================================================= -->
+        <mxCell id="box_alt_checksheet" value="alt Rekapitulasi Check Sheet (Lembar Periksa)"
+          style="shape=umlFrame;whiteSpace=wrap;html=1;width=270;height=22;fontSize=11;fontStyle=1;align=left;spacingLeft=6;strokeColor=#000000;strokeWidth=1.2;fillColor=none;"
+          vertex="1" parent="1">
+          <mxGeometry x="35" y="165" width="890" height="345" as="geometry" />
+        </mxCell>
+
+        <!-- Activations CS -->
+        <mxCell id="act_act_cs" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="85" y="195" width="10" height="285" as="geometry" />
+        </mxCell>
+        <mxCell id="act_page_cs" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="255" y="200" width="10" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="act_form_cs_a" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="425" y="230" width="10" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="act_form_cs_b" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="425" y="270" width="10" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ctrl_cs" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="605" y="310" width="10" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="act_db_cs" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="805" y="335" width="10" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ctrl_cs_calc" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="610" y="405" width="10" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Pesan 1 (CS): Akses Halaman Seven Tools() -->
+        <mxCell id="msg_cs_1" value="Akses Halaman Seven Tools QC (index)"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="95" y="205" as="sourcePoint"/><mxPoint x="255" y="205" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 2 (CS): Buka Pilihan Mode Check Sheet -->
+        <mxCell id="msg_cs_2" value="Buka Tab Check Sheet &amp; Pilihan Mode Rekap"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="265" y="235" as="sourcePoint"/><mxPoint x="425" y="235" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 3 (CS): Pilih Mode cs_mode -->
+        <mxCell id="msg_cs_3" value="Pilih cs_mode (Jenis / Detail Ketidaksesuaian)"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="95" y="275" as="sourcePoint"/><mxPoint x="425" y="275" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 4 (CS): Kirim Request checkSheetByField -->
+        <mxCell id="msg_cs_4" value="Kirim Request checkSheetByField(csMode)"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="435" y="315" as="sourcePoint"/><mxPoint x="605" y="315" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 5 (CS): Query Data Complaints -->
+        <mxCell id="msg_cs_5" value="SELECT complaints WITH complaint_items"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="615" y="340" as="sourcePoint"/><mxPoint x="805" y="340" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 6 (CS): Return Data -->
+        <mxCell id="msg_cs_6" value="Return Koleksi Data Keluhan &amp; Ketidaksesuaian"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;dashed=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="805" y="380" as="sourcePoint"/><mxPoint x="615" y="380" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 7 (CS): Tabulasi Matriks Bulanan -->
+        <mxCell id="msg_cs_7" value="Tabulasi Matriks Frekuensi per Bulan &amp; Grand Total()"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=left;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="615" y="405" as="sourcePoint"/>
+            <mxPoint x="620" y="430" as="targetPoint"/>
+            <Array as="points">
+              <mxPoint x="640" y="405"/>
+              <mxPoint x="640" y="430"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 8 (CS): Render Tabel Matriks Check Sheet -->
+        <mxCell id="msg_cs_8" value="Return View Tabel Matriks Rekapitulasi Check Sheet"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;dashed=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="605" y="455" as="sourcePoint"/><mxPoint x="255" y="455" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+
+        <!-- =========================================================
+             FRAGMEN 2: alt Analisis Diagram Pareto (80/20)
+        ========================================================= -->
+        <mxCell id="box_alt_pareto" value="alt Analisis Diagram Pareto (80/20)"
+          style="shape=umlFrame;whiteSpace=wrap;html=1;width=230;height=22;fontSize=11;fontStyle=1;align=left;spacingLeft=6;strokeColor=#000000;strokeWidth=1.2;fillColor=none;"
+          vertex="1" parent="1">
+          <mxGeometry x="35" y="530" width="890" height="345" as="geometry" />
+        </mxCell>
+
+        <!-- Activations 1 (Pareto) -->
+        <mxCell id="act_act_1" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="85" y="560" width="10" height="285" as="geometry" />
+        </mxCell>
+        <mxCell id="act_page_1" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="255" y="565" width="10" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="act_form_1a" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="425" y="595" width="10" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="act_form_1b" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="425" y="635" width="10" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ctrl_1" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="605" y="675" width="10" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="act_db_1" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="805" y="700" width="10" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ctrl_calc" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="610" y="770" width="10" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Pesan 1: Pilih Menu Pareto() -->
+        <mxCell id="msg_1" value="Pilih Tab Analisis Diagram Pareto"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="95" y="570" as="sourcePoint"/><mxPoint x="255" y="570" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 2: Buka Form Filter QC() -->
+        <mxCell id="msg_2" value="Buka Filter Pareto (Tahun/Bulan/Customer)"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="265" y="600" as="sourcePoint"/><mxPoint x="425" y="600" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 3: Input Filter Periode / Customer() -->
+        <mxCell id="msg_3" value="Pilih Filter Tahun &amp; Kategori Ketidaksesuaian()"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="95" y="640" as="sourcePoint"/><mxPoint x="425" y="640" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 4: Kirim Parameter Filter ke Service -->
+        <mxCell id="msg_4" value="Kirim Request getParetoData(filters)"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="435" y="680" as="sourcePoint"/><mxPoint x="605" y="680" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 5: Query Frekuensi Cacat() -->
+        <mxCell id="msg_5" value="SELECT jenis_ketidaksesuaian, COUNT(*) GROUP BY jenis"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="615" y="705" as="sourcePoint"/><mxPoint x="805" y="705" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 6: Return Data Cacat (Dashed) -->
+        <mxCell id="msg_ret_db" value="Return Data Hitungan Frekuensi Tiap Cacat"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;dashed=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="805" y="745" as="sourcePoint"/><mxPoint x="615" y="745" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 7: Hitung Akumulasi 80/20 (Loop) -->
+        <mxCell id="msg_calc" value="Hitung Persentase &amp; Kumulatif 80/20()"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=left;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="615" y="770" as="sourcePoint"/>
+            <mxPoint x="620" y="795" as="targetPoint"/>
+            <Array as="points">
+              <mxPoint x="640" y="770"/>
+              <mxPoint x="640" y="795"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 8: Tampilkan Grafik Pareto (Dashed) -->
+        <mxCell id="msg_ret_pareto" value="Return View Diagram Batang &amp; Kurva Pareto (Chart.js)"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;dashed=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="605" y="825" as="sourcePoint"/><mxPoint x="255" y="825" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+
+        <!-- =========================================================
+             FRAGMEN 3: alt Analisis Diagram Fishbone (6M)
+        ========================================================= -->
+        <mxCell id="box_alt_fishbone" value="alt Analisis Diagram Fishbone (6M)"
+          style="shape=umlFrame;whiteSpace=wrap;html=1;width=230;height=22;fontSize=11;fontStyle=1;align=left;spacingLeft=6;strokeColor=#000000;strokeWidth=1.2;fillColor=none;"
+          vertex="1" parent="1">
+          <mxGeometry x="35" y="895" width="890" height="345" as="geometry" />
+        </mxCell>
+
+        <!-- Activations 3 (Fishbone) -->
+        <mxCell id="act_act_2" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="85" y="925" width="10" height="285" as="geometry" />
+        </mxCell>
+        <mxCell id="act_page_2" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="255" y="930" width="10" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="act_form_2a" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="425" y="960" width="10" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="act_form_2b" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="425" y="1000" width="10" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ctrl_2" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="605" y="1040" width="10" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="act_db_2" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="805" y="1065" width="10" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ctrl_fish" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="610" y="1135" width="10" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Pesan 1 (Fishbone): Pilih Tab Fishbone() -->
+        <mxCell id="msg_f1" value="Pilih Tab Diagram Fishbone 6M"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="95" y="935" as="sourcePoint"/><mxPoint x="255" y="935" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 2 (Fishbone): Buka Parameter Fishbone() -->
+        <mxCell id="msg_f2" value="Buka Tab Diagram Fishbone 6M &amp; Filter Masalah"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="265" y="965" as="sourcePoint"/><mxPoint x="425" y="965" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 3 (Fishbone): Pilih Masalah / Cacat Utama() -->
+        <mxCell id="msg_f3" value="Pilih Cacat Masalah Dominan &amp; Filter Periode"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="95" y="1005" as="sourcePoint"/><mxPoint x="425" y="1005" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 4 (Fishbone): Kirim Request Fishbone ke Service -->
+        <mxCell id="msg_f4" value="Kirim Request getFishboneData(defect)"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="435" y="1045" as="sourcePoint"/><mxPoint x="605" y="1045" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 5 (Fishbone): Query Penyebab Cacat 6M() -->
+        <mxCell id="msg_f5" value="SELECT fishbone, penyebab FROM complaints WHERE defect = ?"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="615" y="1070" as="sourcePoint"/><mxPoint x="805" y="1070" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 6 (Fishbone): Return Data 6M (Dashed) -->
+        <mxCell id="msg_f6" value="Return Data Faktor Penyebab 6M"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;dashed=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="805" y="1110" as="sourcePoint"/><mxPoint x="615" y="1110" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 7 (Fishbone): Pemetaan Struktur 6M (Loop) -->
+        <mxCell id="msg_f7" value="Petakan ke Man, Machine, Material, Method, Env, Measure"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=left;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="615" y="1135" as="sourcePoint"/>
+            <mxPoint x="620" y="1160" as="targetPoint"/>
+            <Array as="points">
+              <mxPoint x="640" y="1135"/>
+              <mxPoint x="640" y="1160"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 8 (Fishbone): Render Diagram Fishbone (Dashed) -->
+        <mxCell id="msg_f8" value="Return View Diagram Tulang Ikan (Fishbone 6M)"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;dashed=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="605" y="1185" as="sourcePoint"/><mxPoint x="255" y="1185" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

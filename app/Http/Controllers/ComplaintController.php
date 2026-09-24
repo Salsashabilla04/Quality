@@ -233,6 +233,12 @@ class ComplaintController extends Controller
         $data['deskripsi_customer'] = $request->input('deskripsi_customer', $complaint->deskripsi_customer);
         $data['deskripsi_penyebab'] = $request->input('deskripsi_penyebab', $complaint->deskripsi_penyebab);
 
+        // Jika tombol "Ajukan Validasi" ditekan, simpan + langsung ajukan ke SPV
+        if ($request->input('ajukan_setelah_simpan')) {
+            $data['status']              = 'Diproses';
+            $data['supervisor_approval'] = 'Pending';
+        }
+
         $complaint->update($data);
 
         // Hapus items lama, insert ulang
@@ -246,8 +252,12 @@ class ComplaintController extends Controller
 
         \App\Services\AprioriService::clearCache();
 
+        $message = $request->input('ajukan_setelah_simpan')
+            ? "Complaint {$complaint->no_customer} berhasil diperbarui & diajukan ke Supervisor QC untuk validasi."
+            : "Complaint {$complaint->no_customer} berhasil diperbarui.";
+
         return redirect()->route('complaints.index')
-            ->with('success', "Complaint {$complaint->no_customer} berhasil diperbarui.");
+            ->with('success', $message);
     }
 
     public function quickClose(Request $request, Complaint $complaint)

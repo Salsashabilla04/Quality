@@ -1,0 +1,256 @@
+<mxfile host="app.diagrams.net" modified="2026-09-12T13:00:00.000Z" agent="Mozilla/5.0" version="21.6.8" type="device">
+  <diagram id="activity-analisis-apriori" name="Activity Diagram - Analisis Algoritma Apriori">
+    <mxGraphModel dx="1100" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="950" pageHeight="950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- =================================================== -->
+        <!-- JUDUL DIAGRAM                                       -->
+        <!-- =================================================== -->
+        <mxCell id="title_apriori" value="ACTIVITY DIAGRAM - ANALISIS POLA HUBUNGAN CACAT (ALGORITMA APRIORI)"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;
+                 whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;fontColor=#000000;"
+          vertex="1" parent="1">
+          <mxGeometry x="150" y="20" width="650" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- =================================================== -->
+        <!-- SWIMLANE 1 : STAFF QA / PENGGUNA                   -->
+        <!-- =================================================== -->
+        <mxCell id="lane_qa" value="Staff QA"
+          style="swimlane;startSize=30;fontSize=12;fontStyle=1;html=1;horizontal=1;
+                 fillColor=#f8fafc;strokeColor=#000000;strokeWidth=1.5;"
+          vertex="1" parent="1">
+          <mxGeometry x="100" y="70" width="370" height="780" as="geometry" />
+        </mxCell>
+
+        <!-- Initial Node (Start) -->
+        <mxCell id="start_node" value=""
+          style="ellipse;fillColor=#000000;strokeColor=#000000;html=1;"
+          vertex="1" parent="lane_qa">
+          <mxGeometry x="170" y="45" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- QA Action 1 : Akses Menu Apriori -->
+        <mxCell id="act_akses_menu" value="Mengakses Menu&#xa;&quot;Analisis Pola Hubungan (Apriori)&quot;"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=30;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontStyle=1;"
+          vertex="1" parent="lane_qa">
+          <mxGeometry x="85" y="105" width="200" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- QA Action 2 : Mengatur Filter & Parameter -->
+        <mxCell id="act_input_param" value="Mengatur Filter Periode Komplain&#xa;serta Nilai Minimum Confidence&#xa;lalu Menekan Tombol &quot;Tampilkan Pola&quot;"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=25;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_qa">
+          <mxGeometry x="75" y="205" width="220" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- QA Action 3 : Menelaah Pola & Rekomendasi -->
+        <mxCell id="act_review_hasil" value="Menelaah Pola Hubungan Sebab-Akibat,&#xa;Nilai Metrik, dan Rekomendasi Tindakan CAPA"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=25;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_qa">
+          <mxGeometry x="75" y="660" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Activity Final Node (End) -->
+        <mxCell id="end_node" value=""
+          style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;strokeWidth=2;"
+          vertex="1" parent="lane_qa">
+          <mxGeometry x="170" y="735" width="30" height="30" as="geometry" />
+        </mxCell>
+
+
+        <!-- =================================================== -->
+        <!-- SWIMLANE 2 : SISTEM                                -->
+        <!-- =================================================== -->
+        <mxCell id="lane_sys" value="Sistem"
+          style="swimlane;startSize=30;fontSize=12;fontStyle=1;html=1;horizontal=1;
+                 fillColor=#f8fafc;strokeColor=#000000;strokeWidth=1.5;"
+          vertex="1" parent="1">
+          <mxGeometry x="470" y="70" width="380" height="780" as="geometry" />
+        </mxCell>
+
+        <!-- System Action 1 : Tampilkan Halaman Analisis -->
+        <mxCell id="act_show_page" value="Menampilkan Halaman Analisis Apriori&#xa;beserta Form Filter Parameter"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=30;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontStyle=1;"
+          vertex="1" parent="lane_sys">
+          <mxGeometry x="90" y="105" width="200" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- System Action 2 : Ambil Data DB -->
+        <mxCell id="act_fetch_db" value="Mengambil Data Transaksi Komplain&#xa;dari Database sesuai Filter Periode"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=30;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontStyle=1;"
+          vertex="1" parent="lane_sys">
+          <mxGeometry x="90" y="210" width="200" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Decision: Data Transaksi Tersedia? -->
+        <mxCell id="dec_data" value="Apakah Data&#xa;Transaksi&#xa;Tersedia?"
+          style="rhombus;whiteSpace=wrap;html=1;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_sys">
+          <mxGeometry x="135" y="285" width="110" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- System Action 3 : Notifikasi Kosong -->
+        <mxCell id="act_show_empty" value="Menampilkan Pesan Peringatan:&#xa;&quot;Data Komplain Kosong pada Periode Terpilih&quot;"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=30;
+                 fillColor=#fff1f2;strokeColor=#e11d48;strokeWidth=1.2;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_sys">
+          <mxGeometry x="90" y="375" width="200" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- System Action 4 : Membentuk Keranjang Transaksi -->
+        <mxCell id="act_build_basket" value="Membentuk Keranjang Transaksi dari&#xa;Data Cacat dan Penyebab Komplain"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=25;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_sys">
+          <mxGeometry x="85" y="445" width="210" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- System Action 5 : Hitung Support & Frequent Itemset -->
+        <mxCell id="act_frequent" value="Menghitung Nilai Support untuk&#xa;Menentukan Frequent Itemset yang Memenuhi Syarat"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=25;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_sys">
+          <mxGeometry x="85" y="515" width="210" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- System Action 6 : Bentuk Aturan Asosiasi & Lift Ratio -->
+        <mxCell id="act_association" value="Membentuk Aturan Asosiasi serta&#xa;Menghitung Nilai Confidence dan Lift Ratio"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=25;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_sys">
+          <mxGeometry x="85" y="590" width="210" height="48" as="geometry" />
+        </mxCell>
+
+        <!-- System Action 7 : Tampilkan Pola & CAPA -->
+        <mxCell id="act_display_result" value="Menampilkan Hasil Pola Hubungan Cacat,&#xa;Kartu Analisis, dan Rekomendasi Tindakan CAPA"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=25;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_sys">
+          <mxGeometry x="85" y="660" width="210" height="50" as="geometry" />
+        </mxCell>
+
+
+        <!-- =================================================== -->
+        <!-- CONNECTORS / TRANSITIONS                            -->
+        <!-- =================================================== -->
+
+        <!-- c1: Start -> Akses Menu -->
+        <mxCell id="c1"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="start_node" target="act_akses_menu">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c2: Akses Menu -> Tampilkan Halaman Analisis (Across lane) -->
+        <mxCell id="c2"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="act_akses_menu" target="act_show_page">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c3: Tampilkan Halaman -> Mengatur Parameter (Across lane) -->
+        <mxCell id="c3"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="act_show_page" target="act_input_param">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="660" y="175" />
+              <mxPoint x="285" y="175" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- c4: Mengatur Parameter -> Ambil Data Transaksi (Across lane) -->
+        <mxCell id="c4"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="act_input_param" target="act_fetch_db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c5: Ambil Data -> Decision Data Tersedia? -->
+        <mxCell id="c5"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="act_fetch_db" target="dec_data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c6: Decision -> [Tidak Ada] -> Tampilkan Notifikasi Kosong -->
+        <mxCell id="c6_false" value="[Tidak Ada]"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;"
+          edge="1" parent="1" source="dec_data" target="act_show_empty">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c7: Notifikasi Kosong -> Kembali ke Form Filter Parameter -->
+        <mxCell id="c7_back"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="act_show_empty" target="act_input_param">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="780" y="397" />
+              <mxPoint x="780" y="232" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- c8: Decision -> [Tersedia] -> Membentuk Keranjang Transaksi -->
+        <mxCell id="c8_true" value="[Tersedia]"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;align=right;"
+          edge="1" parent="1" source="dec_data" target="act_build_basket">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="525" y="317" />
+              <mxPoint x="525" y="467" />
+              <mxPoint x="555" y="467" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- c9: Membentuk Keranjang -> Hitung Support & Frequent Itemset -->
+        <mxCell id="c9"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="act_build_basket" target="act_frequent">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c10: Frequent Itemset -> Bentuk Aturan Asosiasi & Lift Ratio -->
+        <mxCell id="c10"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="act_frequent" target="act_association">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c11: Bentuk Aturan Asosiasi -> Tampilkan Hasil Analisis & CAPA -->
+        <mxCell id="c11"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="act_association" target="act_display_result">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c12: Tampilkan Hasil -> QA Menelaah Hasil & Rekomendasi (Across lane) -->
+        <mxCell id="c12"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="act_display_result" target="act_review_hasil">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c13: QA Menelaah Hasil -> Selesai (End) -->
+        <mxCell id="c13_end"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="act_review_hasil" target="end_node">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

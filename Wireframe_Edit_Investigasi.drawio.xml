@@ -1,0 +1,520 @@
+<mxfile host="app.diagrams.net" modified="2026-09-21T15:20:00.000Z" agent="Mozilla/5.0" version="21.6.8" type="device">
+  <diagram id="wireframe-edit-investigasi-bw" name="Wireframe - Edit Investigasi Complaint &amp; NCR (Hitam Putih)">
+    <mxGraphModel dx="1400" dy="1750" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1360" pageHeight="1800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ==============================================================
+             1. BROWSER FRAME MOCKUP (STANDAR SKRIPSI - MONOKROM HITAM PUTIH)
+        ============================================================== -->
+        <!-- Tab Browser -->
+        <mxCell id="tab_browser" value="Edit Complaint 07-183 · Monitoring Complaint &amp; NCR" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e5e5e5;strokeColor=#000000;strokeWidth=1.5;fontSize=11;fontStyle=1;fontFamily=Arial;align=center;" vertex="1" parent="1">
+          <mxGeometry x="60" y="15" width="340" height="26" as="geometry" />
+        </mxCell>
+
+        <!-- Outer Browser Window -->
+        <mxCell id="browser_window" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.8;" vertex="1" parent="1">
+          <mxGeometry x="30" y="40" width="1300" height="1720" as="geometry" />
+        </mxCell>
+
+        <!-- Navigation Controls: Back, Forward, Refresh -->
+        <mxCell id="nav_back" value="←" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="45" y="48" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="nav_forward" value="→" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="80" y="48" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="nav_refresh" value="↻" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="115" y="48" width="28" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Address Bar -->
+        <mxCell id="address_bar" value="" style="rounded=15;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="155" y="48" width="1155" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="address_text" value="http://127.0.0.1:8000/complaints/183/edit" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#333333;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="175" y="48" width="600" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Garis Pemisah Browser Header -->
+        <mxCell id="line_browser_bottom" value="" style="endArrow=none;html=1;strokeColor=#000000;strokeWidth=1.5;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="30" y="86" as="sourcePoint" />
+            <mxPoint x="1330" y="86" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+
+        <!-- ==============================================================
+             2. SIDEBAR NAVIGASI (SISTEM (W)berPack)
+        ============================================================== -->
+        <mxCell id="sidebar_bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="30" y="86" width="230" height="1674" as="geometry" />
+        </mxCell>
+
+        <!-- Brand Logo: (W)berPack -->
+        <mxCell id="logo_circle" value="W" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f4f4f4;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=15;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="48" y="104" width="34" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="logo_title" value="berPack" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="88" y="102" width="150" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="logo_subtitle" value="Monitoring Complaint &amp; NCR" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#555555;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="48" y="138" width="195" height="18" as="geometry" />
+        </mxCell>
+
+        <mxCell id="side_divider_top" value="" style="endArrow=none;html=1;strokeColor=#cccccc;strokeWidth=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="40" y="162" as="sourcePoint"/><mxPoint x="250" y="162" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Menu 1: Dashboard QA -->
+        <mxCell id="icon_home_roof" value="" style="triangle;whiteSpace=wrap;html=1;rotation=-90;fillColor=none;strokeColor=#000000;strokeWidth=1.3;" vertex="1" parent="1">
+          <mxGeometry x="54" y="183" width="14" height="12" as="geometry" />
+        </mxCell>
+        <mxCell id="icon_home_body" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;strokeWidth=1.3;" vertex="1" parent="1">
+          <mxGeometry x="54" y="192" width="14" height="12" as="geometry" />
+        </mxCell>
+        <mxCell id="menu_1_text" value="Dashboard QA" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="78" y="174" width="160" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Menu 2: Data Complaint & NCR (ACTIVE HIGHLIGHT) -->
+        <mxCell id="menu_active_box" value="" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#222222;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="42" y="224" width="206" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="icon_doc_box" value="" style="rounded=2;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#ffffff;strokeWidth=1.3;" vertex="1" parent="1">
+          <mxGeometry x="54" y="235" width="14" height="17" as="geometry" />
+        </mxCell>
+        <mxCell id="icon_doc_l" value="" style="endArrow=none;html=1;strokeColor=#ffffff;strokeWidth=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="57" y="241" as="sourcePoint"/><mxPoint x="65" y="241" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="menu_2_text" value="Data Complaint &amp; NCR" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#ffffff;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="78" y="224" width="165" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Menu 3: Seven Tools QC -->
+        <mxCell id="icon_st_l1" value="" style="endArrow=none;html=1;strokeColor=#000000;strokeWidth=1.5;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="54" y="280" as="sourcePoint"/><mxPoint x="68" y="280" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="icon_st_l2" value="" style="endArrow=none;html=1;strokeColor=#000000;strokeWidth=1.5;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="54" y="285" as="sourcePoint"/><mxPoint x="68" y="285" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="icon_st_l3" value="" style="endArrow=none;html=1;strokeColor=#000000;strokeWidth=1.5;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="54" y="290" as="sourcePoint"/><mxPoint x="64" y="290" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="menu_3_text" value="Seven Tools QC" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="78" y="268" width="165" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- Menu 4: Analisis Apriori -->
+        <mxCell id="icon_ap_line" value="" style="edgeStyle=none;endArrow=none;html=1;strokeColor=#000000;strokeWidth=1.5;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="54" y="332" as="sourcePoint"/><mxPoint x="68" y="321" as="targetPoint"/><Array as="points"><mxPoint x="59" y="328"/><mxPoint x="63" y="323"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="menu_4_text" value="Analisis Apriori" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="78" y="312" width="165" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- Menu 5: Kamus Cacat QC -->
+        <mxCell id="icon_book_l" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;strokeWidth=1.3;" vertex="1" parent="1"><mxGeometry x="54" y="366" width="7" height="15" as="geometry" /></mxCell>
+        <mxCell id="icon_book_r" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;strokeWidth=1.3;" vertex="1" parent="1"><mxGeometry x="61" y="366" width="7" height="15" as="geometry" /></mxCell>
+        <mxCell id="menu_5_text" value="Kamus Cacat QC 📚" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="78" y="356" width="165" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- Menu 6: Daftar Customer -->
+        <mxCell id="icon_cust_h1" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=none;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1"><mxGeometry x="55" y="408" width="7" height="7" as="geometry" /></mxCell>
+        <mxCell id="icon_cust_b1" value="" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1"><mxGeometry x="53" y="416" width="11" height="6" as="geometry" /></mxCell>
+        <mxCell id="icon_cust_h2" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=none;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1"><mxGeometry x="63" y="410" width="6" height="6" as="geometry" /></mxCell>
+        <mxCell id="icon_cust_b2" value="" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1"><mxGeometry x="62" y="417" width="9" height="5" as="geometry" /></mxCell>
+        <mxCell id="menu_6_text" value="Daftar Customer" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="78" y="400" width="165" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- Menu 7: Jadwal Visit Supervisor -->
+        <mxCell id="icon_cal_box" value="" style="rounded=2;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;strokeWidth=1.3;" vertex="1" parent="1"><mxGeometry x="54" y="454" width="15" height="15" as="geometry" /></mxCell>
+        <mxCell id="icon_cal_top" value="" style="endArrow=none;html=1;strokeColor=#000000;strokeWidth=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="54" y="458" as="sourcePoint"/><mxPoint x="69" y="458" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="menu_7_text" value="Jadwal Visit Supervisor 👁️" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="78" y="444" width="165" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- User Profile Widget (Bawah) -->
+        <mxCell id="profile_avatar" value="S" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#222222;strokeColor=#000000;fontColor=#ffffff;fontSize=13;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="46" y="1590" width="36" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="profile_name" value="Staff QA" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1588" width="130" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="profile_role" value="STAFF QA" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=9;fontColor=#666666;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1606" width="130" height="16" as="geometry" />
+        </mxCell>
+
+        <mxCell id="btn_pwd" value="⚿  Ganti Password" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="42" y="1640" width="206" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="btn_logout" value="↪  Keluar" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="42" y="1678" width="206" height="30" as="geometry" />
+        </mxCell>
+
+
+        <!-- ==============================================================
+             3. TOP HEADER BAR
+        ============================================================== -->
+        <mxCell id="main_bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="260" y="86" width="1070" height="1674" as="geometry" />
+        </mxCell>
+
+        <!-- Title & Subtitle -->
+        <mxCell id="header_title" value="Edit Complaint &amp; Investigasi 07-183" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=20;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="285" y="98" width="450" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="header_desc" value="Ubah data Customer Complaint / NCR, perbarui analisis 6M &amp; tindakan perbaikan (CAPA)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#555555;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="285" y="122" width="620" height="18" as="geometry" />
+        </mxCell>
+
+        <!-- Back Link to List -->
+        <mxCell id="btn_back_list" value="← Kembali ke Data Complaint" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="98" width="195" height="32" as="geometry" />
+        </mxCell>
+
+
+        <!-- ==============================================================
+             4. PROCESS TRACKER & REVISION ALERT BANNER
+        ============================================================== -->
+        <!-- Process Tracker Card -->
+        <mxCell id="card_tracker" value="" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="285" y="148" width="1000" height="68" as="geometry" />
+        </mxCell>
+        <mxCell id="tracker_title" value="INDIKATOR PROGRESS ALUR MUTU (PROCESS TRACKER)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontStyle=1;fontColor=#666666;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="300" y="153" width="400" height="16" as="geometry" />
+        </mxCell>
+
+        <!-- Step 1: Input Data QA (Selesai) -->
+        <mxCell id="step_1" value="1. Input Data QA  [✓]" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#000000;strokeWidth=1.2;fontColor=#000000;fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="300" y="173" width="230" height="34" as="geometry" />
+        </mxCell>
+        <!-- Step 2: Analisis 6M & CAPA (Aktif / Diedit) -->
+        <mxCell id="step_2" value="2. Analisis 6M &amp; CAPA  [✍ Sedang Diedit]" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#222222;strokeColor=#000000;strokeWidth=1.5;fontColor=#ffffff;fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="545" y="173" width="235" height="34" as="geometry" />
+        </mxCell>
+        <!-- Step 3: Validasi SPV (Pending / Menunggu) -->
+        <mxCell id="step_3" value="3. Validasi SPV  [⏳ Pending]" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#444444;fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="795" y="173" width="235" height="34" as="geometry" />
+        </mxCell>
+        <!-- Step 4: Ready Print NCR (Terkunci) -->
+        <mxCell id="step_4" value="4. Ready Print NCR  [🔒 Terkunci]" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#cccccc;strokeWidth=1;fontColor=#888888;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1045" y="173" width="225" height="34" as="geometry" />
+        </mxCell>
+
+
+        <!-- Revision Alert Banner (Kondisional jika ada catatan revisi SPV) -->
+        <mxCell id="card_revision" value="" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#000000;strokeWidth=1.5;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="285" y="224" width="1000" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="rev_icon" value="!" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#222222;strokeColor=#000000;fontColor=#ffffff;fontSize=14;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="302" y="238" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="rev_title" value="CATATAN REVISI / PERBAIKAN INVESTIGASI DARI SUPERVISOR QC:" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="345" y="232" width="550" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="rev_text" value="&quot;Mohon perjelas rincian Fishbone pada faktor Machine &amp; pastikan Preventive Action mencakup jadwal kalibrasi pisau potong.&quot;" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=2;fontColor=#444444;" vertex="1" parent="1">
+          <mxGeometry x="345" y="252" width="850" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="rev_time" value="Direvisi: 2024-10-16 09:30 WIB" style="text;html=1;strokeColor=none;fillColor=none;align=right;fontSize=9;fontColor=#888888;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="232" width="200" height="16" as="geometry" />
+        </mxCell>
+
+
+        <!-- Legend Manual & Otomatis -->
+        <mxCell id="leg_dot_man" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#222222;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="285" y="293" width="8" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_txt_man" value="Diisi manual" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#555555;" vertex="1" parent="1">
+          <mxGeometry x="298" y="288" width="80" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_dot_oto" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#cccccc;strokeColor=#888888;" vertex="1" parent="1">
+          <mxGeometry x="385" y="293" width="8" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_txt_oto" value="Terisi otomatis / Terkunci (Readonly)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#555555;" vertex="1" parent="1">
+          <mxGeometry x="398" y="288" width="220" height="18" as="geometry" />
+        </mxCell>
+
+
+        <!-- ==============================================================
+             5. SECTION 1: IDENTITAS COMPLAINT (CARD 1)
+        ============================================================== -->
+        <mxCell id="card_1" value="" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="285" y="315" width="1000" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_title" value="Identitas Complaint" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="305" y="325" width="200" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Field 1: No Customer (Otomatis & Locked) -->
+        <mxCell id="f1_lbl" value="● No Customer (otomatis)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontColor=#666666;" vertex="1" parent="1"><mxGeometry x="305" y="350" width="150" height="14" as="geometry" /></mxCell>
+        <mxCell id="f1_inp" value="07-183  [🔒 Terkunci]" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#f4f4f4;strokeColor=#cccccc;strokeWidth=1;fontColor=#555555;fontStyle=1;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="305" y="366" width="300" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="f1_help" value="Kode 07 = Customer Indofood, No: 183" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=9;fontColor=#888888;" vertex="1" parent="1"><mxGeometry x="305" y="400" width="300" height="14" as="geometry" /></mxCell>
+
+        <!-- Field 2: Nama Customer * -->
+        <mxCell id="f2_lbl" value="● Nama Customer *" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=1;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="635" y="350" width="150" height="14" as="geometry" /></mxCell>
+        <mxCell id="f2_inp" value="PT. Indofood Sukses Makmur Tbk                        ▼" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontColor=#000000;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="635" y="366" width="310" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- Field 3: Tanggal Complain * -->
+        <mxCell id="f3_lbl" value="● Tanggal Complain *" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=1;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="975" y="350" width="150" height="14" as="geometry" /></mxCell>
+        <mxCell id="f3_inp" value="2024-10-15  📅" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontColor=#000000;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="975" y="366" width="290" height="32" as="geometry" />
+        </mxCell>
+
+
+        <!-- ==============================================================
+             6. SECTION 2: DETAIL PRODUK (CARD 2)
+        ============================================================== -->
+        <mxCell id="card_2" value="" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="285" y="437" width="1000" height="96" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_title" value="Detail Produk" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="305" y="445" width="200" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Field Ukuran -->
+        <mxCell id="f4_lbl" value="● Ukuran" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontColor=#444444;" vertex="1" parent="1"><mxGeometry x="305" y="469" width="100" height="14" as="geometry" /></mxCell>
+        <mxCell id="f4_inp" value="3 x 14 x 924" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="305" y="485" width="300" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- Field Qty -->
+        <mxCell id="f5_lbl" value="● Qty (pcs)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontColor=#444444;" vertex="1" parent="1"><mxGeometry x="635" y="469" width="100" height="14" as="geometry" /></mxCell>
+        <mxCell id="f5_inp" value="1500" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="635" y="485" width="310" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- Field Area / Lokasi -->
+        <mxCell id="f6_lbl" value="● Area / Lokasi" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontColor=#444444;" vertex="1" parent="1"><mxGeometry x="975" y="469" width="100" height="14" as="geometry" /></mxCell>
+        <mxCell id="f6_inp" value="T3 / W2" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="975" y="485" width="290" height="32" as="geometry" />
+        </mxCell>
+
+
+        <!-- ==============================================================
+             7. SECTION 3: DESKRIPSI KETIDAKSESUAIAN & PENYEBAB NCR (CARD 3)
+        ============================================================== -->
+        <mxCell id="card_3" value="" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="285" y="545" width="1000" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_t1" value="Deskripsi &amp; Rincian Ketidaksesuaian" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="305" y="555" width="300" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_sub1" value="Jelaskan secara detail masalah ketidaksesuaian produk yang dilaporkan oleh customer." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="305" y="575" width="600" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_ta1" value="Ditemukan panjang paper core tidak presisi (kurang 3mm dari batas toleransi standar spesifikasi) pada batch produksi line 2." style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=11;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="305" y="593" width="960" height="42" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c3_divider" value="" style="endArrow=none;html=1;strokeColor=#e5e5e5;strokeWidth=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="305" y="645" as="sourcePoint"/><mxPoint x="1265" y="645" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <mxCell id="c3_t2" value="Deskripsi Narasi Penyebab (Khusus Cetak Surat NCR PDF)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="305" y="651" width="450" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_sub2" value="Tuliskan kronologi/penjelasan panjang penyebab masalah untuk dicetak pada dokumen Surat NCR PDF." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="305" y="671" width="650" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_ta2" value="Terjadi keausan pada stopper nilon pemotong mesin potong otomatis line 2 sehingga sensor pemotong bergeser sejauh 3mm selama proses cutting." style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=11;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="305" y="689" width="960" height="42" as="geometry" />
+        </mxCell>
+
+
+        <!-- ==============================================================
+             8. SECTION 4: KLASIFIKASI APRIORI (CARD 4 DENGAN MULTI-ROW)
+        ============================================================== -->
+        <mxCell id="card_4" value="" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="285" y="747" width="1000" height="188" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_title" value="Klasifikasi (dipakai Algoritma Apriori)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="305" y="757" width="350" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_sub" value="Satu baris = satu jenis cacat dan penyebabnya. Data baris ini dapat ditambah, diedit, atau dihapus." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="305" y="777" width="650" height="16" as="geometry" />
+        </mxCell>
+
+        <!-- Dynamic Item Row 1 -->
+        <mxCell id="row1_box" value="" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#dddddd;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="305" y="797" width="960" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_f_ket" value="Length_Issue ▼" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="315" y="803" width="215" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_f_det_ket" value="L(-)  [Kurang Panjang]" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="540" y="803" width="205" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_f_pen" value="Masalah Mesin ▼" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="755" y="803" width="215" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_f_det_pen" value="Nilon pada mesin aus" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="980" y="803" width="220" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_btn_del" value="🗑️" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cccccc;strokeWidth=1;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1210" y="803" width="40" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- Dynamic Item Row 2 -->
+        <mxCell id="row2_box" value="" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#dddddd;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="305" y="847" width="960" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_f_ket" value="Diameter_Issue ▼" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="315" y="853" width="215" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_f_det_ket" value="ID Longgar" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="540" y="853" width="205" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_f_pen" value="Masalah Manusia ▼" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="755" y="853" width="215" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_f_det_pen" value="Kurang teliti setting mandrel" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="980" y="853" width="220" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_btn_del" value="🗑️" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cccccc;strokeWidth=1;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1210" y="853" width="40" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- Button + Tambah Baris -->
+        <mxCell id="btn_add_item" value="+ Tambah Baris" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#222222;strokeColor=#000000;strokeWidth=1;fontColor=#ffffff;fontSize=10;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="305" y="899" width="115" height="26" as="geometry" />
+        </mxCell>
+
+
+        <!-- ==============================================================
+             9. SECTION 5: REKOMENDASI TINDAKAN APRIORI (CARD AI)
+        ============================================================== -->
+        <mxCell id="card_reco" value="" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#fbfbfb;strokeColor=#000000;strokeWidth=1.2;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="285" y="947" width="1000" height="136" as="geometry" />
+        </mxCell>
+        <mxCell id="reco_title" value="💡 Rekomendasi Tindakan (berdasarkan histori &amp; Pola Asosiasi Apriori)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="305" y="957" width="480" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="reco_rule" value="Pola Ditemukan: [Length_Issue] ➔ [Masalah Mesin] (Confidence: 87.5%, Lift: 4.2x — Aturan Sangat Kuat)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=2;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="305" y="979" width="600" height="16" as="geometry" />
+        </mxCell>
+
+        <!-- Card Saran Corrective Action -->
+        <mxCell id="saran_c_box" value="" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cccccc;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="305" y="1001" width="470" height="68" as="geometry" />
+        </mxCell>
+        <mxCell id="saran_c_lbl" value="Saran Corrective Action:" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=1;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="315" y="1005" width="200" height="14" as="geometry" /></mxCell>
+        <mxCell id="saran_c_txt" value="&quot;Tukar Guling barang cacat dengan stok buffer customer.&quot;&#10;(Digunakan 18x pada kasus sejenis)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontColor=#444444;" vertex="1" parent="1"><mxGeometry x="315" y="1021" width="370" height="34" as="geometry" /></mxCell>
+        <mxCell id="btn_use_c" value="Pakai ↵" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#222222;strokeColor=#000000;fontColor=#ffffff;fontSize=9;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="695" y="1019" width="70" height="26" as="geometry" /></mxCell>
+
+        <!-- Card Saran Preventive Action -->
+        <mxCell id="saran_p_box" value="" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cccccc;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="795" y="1001" width="470" height="68" as="geometry" />
+        </mxCell>
+        <mxCell id="saran_p_lbl" value="Saran Preventive Action:" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=1;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="805" y="1005" width="200" height="14" as="geometry" /></mxCell>
+        <mxCell id="saran_p_txt" value="&quot;Perbaikan &amp; Penggantian Nilon serta kalibrasi rutin sensor potong.&quot;&#10;(Rekomendasi pencegahan berulang)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontColor=#444444;" vertex="1" parent="1"><mxGeometry x="805" y="1021" width="370" height="34" as="geometry" /></mxCell>
+        <mxCell id="btn_use_p" value="Pakai ↵" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#222222;strokeColor=#000000;fontColor=#ffffff;fontSize=9;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="1185" y="1019" width="70" height="26" as="geometry" /></mxCell>
+
+
+        <!-- ==============================================================
+             10. SECTION 6: TINDAKAN & PENYELESAIAN (CARD 5)
+        ============================================================== -->
+        <mxCell id="card_5" value="" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="285" y="1097" width="1000" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_title" value="Tindakan &amp; Penyelesaian" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="305" y="1107" width="250" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Corrective Action -->
+        <mxCell id="f7_lbl" value="● Corrective Action" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontColor=#444444;" vertex="1" parent="1"><mxGeometry x="305" y="1133" width="150" height="14" as="geometry" /></mxCell>
+        <mxCell id="f7_inp" value="Tukar Guling barang cacat dengan stok buffer customer" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=11;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="305" y="1149" width="460" height="42" as="geometry" />
+        </mxCell>
+
+        <!-- Preventive Action -->
+        <mxCell id="f8_lbl" value="● Preventive Action" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontColor=#444444;" vertex="1" parent="1"><mxGeometry x="785" y="1133" width="150" height="14" as="geometry" /></mxCell>
+        <mxCell id="f8_inp" value="Perbaikan &amp; Penggantian Nilon yang Sudah Aus serta kalibrasi ulang pisau potong" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=11;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="785" y="1149" width="480" height="42" as="geometry" />
+        </mxCell>
+
+        <!-- Tanggal Produksi -->
+        <mxCell id="f9_lbl" value="● Tanggal Produksi" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontColor=#444444;" vertex="1" parent="1"><mxGeometry x="305" y="1201" width="150" height="14" as="geometry" /></mxCell>
+        <mxCell id="f9_inp" value="2023-11-08  📅" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="305" y="1217" width="460" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- Tanggal Kirim -->
+        <mxCell id="f10_lbl" value="● Tanggal Kirim" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontColor=#444444;" vertex="1" parent="1"><mxGeometry x="785" y="1201" width="150" height="14" as="geometry" /></mxCell>
+        <mxCell id="f10_inp" value="2024-01-05  📅" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="785" y="1217" width="480" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- Keterangan Penyelesaian (Disabled / SPV Authority) -->
+        <mxCell id="f11_lbl" value="● Keterangan Penyelesaian (Wewenang SPV)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontColor=#666666;" vertex="1" parent="1"><mxGeometry x="305" y="1259" width="250" height="14" as="geometry" /></mxCell>
+        <mxCell id="f11_inp" value="Belum ditentukan — menunggu keputusan Supervisor QC       [🔒 Wewenang SPV]" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#f8f8f8;strokeColor=#cccccc;strokeWidth=1;fontColor=#777777;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="305" y="1275" width="460" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- Status Dokumen (Otomatis Open) -->
+        <mxCell id="f12_lbl" value="● Status Dokumen (Otomatis)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontColor=#666666;" vertex="1" parent="1"><mxGeometry x="785" y="1259" width="200" height="14" as="geometry" /></mxCell>
+        <mxCell id="f12_inp" value="●  Open                                                   Validasi SPV QC" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#f4f4f4;strokeColor=#cccccc;strokeWidth=1;fontColor=#000000;fontStyle=1;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="785" y="1275" width="480" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="f12_help" value="* Lead time (selisih hari Tanggal Complain − Tanggal Produksi = 342 hari) dihitung otomatis saat disimpan." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=9;fontColor=#888888;" vertex="1" parent="1"><mxGeometry x="305" y="1313" width="600" height="14" as="geometry" /></mxCell>
+
+
+        <!-- ==============================================================
+             11. SECTION 7: DIAGRAM FISHBONE 6M (CARD 6)
+        ============================================================== -->
+        <mxCell id="card_6" value="" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="285" y="1351" width="1000" height="236" as="geometry" />
+        </mxCell>
+        <mxCell id="c6_title" value="Diagram Sebab-Akibat (Fishbone 6M)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="305" y="1361" width="300" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c6_btn_auto" value="↻ Isi otomatis dari Penyebab" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=10;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="1361" width="185" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="c6_sub" value="Akibat = jenis ketidaksesuaian. Isi sebab pada tiap kategori 6M (satu sebab per baris). Bisa ditambah/diedit bebas." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="305" y="1381" width="650" height="16" as="geometry" />
+        </mxCell>
+
+        <!-- 6M Grid: Baris 1 (Man, Machine, Material) -->
+        <mxCell id="fb_man_lbl" value="Man / Manusia" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=1;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="305" y="1405" width="150" height="14" as="geometry" /></mxCell>
+        <mxCell id="fb_man_inp" value="Kurang teliti saat pengecekan awal toleransi&#10;Operator terburu-buru mengejar target" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=10;align=left;verticalAlign=top;spacing=6;" vertex="1" parent="1"><mxGeometry x="305" y="1421" width="300" height="58" as="geometry" /></mxCell>
+
+        <mxCell id="fb_mc_lbl" value="Machine / Mesin" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=1;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="635" y="1405" width="150" height="14" as="geometry" /></mxCell>
+        <mxCell id="fb_mc_inp" value="Nilon pada mesin pemotong sudah aus&#10;Sensor stopper bergeser 3mm" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=10;align=left;verticalAlign=top;spacing=6;" vertex="1" parent="1"><mxGeometry x="635" y="1421" width="310" height="58" as="geometry" /></mxCell>
+
+        <mxCell id="fb_mat_lbl" value="Material" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=1;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="975" y="1405" width="150" height="14" as="geometry" /></mxCell>
+        <mxCell id="fb_mat_inp" value="Toleransi ketebalan paper core bervariasi" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=10;align=left;verticalAlign=top;spacing=6;" vertex="1" parent="1"><mxGeometry x="975" y="1421" width="290" height="58" as="geometry" /></mxCell>
+
+        <!-- 6M Grid: Baris 2 (Method, Environment, Measurement) -->
+        <mxCell id="fb_met_lbl" value="Method / Metode" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=1;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="305" y="1487" width="150" height="14" as="geometry" /></mxCell>
+        <mxCell id="fb_met_inp" value="SOP kalibrasi mesin belum berkala&#10;Metode potong manual saat switch batch" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=10;align=left;verticalAlign=top;spacing=6;" vertex="1" parent="1"><mxGeometry x="305" y="1503" width="300" height="58" as="geometry" /></mxCell>
+
+        <mxCell id="fb_env_lbl" value="Environment / Lingkungan" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=1;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="635" y="1487" width="150" height="14" as="geometry" /></mxCell>
+        <mxCell id="fb_env_inp" value="Pencahayaan area pemotongan redup" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=10;align=left;verticalAlign=top;spacing=6;" vertex="1" parent="1"><mxGeometry x="635" y="1503" width="310" height="58" as="geometry" /></mxCell>
+
+        <mxCell id="fb_mea_lbl" value="Measurement / Pengukuran" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=1;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="975" y="1487" width="150" height="14" as="geometry" /></mxCell>
+        <mxCell id="fb_mea_inp" value="Alat ukur sigmat belum dikalibrasi ulang" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=10;align=left;verticalAlign=top;spacing=6;" vertex="1" parent="1"><mxGeometry x="975" y="1503" width="290" height="58" as="geometry" /></mxCell>
+
+
+        <!-- ==============================================================
+             12. FORM SUBMIT ACTIONS (EDIT MODE: SIMPAN & AJUKAN VALIDASI)
+        ============================================================== -->
+        <mxCell id="btn_submit_change" value="Simpan Perubahan" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=12;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="285" y="1603" width="165" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="btn_submit_ajukan" value="✓  Ajukan Validasi" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#222222;strokeColor=#000000;strokeWidth=1.5;fontColor=#ffffff;fontSize=12;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="465" y="1603" width="165" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="btn_cancel_link" value="Batal" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#666666;fontStyle=4;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="645" y="1603" width="60" height="38" as="geometry" />
+        </mxCell>
+
+        <!-- Footnote Info -->
+        <mxCell id="wireframe_note" value="* Catatan Desain Wireframe: Standar UI Formulir Edit Customer Complaint &amp; Investigasi 6M Mutu (Process Tracker, Multi-Defect, CAPA, &amp; Ajukan Validasi) — PT Wahana Bermuda Nusantara." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=9;fontStyle=2;fontColor=#777777;" vertex="1" parent="1">
+          <mxGeometry x="285" y="1653" width="1000" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

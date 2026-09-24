@@ -1,0 +1,183 @@
+<mxfile host="app.diagrams.net" modified="2026-09-18T09:32:00.000Z" agent="Mozilla/5.0" version="21.6.8" type="device">
+  <diagram id="class-diagram-sistem-clean" name="Class Diagram - Sistem Complaint &amp; NCR">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="740" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ===== FRAME UTAMA UML ===== -->
+        <mxCell id="outer_frame" value="class Class Diagram Sistem Monitoring Customer Complaint &amp; NCR"
+          style="shape=umlFrame;whiteSpace=wrap;html=1;width=450;height=28;fontSize=12;fontStyle=1;align=left;spacingLeft=10;strokeColor=#000000;strokeWidth=1.5;fillColor=none;"
+          vertex="1" parent="1">
+          <mxGeometry x="30" y="25" width="1120" height="670" as="geometry" />
+        </mxCell>
+
+
+        <!-- ===================================================================
+             1. CLASS: User (Sisi Kiri, Vertically Centered)
+        =================================================================== -->
+        <!-- Header -->
+        <mxCell id="hdr_user" value="&lt;b&gt;User&lt;/b&gt;"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#000000;strokeWidth=1.2;fontSize=12;align=center;"
+          vertex="1" parent="1">
+          <mxGeometry x="60" y="235" width="250" height="30" as="geometry" />
+        </mxCell>
+        <!-- Attributes -->
+        <mxCell id="attrs_user" value="- id : int&#10;- name : string&#10;- email : string&#10;- password : string&#10;- role : string&#10;- remember_token : string&#10;- created_at : timestamp&#10;- updated_at : timestamp"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=10;fontFamily=Consolas,monospace;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;"
+          vertex="1" parent="1">
+          <mxGeometry x="60" y="265" width="250" height="135" as="geometry" />
+        </mxCell>
+        <!-- Operations -->
+        <mxCell id="ops_user" value="+ complaints() : HasMany&#10;+ isQa() : bool&#10;+ isSupervisor() : bool"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=10;fontFamily=Consolas,monospace;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;"
+          vertex="1" parent="1">
+          <mxGeometry x="60" y="400" width="250" height="65" as="geometry" />
+        </mxCell>
+
+
+        <!-- ===================================================================
+             2. CLASS: Complaint (Pusat / Hub Utama - TANPA FOTO BUKTI)
+        =================================================================== -->
+        <!-- Header -->
+        <mxCell id="hdr_complaint" value="&lt;b&gt;Complaint&lt;/b&gt;"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#000000;strokeWidth=1.5;fontSize=12;align=center;"
+          vertex="1" parent="1">
+          <mxGeometry x="380" y="65" width="370" height="30" as="geometry" />
+        </mxCell>
+        <!-- Attributes -->
+        <mxCell id="attrs_complaint" value="- id : int&#10;- user_id : int&#10;- no_customer : string&#10;- nama_customer : string&#10;- deskripsi_customer : string&#10;- ukuran : string&#10;- qty : int&#10;- tanggal_complain : date&#10;- tanggal_produksi : date&#10;- tanggal_kirim : date&#10;- area : string&#10;- status : string&#10;- lead_time : int&#10;- deskripsi_penyebab : string&#10;- fishbone : json&#10;- corrective_action : string&#10;- preventive_action : string&#10;- keterangan : string&#10;- perlu_visit : boolean&#10;- tanggal_visit : date&#10;- jam_visit : time&#10;- catatan_visit : string&#10;- supervisor_approval : string&#10;- catatan_supervisor : string&#10;- approved_at : datetime&#10;- created_at : timestamp&#10;- updated_at : timestamp"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=10;fontFamily=Consolas,monospace;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;"
+          vertex="1" parent="1">
+          <mxGeometry x="380" y="95" width="370" height="430" as="geometry" />
+        </mxCell>
+        <!-- Operations -->
+        <mxCell id="ops_complaint" value="+ user() : BelongsTo&#10;+ items() : HasMany&#10;+ fishboneNormalized() : array&#10;+ recalculateTransactionNumbers() : void&#10;+ save() : bool&#10;+ update(data : array) : bool&#10;+ delete() : bool"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=10;fontFamily=Consolas,monospace;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;"
+          vertex="1" parent="1">
+          <mxGeometry x="380" y="525" width="370" height="130" as="geometry" />
+        </mxCell>
+
+
+        <!-- ===================================================================
+             3. CLASS: ComplaintItem (Sisi Kanan Atas)
+        =================================================================== -->
+        <!-- Header -->
+        <mxCell id="hdr_item" value="&lt;b&gt;ComplaintItem&lt;/b&gt;"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#000000;strokeWidth=1.2;fontSize=12;align=center;"
+          vertex="1" parent="1">
+          <mxGeometry x="820" y="65" width="300" height="30" as="geometry" />
+        </mxCell>
+        <!-- Attributes -->
+        <mxCell id="attrs_item" value="- id : int&#10;- complaint_id : int&#10;- jenis_ketidaksesuaian : string&#10;- detail_ketidaksesuaian : string&#10;- penyebab : string&#10;- detail_penyebab : string&#10;- created_at : timestamp&#10;- updated_at : timestamp"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=10;fontFamily=Consolas,monospace;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;"
+          vertex="1" parent="1">
+          <mxGeometry x="820" y="95" width="300" height="135" as="geometry" />
+        </mxCell>
+        <!-- Operations -->
+        <mxCell id="ops_item" value="+ complaint() : BelongsTo&#10;+ save() : bool&#10;+ update(data : array) : bool&#10;+ delete() : bool"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=10;fontFamily=Consolas,monospace;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;"
+          vertex="1" parent="1">
+          <mxGeometry x="820" y="230" width="300" height="85" as="geometry" />
+        </mxCell>
+
+
+        <!-- ===================================================================
+             4. CLASS: DefectDictionary (Sisi Kanan Bawah)
+        =================================================================== -->
+        <!-- Header -->
+        <mxCell id="hdr_dict" value="&lt;b&gt;DefectDictionary&lt;/b&gt;"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#000000;strokeWidth=1.2;fontSize=12;align=center;"
+          vertex="1" parent="1">
+          <mxGeometry x="820" y="415" width="300" height="30" as="geometry" />
+        </mxCell>
+        <!-- Attributes -->
+        <mxCell id="attrs_dict" value="- id : int&#10;- jenis_ketidaksesuaian : string&#10;- definisi : string&#10;- detail_standar : string&#10;- penyebab_terkait : string&#10;- tindakan_rekomendasi : string&#10;- created_at : timestamp&#10;- updated_at : timestamp"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=10;fontFamily=Consolas,monospace;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;"
+          vertex="1" parent="1">
+          <mxGeometry x="820" y="445" width="300" height="135" as="geometry" />
+        </mxCell>
+        <!-- Operations -->
+        <mxCell id="ops_dict" value="+ scopeSearch(query, term) : Builder&#10;+ save() : bool&#10;+ update(data : array) : bool"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=10;fontFamily=Consolas,monospace;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;"
+          vertex="1" parent="1">
+          <mxGeometry x="820" y="580" width="300" height="75" as="geometry" />
+        </mxCell>
+
+
+        <!-- ===================================================================
+             RELASI OOP ANTAR KELAS (GARIS LURUS, PRESISI, TANPA TEKS BERLEBIH)
+        =================================================================== -->
+
+        <!-- RELASI 1: User (1) ke Complaint (0..*) [Asosiasi Langsung Horizontal] -->
+        <mxCell id="edge_user_complaint" value=""
+          style="endArrow=none;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.5;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="310" y="350" as="sourcePoint" />
+            <mxPoint x="380" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Kardinalitas User -->
+        <mxCell id="lbl_user_mult" value="1"
+          style="text;html=1;align=left;verticalAlign=bottom;fontSize=12;fontStyle=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="318" y="326" width="20" height="20" as="geometry" />
+        </mxCell>
+        <!-- Kardinalitas Complaint -->
+        <mxCell id="lbl_complaint_mult" value="0..*"
+          style="text;html=1;align=right;verticalAlign=bottom;fontSize=12;fontStyle=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="345" y="326" width="30" height="20" as="geometry" />
+        </mxCell>
+
+
+        <!-- RELASI 2: Complaint (1) ke ComplaintItem (1..*) [Komposisi Horizontal] -->
+        <mxCell id="edge_complaint_item" value=""
+          style="endArrow=none;startArrow=diamond;startFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.5;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="750" y="190" as="sourcePoint" />
+            <mxPoint x="820" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Kardinalitas Komposisi Complaint -->
+        <mxCell id="lbl_comp_item_mult1" value="1"
+          style="text;html=1;align=left;verticalAlign=bottom;fontSize=12;fontStyle=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="765" y="166" width="20" height="20" as="geometry" />
+        </mxCell>
+        <!-- Kardinalitas ComplaintItem -->
+        <mxCell id="lbl_comp_item_mult2" value="1..*"
+          style="text;html=1;align=right;verticalAlign=bottom;fontSize=12;fontStyle=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="785" y="166" width="30" height="20" as="geometry" />
+        </mxCell>
+
+
+        <!-- RELASI 3: ComplaintItem (*) ke DefectDictionary (0..1) [Asosiasi Vertikal] -->
+        <mxCell id="edge_item_dict" value=""
+          style="endArrow=open;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.5;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="970" y="315" as="sourcePoint" />
+            <mxPoint x="970" y="415" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Kardinalitas Item -->
+        <mxCell id="lbl_dict_mult1" value="*"
+          style="text;html=1;align=left;verticalAlign=top;fontSize=12;fontStyle=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="978" y="325" width="20" height="20" as="geometry" />
+        </mxCell>
+        <!-- Kardinalitas Dict -->
+        <mxCell id="lbl_dict_mult2" value="0..1"
+          style="text;html=1;align=left;verticalAlign=bottom;fontSize=12;fontStyle=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="978" y="388" width="30" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

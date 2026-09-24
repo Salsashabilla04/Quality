@@ -342,10 +342,38 @@
     </div>
     @endcan
 
-    <div class="flex items-center gap-3">
-        <button class="bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold px-6 py-2.5 rounded-lg">
-            {{ $isEdit ? 'Simpan Perubahan' : 'Simpan Complaint' }}
-        </button>
+    <div class="flex items-center gap-3 flex-wrap">
+        @if (!$isEdit)
+            {{-- Buat Baru: hanya tombol Simpan Complaint --}}
+            <button class="bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold px-6 py-2.5 rounded-lg">
+                Simpan Complaint
+            </button>
+        @elseif ($complaint->supervisor_approval === 'Rejected')
+            {{-- Status Revisi: tombol utama = Ajukan Validasi (simpan + ajukan sekaligus) --}}
+            <button name="ajukan_setelah_simpan" value="1"
+                    class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-6 py-2.5 rounded-lg inline-flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Ajukan Validasi
+            </button>
+            <button class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-semibold px-6 py-2.5 rounded-lg">
+                Simpan Sementara
+            </button>
+        @elseif ($complaint->status === 'Open' && (!$complaint->supervisor_approval || $complaint->supervisor_approval === 'Pending'))
+            {{-- Status Open (belum pernah diajukan / menunggu): Simpan + Ajukan --}}
+            <button class="bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold px-6 py-2.5 rounded-lg">
+                Simpan Perubahan
+            </button>
+            <button name="ajukan_setelah_simpan" value="1"
+                    class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-6 py-2.5 rounded-lg inline-flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Ajukan Validasi
+            </button>
+        @else
+            {{-- Status lainnya (Diproses / Close): hanya simpan biasa --}}
+            <button class="bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold px-6 py-2.5 rounded-lg">
+                Simpan Perubahan
+            </button>
+        @endif
         <a href="{{ route('complaints.index') }}" class="text-sm text-slate-500 hover:text-slate-700">Batal</a>
     </div>
 </form>

@@ -6,6 +6,7 @@ use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\SevenToolsController;
 use App\Http\Controllers\VisitController;
@@ -20,6 +21,9 @@ Route::middleware('guest')->group(function () {
 // ===== Admin (butuh login) =====
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::get('/password', [ProfileController::class, 'showPasswordForm'])->name('profile.password');
+    Route::put('/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 

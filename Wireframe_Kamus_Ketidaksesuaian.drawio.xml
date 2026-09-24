@@ -1,0 +1,429 @@
+<mxfile host="app.diagrams.net" modified="2026-09-21T18:30:00.000Z" agent="Mozilla/5.0" version="21.6.8" type="device">
+  <diagram id="wireframe-kamus-ketidaksesuaian" name="Wireframe - Kamus Ketidaksesuaian QC">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1320" pageHeight="1020" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ========================================== -->
+        <!-- BROWSER / APP WINDOW FRAME CONTAINER       -->
+        <!-- ========================================== -->
+        <mxCell id="win_bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="1280" height="980" as="geometry" />
+        </mxCell>
+
+        <!-- Browser Header Bar -->
+        <mxCell id="win_header" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="1280" height="36" as="geometry" />
+        </mxCell>
+        <!-- Browser Dots -->
+        <mxCell id="dot_1" value="" style="ellipse;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="36" y="32" width="12" height="12" as="geometry" />
+        </mxCell>
+        <mxCell id="dot_2" value="" style="ellipse;fillColor=#cccccc;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="54" y="32" width="12" height="12" as="geometry" />
+        </mxCell>
+        <mxCell id="dot_3" value="" style="ellipse;fillColor=#666666;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="72" y="32" width="12" height="12" as="geometry" />
+        </mxCell>
+        <!-- URL Bar -->
+        <mxCell id="win_url" value="http://localhost:8000/defect-dictionary (Wireframe Kamus Cacat QC - Hitam Putih)" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cccccc;strokeWidth=1;fontSize=11;fontFamily=Helvetica;fontColor=#333333;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="110" y="26" width="1170" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================== -->
+        <!-- TOPBAR NAVIGATION (HITAM PUTIH)           -->
+        <!-- ========================================== -->
+        <mxCell id="topbar" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="56" width="1060" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="topbar_title" value="Kamus QC" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;fontFamily=Helvetica;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="260" y="68" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="topbar_bell" value="🔔" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=15;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1255" y="68" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================== -->
+        <!-- SIDEBAR (LEFT NAVIGATION - SOLID BLACK)    -->
+        <!-- ========================================== -->
+        <mxCell id="sidebar" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="56" width="220" height="944" as="geometry" />
+        </mxCell>
+
+        <!-- Sidebar Brand / Logo Area -->
+        <mxCell id="sb_brand_logo" value="W" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontSize=16;fontStyle=1;fontFamily=Helvetica;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="36" y="74" width="34" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="sb_brand_title" value="WberPack" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=16;fontStyle=1;fontFamily=Helvetica;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="78" y="72" width="150" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="sb_brand_sub" value="Monitoring Complaint &amp; NCR" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontStyle=1;fontFamily=Helvetica;fontColor=#cccccc;" vertex="1" parent="1">
+          <mxGeometry x="36" y="112" width="190" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Sidebar Menu Items -->
+        <mxCell id="sb_menu_kpi" value="🏠  Dashboard QA" style="rounded=4;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;align=left;spacingLeft=15;fontSize=11;fontFamily=Helvetica;fontColor=#cccccc;" vertex="1" parent="1">
+          <mxGeometry x="30" y="160" width="200" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="sb_menu_comp" value="📁  Data Complaint &amp; NCR" style="rounded=4;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;align=left;spacingLeft=15;fontSize=11;fontFamily=Helvetica;fontColor=#cccccc;" vertex="1" parent="1">
+          <mxGeometry x="30" y="204" width="200" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="sb_menu_7tools" value="≡   Seven Tools QC" style="rounded=4;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;align=left;spacingLeft=15;fontSize=11;fontFamily=Helvetica;fontColor=#cccccc;" vertex="1" parent="1">
+          <mxGeometry x="30" y="248" width="200" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="sb_menu_apriori" value="📈  Analisis Apriori" style="rounded=4;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;align=left;spacingLeft=15;fontSize=11;fontFamily=Helvetica;fontColor=#cccccc;" vertex="1" parent="1">
+          <mxGeometry x="30" y="292" width="200" height="36" as="geometry" />
+        </mxCell>
+        
+        <!-- ACTIVE MENU: Kamus Cacat QC (MONOCHROME HIGHLIGHT) -->
+        <mxCell id="sb_menu_kamus_active" value="📖  Kamus Cacat QC" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#333333;strokeColor=#ffffff;strokeWidth=1;align=left;spacingLeft=15;fontSize=11;fontFamily=Helvetica;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="30" y="336" width="200" height="38" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sb_menu_customer" value="👥  Daftar Customer" style="rounded=4;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;align=left;spacingLeft=15;fontSize=11;fontFamily=Helvetica;fontColor=#cccccc;" vertex="1" parent="1">
+          <mxGeometry x="30" y="382" width="200" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="sb_menu_visit" value="📅  Jadwal Visit Supervisor" style="rounded=4;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;align=left;spacingLeft=15;fontSize=11;fontFamily=Helvetica;fontColor=#cccccc;" vertex="1" parent="1">
+          <mxGeometry x="30" y="426" width="200" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- Sidebar User Profile Footer (Hitam Putih Murni) -->
+        <mxCell id="sb_user_box" value="" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#1a1a1a;strokeColor=#333333;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="800" width="200" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="sb_user_avatar" value="S" style="ellipse;whiteSpace=wrap;html=1;fillColor=#333333;strokeColor=#ffffff;strokeWidth=1;fontSize=14;fontStyle=1;fontColor=#ffffff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="42" y="812" width="34" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="sb_user_name" value="Staff QA" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontFamily=Helvetica;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="84" y="812" width="130" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="sb_user_role" value="STAFF QA" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=9;fontStyle=1;fontFamily=Helvetica;fontColor=#aaaaaa;" vertex="1" parent="1">
+          <mxGeometry x="84" y="830" width="130" height="14" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sb_btn_pwd" value="🔑 Ganti Password" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#333333;strokeColor=#666666;strokeWidth=1;fontSize=10;fontFamily=Helvetica;fontColor=#ffffff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="42" y="870" width="176" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="sb_btn_logout" value="➔ Keluar" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#333333;strokeColor=#666666;strokeWidth=1;fontSize=10;fontFamily=Helvetica;fontColor=#ffffff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="42" y="916" width="176" height="34" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================== -->
+        <!-- MAIN CONTENT AREA (MONOCHROME / HITAM PUTIH)-->
+        <!-- ========================================== -->
+
+        <!-- 1. PAGE HEADER CARD -->
+        <mxCell id="header_card" value="" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="125" width="1020" height="68" as="geometry" />
+        </mxCell>
+        <mxCell id="header_icon" value="📖" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;" vertex="1" parent="1">
+          <mxGeometry x="272" y="139" width="36" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="header_title" value="Kamus Pengelompokan Mutu QC" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=16;fontStyle=1;fontFamily=Helvetica;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="312" y="133" width="450" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="header_sub" value="Pemetaan jenis &amp; rincian detail murni dari riwayat data input komplain real." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontFamily=Helvetica;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="312" y="159" width="600" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- Search Input Bar -->
+        <mxCell id="search_box" value="🔍 Cari jenis atau rincian detail..." style="rounded=8;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#cccccc;strokeWidth=1;fontSize=11;fontFamily=Helvetica;fontColor=#666666;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry x="930" y="141" width="330" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- 2. CONTROL BAR: TAB SWITCHER & VIEW MODE SWITCHER -->
+        <mxCell id="ctrl_bar" value="" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="205" width="1020" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Tab Pills Container -->
+        <mxCell id="tabs_bg" value="" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#cccccc;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="272" y="213" width="450" height="34" as="geometry" />
+        </mxCell>
+        <!-- Tab 1: ACTIVE (Ketidaksesuaian - Solid Black) -->
+        <mxCell id="tab_ketidaksesuaian" value="🏷️  Kamus Ketidaksesuaian (11)" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;strokeWidth=1;fontSize=11;fontFamily=Helvetica;fontStyle=1;fontColor=#ffffff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="274" y="215" width="220" height="30" as="geometry" />
+        </mxCell>
+        <!-- Tab 2: INACTIVE (Penyebab - Light Gray) -->
+        <mxCell id="tab_penyebab" value="🛠️  Kamus Penyebab (14)" style="rounded=6;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=11;fontFamily=Helvetica;fontStyle=0;fontColor=#555555;align=center;" vertex="1" parent="1">
+          <mxGeometry x="498" y="215" width="220" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- View Mode Switcher Container -->
+        <mxCell id="view_bg" value="" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#cccccc;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="1035" y="213" width="230" height="34" as="geometry" />
+        </mxCell>
+        <!-- View 1: ACTIVE (Tampilan Kartu - Solid Black) -->
+        <mxCell id="btn_view_cards" value="📱 Tampilan Kartu" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;strokeWidth=1;fontSize=11;fontFamily=Helvetica;fontStyle=1;fontColor=#ffffff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1037" y="215" width="112" height="30" as="geometry" />
+        </mxCell>
+        <!-- View 2: INACTIVE (Tabel Data) -->
+        <mxCell id="btn_view_table" value="📊 Tabel Data" style="rounded=6;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=11;fontFamily=Helvetica;fontStyle=0;fontColor=#555555;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1151" y="215" width="112" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================================================= -->
+        <!-- 3. MAIN CARDS GRID (MONOCHROME - PURE BLACK & WHITE)                      -->
+        <!-- ========================================================================= -->
+
+        <!-- ========== ROW 1 : CARD 1 (LENGTH ISSUE - 58 KASUS) ========== -->
+        <mxCell id="card_1" value="" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="260" y="270" width="326" height="340" as="geometry" />
+        </mxCell>
+        <!-- Header Card 1 -->
+        <mxCell id="c1_icon" value="📐" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=16;align=center;" vertex="1" parent="1">
+          <mxGeometry x="276" y="286" width="36" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_title" value="Length Issue" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontFamily=Helvetica;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="322" y="284" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_code" value="Length_Issue" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#cccccc;strokeWidth=1;fontSize=9.5;fontFamily=Courier;fontColor=#333333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="322" y="306" width="85" height="18" as="geometry" />
+        </mxCell>
+        <!-- Badge Kasus Monokrom Hitam -->
+        <mxCell id="c1_total" value="58 Kasus" style="rounded=12;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;strokeWidth=1;fontSize=10;fontFamily=Courier;fontStyle=1;fontColor=#ffffff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="502" y="288" width="70" height="24" as="geometry" />
+        </mxCell>
+        
+        <!-- Label Detail -->
+        <mxCell id="c1_lbl_det" value="RINCIAN DETAIL KETIDAKSESUAIAN (REAL INPUT):" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=8.5;fontStyle=1;fontFamily=Helvetica;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="276" y="340" width="300" height="16" as="geometry" />
+        </mxCell>
+
+        <!-- Pills Row 1 (Monokrom) -->
+        <mxCell id="c1_p1" value="• L(-)  43x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="276" y="364" width="90" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_p2" value="• L(+)  11x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="374" y="364" width="90" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Pills Row 2 -->
+        <mxCell id="c1_p3" value="• L Variasi  4x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="276" y="400" width="105" height="28" as="geometry" />
+        </mxCell>
+
+
+        <!-- ========== ROW 1 : CARD 2 (DEFORMATION - 29 KASUS - BORDER TEBAL HITAM) ========== -->
+        <mxCell id="card_2" value="" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2.5;" vertex="1" parent="1">
+          <mxGeometry x="606" y="270" width="326" height="340" as="geometry" />
+        </mxCell>
+        <!-- Header Card 2 -->
+        <mxCell id="c2_icon" value="📐" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=16;align=center;" vertex="1" parent="1">
+          <mxGeometry x="622" y="286" width="36" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_title" value="Deformation" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontFamily=Helvetica;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="668" y="284" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_code" value="Deformation" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#cccccc;strokeWidth=1;fontSize=9.5;fontFamily=Courier;fontColor=#333333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="668" y="306" width="85" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_total" value="29 Kasus" style="rounded=12;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;strokeWidth=1;fontSize=10;fontFamily=Courier;fontStyle=1;fontColor=#ffffff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="848" y="288" width="70" height="24" as="geometry" />
+        </mxCell>
+        
+        <!-- Label Detail -->
+        <mxCell id="c2_lbl_det" value="RINCIAN DETAIL KETIDAKSESUAIAN (REAL INPUT):" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=8.5;fontStyle=1;fontFamily=Helvetica;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="622" y="340" width="300" height="16" as="geometry" />
+        </mxCell>
+
+        <!-- Pills Row 1 -->
+        <mxCell id="c2_p1" value="• Dented  12x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="622" y="364" width="105" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_p2" value="• Oval  10x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="735" y="364" width="90" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Pills Row 2 -->
+        <mxCell id="c2_p3" value="• Bending  6x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="622" y="400" width="105" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_p4" value="• Bergelombang  1x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="735" y="400" width="135" height="28" as="geometry" />
+        </mxCell>
+
+
+        <!-- ========== ROW 1 : CARD 3 (VISUAL DEFECT - 29 KASUS) ========== -->
+        <mxCell id="card_3" value="" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="954" y="270" width="326" height="340" as="geometry" />
+        </mxCell>
+        <!-- Header Card 3 -->
+        <mxCell id="c3_icon" value="👁️" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=16;align=center;" vertex="1" parent="1">
+          <mxGeometry x="970" y="286" width="36" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_title" value="Visual Defect" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontFamily=Helvetica;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1016" y="284" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_code" value="Visual_Defect" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#cccccc;strokeWidth=1;fontSize=9.5;fontFamily=Courier;fontColor=#333333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1016" y="306" width="85" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_total" value="29 Kasus" style="rounded=12;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;strokeWidth=1;fontSize=10;fontFamily=Courier;fontStyle=1;fontColor=#ffffff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1196" y="288" width="70" height="24" as="geometry" />
+        </mxCell>
+        
+        <!-- Label Detail -->
+        <mxCell id="c3_lbl_det" value="RINCIAN DETAIL KETIDAKSESUAIAN (REAL INPUT):" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=8.5;fontStyle=1;fontFamily=Helvetica;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="970" y="340" width="300" height="16" as="geometry" />
+        </mxCell>
+
+        <!-- Pills Row 1 -->
+        <mxCell id="c3_p1" value="• Visual Kotor  13x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="970" y="364" width="130" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_p2" value="• NG Visual  11x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1108" y="364" width="120" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Pills Row 2 -->
+        <mxCell id="c3_p3" value="• Visual Inner Label Sobek  3x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="970" y="400" width="195" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Pills Row 3 -->
+        <mxCell id="c3_p4" value="• Inner Berminyak  2x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="970" y="436" width="145" height="28" as="geometry" />
+        </mxCell>
+
+
+        <!-- ========== ROW 2 : CARD 4 (ID ISSUE - 24 KASUS) ========== -->
+        <mxCell id="card_4" value="" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="260" y="625" width="326" height="340" as="geometry" />
+        </mxCell>
+        <!-- Header Card 4 -->
+        <mxCell id="c4_icon" value="⭕" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=16;align=center;" vertex="1" parent="1">
+          <mxGeometry x="276" y="641" width="36" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_title" value="ID Issue" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontFamily=Helvetica;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="322" y="639" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_code" value="ID_Issue" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#cccccc;strokeWidth=1;fontSize=9.5;fontFamily=Courier;fontColor=#333333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="322" y="661" width="70" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_total" value="24 Kasus" style="rounded=12;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;strokeWidth=1;fontSize=10;fontFamily=Courier;fontStyle=1;fontColor=#ffffff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="502" y="643" width="70" height="24" as="geometry" />
+        </mxCell>
+        
+        <!-- Label Detail -->
+        <mxCell id="c4_lbl_det" value="RINCIAN DETAIL KETIDAKSESUAIAN (REAL INPUT):" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=8.5;fontStyle=1;fontFamily=Helvetica;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="276" y="695" width="300" height="16" as="geometry" />
+        </mxCell>
+
+        <!-- Pills Row 1 -->
+        <mxCell id="c4_p1" value="• ID Tidak Rata  8x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="276" y="719" width="135" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_p2" value="• Seret  7x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="419" y="719" width="90" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Pills Row 2 -->
+        <mxCell id="c4_p3" value="• ID(-)  6x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="276" y="755" width="85" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_p4" value="• ID(+)  2x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="369" y="755" width="85" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Pills Row 3 -->
+        <mxCell id="c4_p5" value="• ID Come Down  1x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="276" y="791" width="140" height="28" as="geometry" />
+        </mxCell>
+
+
+        <!-- ========== ROW 2 : CARD 5 (ADHESION ISSUE - 18 KASUS) ========== -->
+        <mxCell id="card_5" value="" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="606" y="625" width="326" height="340" as="geometry" />
+        </mxCell>
+        <!-- Header Card 5 -->
+        <mxCell id="c5_icon" value="🔗" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=16;align=center;" vertex="1" parent="1">
+          <mxGeometry x="622" y="641" width="36" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_title" value="Adhesion Issue" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontFamily=Helvetica;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="668" y="639" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_code" value="Adhesion_Issue" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#cccccc;strokeWidth=1;fontSize=9.5;fontFamily=Courier;fontColor=#333333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="668" y="661" width="90" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_total" value="18 Kasus" style="rounded=12;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;strokeWidth=1;fontSize=10;fontFamily=Courier;fontStyle=1;fontColor=#ffffff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="848" y="643" width="70" height="24" as="geometry" />
+        </mxCell>
+        
+        <!-- Label Detail -->
+        <mxCell id="c5_lbl_det" value="RINCIAN DETAIL KETIDAKSESUAIAN (REAL INPUT):" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=8.5;fontStyle=1;fontFamily=Helvetica;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="622" y="695" width="300" height="16" as="geometry" />
+        </mxCell>
+
+        <!-- Pills Row 1 -->
+        <mxCell id="c5_p1" value="• Peel Off  6x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="622" y="719" width="105" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_p2" value="• Peel Off Outer  3x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="735" y="719" width="135" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Pills Row 2 -->
+        <mxCell id="c5_p3" value="• Unstuck Inner  2x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="622" y="755" width="135" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_p4" value="• Unstuck Body  2x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="765" y="755" width="135" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Pills Row 3 -->
+        <mxCell id="c5_p5" value="• Peel Off Inner  2x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="622" y="791" width="135" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_more" value="+ 3 detail lagi" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#e0e0e0;strokeColor=#000000;strokeWidth=1;fontSize=10;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="765" y="791" width="105" height="28" as="geometry" />
+        </mxCell>
+
+
+        <!-- ========== ROW 2 : CARD 6 (SPEC ISSUE - 14 KASUS) ========== -->
+        <mxCell id="card_6" value="" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="954" y="625" width="326" height="340" as="geometry" />
+        </mxCell>
+        <!-- Header Card 6 -->
+        <mxCell id="c6_icon" value="📋" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=16;align=center;" vertex="1" parent="1">
+          <mxGeometry x="970" y="641" width="36" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="c6_title" value="Spec Issue" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontFamily=Helvetica;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1016" y="639" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c6_code" value="Spec_Issue" style="rounded=4;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#cccccc;strokeWidth=1;fontSize=9.5;fontFamily=Courier;fontColor=#333333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1016" y="661" width="70" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="c6_total" value="14 Kasus" style="rounded=12;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;strokeWidth=1;fontSize=10;fontFamily=Courier;fontStyle=1;fontColor=#ffffff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1196" y="643" width="70" height="24" as="geometry" />
+        </mxCell>
+        
+        <!-- Label Detail -->
+        <mxCell id="c6_lbl_det" value="RINCIAN DETAIL KETIDAKSESUAIAN (REAL INPUT):" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=8.5;fontStyle=1;fontFamily=Helvetica;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="970" y="695" width="300" height="16" as="geometry" />
+        </mxCell>
+
+        <!-- Pills Row 1 -->
+        <mxCell id="c6_p1" value="• Overlap Outer  10x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="970" y="719" width="140" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Pills Row 2 -->
+        <mxCell id="c6_p2" value="• Berat Core Tidak Standar  2x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="970" y="755" width="195" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Pills Row 3 -->
+        <mxCell id="c6_p3" value="• Hasil Cetakan Berongga  1x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="970" y="791" width="185" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Pills Row 4 -->
+        <mxCell id="c6_p4" value="• Low FC  1x" style="rounded=10;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;fontSize=10.5;fontFamily=Helvetica;fontStyle=1;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="970" y="827" width="105" height="28" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

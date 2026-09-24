@@ -1,0 +1,452 @@
+<mxfile host="app.diagrams.net" modified="2026-09-19T11:55:00.000Z" agent="Mozilla/5.0" version="21.6.8" type="device">
+  <diagram id="wireframe-dashboard-qa-bw" name="Wireframe - Dashboard QA (Hitam Putih)">
+    <mxGraphModel dx="1400" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1360" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ==============================================================
+             BROWSER FRAME MOCKUP (STANDAR WIREFRAME HITAM PUTIH / SKRIPSI)
+        ============================================================== -->
+        <!-- Tab Browser di Kiri Atas -->
+        <mxCell id="tab_browser" value="Dashboard" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e5e5e5;strokeColor=#000000;strokeWidth=1.5;fontSize=12;fontStyle=1;fontFamily=Arial;align=center;" vertex="1" parent="1">
+          <mxGeometry x="60" y="15" width="130" height="26" as="geometry" />
+        </mxCell>
+
+        <!-- Outer Browser Window -->
+        <mxCell id="browser_window" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.8;" vertex="1" parent="1">
+          <mxGeometry x="30" y="40" width="1300" height="1020" as="geometry" />
+        </mxCell>
+
+        <!-- Browser Navigation Bar: Back, Forward, Refresh -->
+        <mxCell id="nav_back" value="←" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="45" y="48" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="nav_forward" value="→" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="80" y="48" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="nav_refresh" value="↻" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="115" y="48" width="28" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Address Bar (Pill Shape Bersih) -->
+        <mxCell id="address_bar" value="" style="rounded=15;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="155" y="48" width="1155" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="address_text" value="https://sistem-complaint.wbn.co.id/dashboard" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#333333;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="175" y="48" width="600" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Garis Pemisah Bawah Browser Bar -->
+        <mxCell id="line_browser_bottom" value="" style="endArrow=none;html=1;strokeColor=#000000;strokeWidth=1.5;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="30" y="86" as="sourcePoint" />
+            <mxPoint x="1330" y="86" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+
+        <!-- ==============================================================
+             SIDEBAR NAV (LEBAR 230px, WIREFRAME MONOKROM PUTIH & GARIS HITAM)
+        ============================================================== -->
+        <mxCell id="sidebar_bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="30" y="86" width="230" height="974" as="geometry" />
+        </mxCell>
+
+        <!-- Brand Logo & System Title: PT Wahana Bermuda Nusantara (WBN) -->
+        <mxCell id="logo_circle" value="WBN" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f4f4f4;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="42" y="102" width="38" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="logo_title" value="PT Wahana Bermuda Nusantara" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontStyle=1;fontColor=#000000;fontFamily=Arial;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="86" y="99" width="168" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="logo_subtitle" value="Monitoring Complaint &amp; NCR" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#444444;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="86" y="121" width="168" height="18" as="geometry" />
+        </mxCell>
+
+        <mxCell id="side_divider_top" value="" style="endArrow=none;html=1;strokeColor=#cccccc;strokeWidth=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="40" y="162" as="sourcePoint"/><mxPoint x="250" y="162" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Menu Item 1: Dashboard QA (Active State - Solid Black Wireframe) -->
+        <mxCell id="menu_active_box" value="" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#222222;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="42" y="174" width="206" height="40" as="geometry" />
+        </mxCell>
+        <!-- Home Icon Wireframe Outline -->
+        <mxCell id="icon_home_roof" value="" style="triangle;whiteSpace=wrap;html=1;rotation=-90;fillColor=none;strokeColor=#ffffff;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="54" y="183" width="14" height="12" as="geometry" />
+        </mxCell>
+        <mxCell id="icon_home_body" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#ffffff;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="54" y="192" width="14" height="12" as="geometry" />
+        </mxCell>
+        <mxCell id="menu_1_text" value="Dashboard QA" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#ffffff;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="78" y="174" width="160" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Menu Item 2: Data Complaint & NCR -->
+        <mxCell id="icon_doc_box" value="" style="rounded=2;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;strokeWidth=1.3;" vertex="1" parent="1">
+          <mxGeometry x="54" y="234" width="14" height="17" as="geometry" />
+        </mxCell>
+        <mxCell id="icon_doc_l" value="" style="endArrow=none;html=1;strokeColor=#000000;strokeWidth=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="57" y="240" as="sourcePoint"/><mxPoint x="65" y="240" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="menu_2_text" value="Data Complaint &amp; NCR" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="78" y="224" width="165" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- Menu Item 3: Seven Tools QC -->
+        <mxCell id="icon_st_l1" value="" style="endArrow=none;html=1;strokeColor=#000000;strokeWidth=1.5;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="54" y="280" as="sourcePoint"/><mxPoint x="68" y="280" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="icon_st_l2" value="" style="endArrow=none;html=1;strokeColor=#000000;strokeWidth=1.5;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="54" y="285" as="sourcePoint"/><mxPoint x="68" y="285" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="icon_st_l3" value="" style="endArrow=none;html=1;strokeColor=#000000;strokeWidth=1.5;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="54" y="290" as="sourcePoint"/><mxPoint x="64" y="290" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="menu_3_text" value="Seven Tools QC" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="78" y="268" width="165" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- Menu Item 4: Analisis Apriori -->
+        <mxCell id="icon_ap_line" value="" style="edgeStyle=none;endArrow=none;html=1;strokeColor=#000000;strokeWidth=1.5;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="54" y="332" as="sourcePoint"/><mxPoint x="68" y="321" as="targetPoint"/><Array as="points"><mxPoint x="59" y="328"/><mxPoint x="63" y="323"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="menu_4_text" value="Analisis Apriori" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="78" y="312" width="165" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- Menu Item 5: Kamus Cacat QC -->
+        <mxCell id="icon_book_l" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;strokeWidth=1.3;" vertex="1" parent="1"><mxGeometry x="54" y="366" width="7" height="15" as="geometry" /></mxCell>
+        <mxCell id="icon_book_r" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;strokeWidth=1.3;" vertex="1" parent="1"><mxGeometry x="61" y="366" width="7" height="15" as="geometry" /></mxCell>
+        <mxCell id="menu_5_text" value="Kamus Cacat QC" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="78" y="356" width="165" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- Menu Item 6: Daftar Customer -->
+        <mxCell id="icon_cust_h1" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=none;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1"><mxGeometry x="55" y="408" width="7" height="7" as="geometry" /></mxCell>
+        <mxCell id="icon_cust_b1" value="" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1"><mxGeometry x="53" y="416" width="11" height="6" as="geometry" /></mxCell>
+        <mxCell id="icon_cust_h2" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=none;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1"><mxGeometry x="63" y="410" width="6" height="6" as="geometry" /></mxCell>
+        <mxCell id="icon_cust_b2" value="" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1"><mxGeometry x="62" y="417" width="9" height="5" as="geometry" /></mxCell>
+        <mxCell id="menu_6_text" value="Daftar Customer" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="78" y="400" width="165" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- Menu Item 7: Jadwal Visit Supervisor -->
+        <mxCell id="icon_cal_box" value="" style="rounded=2;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;strokeWidth=1.3;" vertex="1" parent="1"><mxGeometry x="54" y="454" width="15" height="15" as="geometry" /></mxCell>
+        <mxCell id="icon_cal_top" value="" style="endArrow=none;html=1;strokeColor=#000000;strokeWidth=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="54" y="458" as="sourcePoint"/><mxPoint x="69" y="458" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="menu_7_text" value="Jadwal Visit Supervisor" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="78" y="444" width="165" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- Sidebar Footer: User Profile Widget (Hitam Putih) -->
+        <mxCell id="profile_avatar" value="S" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#222222;strokeColor=#000000;fontColor=#ffffff;fontSize=13;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="46" y="890" width="36" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="profile_name" value="Staff QA" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="90" y="888" width="130" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="profile_role" value="STAFF QA" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=9;fontColor=#666666;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="90" y="906" width="130" height="16" as="geometry" />
+        </mxCell>
+
+        <!-- Ganti Password Button Wireframe -->
+        <mxCell id="btn_pwd" value="⚿  Ganti Password" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="42" y="940" width="206" height="30" as="geometry" />
+        </mxCell>
+        <!-- Logout Button Wireframe -->
+        <mxCell id="btn_logout" value="↪  Keluar" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#888888;strokeWidth=1;fontColor=#000000;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="42" y="978" width="206" height="30" as="geometry" />
+        </mxCell>
+
+
+        <!-- ==============================================================
+             MAIN CONTENT (KANAN)
+        ============================================================== -->
+        <mxCell id="main_bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="260" y="86" width="1070" height="974" as="geometry" />
+        </mxCell>
+
+        <!-- TOP BAR / HEADER -->
+        <mxCell id="header_title" value="Dashboard" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="285" y="102" width="200" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="header_desc" value="Ringkasan monitoring Customer Complaint &amp; Non-Conformance Report" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#555555;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="285" y="126" width="480" height="18" as="geometry" />
+        </mxCell>
+
+        <!-- Header Actions: Bell Icon (Outline Vector), Laporan PDF, Input Complaint -->
+        <!-- Bell Icon Shape -->
+        <mxCell id="bell_body" value="" style="rounded=6;arcSize=50;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;strokeWidth=1.3;" vertex="1" parent="1">
+          <mxGeometry x="968" y="108" width="16" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="bell_bottom" value="" style="endArrow=none;html=1;strokeColor=#000000;strokeWidth=1.5;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="965" y="123" as="sourcePoint"/><mxPoint x="987" y="123" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="bell_clapper" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="974" y="124" width="4" height="4" as="geometry" />
+        </mxCell>
+
+        <mxCell id="btn_top_pdf" value="[↓] Laporan PDF" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontColor=#000000;fontSize=12;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1005" y="104" width="130" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="btn_top_input" value="+ Input Complaint" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#222222;strokeColor=#000000;strokeWidth=1;fontColor=#ffffff;fontSize=12;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1145" y="104" width="145" height="34" as="geometry" />
+        </mxCell>
+
+
+        <!-- ==============================================================
+             EWS ALERT BANNERS (HITAM PUTIH DENGAN OUTLINE TEGAS)
+        ============================================================== -->
+        <!-- BANNER 1: MENUNGGU VALIDASI -->
+        <mxCell id="banner_1" value="" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="285" y="152" width="1005" height="66" as="geometry" />
+        </mxCell>
+        <!-- Icon Circle Hourglass Wireframe -->
+        <mxCell id="b1_icon_circle" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f4f4f4;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="303" y="167" width="36" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="b1_icon_hg" value="◷" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="303" y="167" width="36" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="b1_title" value="MENUNGGU VALIDASI: 1 Dokumen NCR Menunggu Persetujuan Supervisor!" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="355" y="163" width="580" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="b1_sub" value="Dokumen telah diajukan dan sedang dalam antrean peninjauan oleh Supervisor QC." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#555555;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="355" y="183" width="580" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="btn_b1" value="Lihat Kasus Pending →" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#222222;strokeColor=#000000;fontColor=#ffffff;fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="168" width="155" height="34" as="geometry" />
+        </mxCell>
+
+        <!-- BANNER 2: SURAT NCR DIVALIDASI SPV -->
+        <mxCell id="banner_2" value="" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="285" y="228" width="1005" height="66" as="geometry" />
+        </mxCell>
+        <!-- Icon Circle Check Doc Wireframe -->
+        <mxCell id="b2_icon_circle" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f4f4f4;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="303" y="243" width="36" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="b2_icon_doc" value="✓" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="303" y="243" width="36" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="b2_title" value="SURAT NCR DIVALIDASI SPV: 181 Dokumen Surat NCR Telah Disetujui!" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="355" y="239" width="580" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="b2_sub" value="Supervisor QC telah memvalidasi dokumen. Tim QA dapat langsung mengunduh &amp; mencetak Surat NCR PDF resmi." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#555555;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="355" y="259" width="580" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="btn_b2" value="Lihat &amp; Unduh Surat NCR →" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#222222;strokeColor=#000000;fontColor=#ffffff;fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1105" y="244" width="170" height="34" as="geometry" />
+        </mxCell>
+
+        <!-- BANNER 3: PERINGATAN KASUS TERBUKA -->
+        <mxCell id="banner_3" value="" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="285" y="304" width="1005" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="b3_text" value="[ ! ]  Terdapat 1 kasus komplain yang perlu untuk ditinjau dan ditindaklanjuti." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="300" y="304" width="600" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="b3_link" value="Tinjau Kasus Sekarang →" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="304" width="175" height="36" as="geometry" />
+        </mxCell>
+
+
+        <!-- ==============================================================
+             KPI STAT CARDS GRID (8 KARTU METRIK HITAM PUTIH WIREFRAME)
+        ============================================================== -->
+        <!-- ROW 1 CARDS -->
+        <!-- Card 1: Total Complaint -->
+        <mxCell id="card_1" value="" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="285" y="350" width="240" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_dot" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="300" y="362" width="8" height="8" as="geometry" /></mxCell>
+        <mxCell id="c1_lbl" value="Total Complaint" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="314" y="358" width="140" height="16" as="geometry" /></mxCell>
+        <mxCell id="c1_arrow" value="→" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontColor=#888888;" vertex="1" parent="1"><mxGeometry x="495" y="358" width="18" height="16" as="geometry" /></mxCell>
+        <mxCell id="c1_val" value="182" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="300" y="378" width="100" height="30" as="geometry" /></mxCell>
+        <mxCell id="c1_sub" value="kasus (all time)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#666666;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="300" y="410" width="140" height="16" as="geometry" /></mxCell>
+
+        <!-- Card 2: NCR Divalidasi -->
+        <mxCell id="card_2" value="" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="540" y="350" width="240" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_dot" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="555" y="362" width="8" height="8" as="geometry" /></mxCell>
+        <mxCell id="c2_lbl" value="NCR Divalidasi [✓]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="569" y="358" width="140" height="16" as="geometry" /></mxCell>
+        <mxCell id="c2_arrow" value="→" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontColor=#888888;" vertex="1" parent="1"><mxGeometry x="750" y="358" width="18" height="16" as="geometry" /></mxCell>
+        <mxCell id="c2_val" value="181" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="555" y="378" width="100" height="30" as="geometry" /></mxCell>
+        <mxCell id="c2_sub" value="divalidasi SPV" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#666666;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="555" y="410" width="140" height="16" as="geometry" /></mxCell>
+
+        <!-- Card 3: NCR Belum Validasi -->
+        <mxCell id="card_3" value="" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="795" y="350" width="240" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_dot" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="810" y="362" width="8" height="8" as="geometry" /></mxCell>
+        <mxCell id="c3_lbl" value="NCR Belum Validasi [◷]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="824" y="358" width="150" height="16" as="geometry" /></mxCell>
+        <mxCell id="c3_arrow" value="→" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontColor=#888888;" vertex="1" parent="1"><mxGeometry x="1005" y="358" width="18" height="16" as="geometry" /></mxCell>
+        <mxCell id="c3_val" value="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="810" y="378" width="100" height="30" as="geometry" /></mxCell>
+        <mxCell id="c3_sub" value="menunggu review SPV" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#666666;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="810" y="410" width="140" height="16" as="geometry" /></mxCell>
+
+        <!-- Card 4: NCR Butuh Revisi -->
+        <mxCell id="card_4" value="" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="350" width="240" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_dot" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1065" y="362" width="8" height="8" as="geometry" /></mxCell>
+        <mxCell id="c4_lbl" value="NCR Butuh Revisi [↺]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="1079" y="358" width="150" height="16" as="geometry" /></mxCell>
+        <mxCell id="c4_arrow" value="→" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontColor=#888888;" vertex="1" parent="1"><mxGeometry x="1260" y="358" width="18" height="16" as="geometry" /></mxCell>
+        <mxCell id="c4_val" value="0" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="1065" y="378" width="100" height="30" as="geometry" /></mxCell>
+        <mxCell id="c4_sub" value="dikembalikan ke QA" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#666666;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="1065" y="410" width="140" height="16" as="geometry" /></mxCell>
+
+        <!-- ROW 2 CARDS -->
+        <!-- Card 5: Status Open -->
+        <mxCell id="card_5" value="" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="285" y="445" width="240" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_dot" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="300" y="457" width="8" height="8" as="geometry" /></mxCell>
+        <mxCell id="c5_lbl" value="Status Open" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="314" y="453" width="140" height="16" as="geometry" /></mxCell>
+        <mxCell id="c5_arrow" value="→" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontColor=#888888;" vertex="1" parent="1"><mxGeometry x="495" y="453" width="18" height="16" as="geometry" /></mxCell>
+        <mxCell id="c5_val" value="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="300" y="473" width="100" height="30" as="geometry" /></mxCell>
+        <mxCell id="c5_sub" value="belum selesai" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#666666;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="300" y="505" width="140" height="16" as="geometry" /></mxCell>
+
+        <!-- Card 6: Status Close -->
+        <mxCell id="card_6" value="" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="540" y="445" width="240" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="c6_dot" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="555" y="457" width="8" height="8" as="geometry" /></mxCell>
+        <mxCell id="c6_lbl" value="Status Close" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="569" y="453" width="140" height="16" as="geometry" /></mxCell>
+        <mxCell id="c6_arrow" value="→" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontColor=#888888;" vertex="1" parent="1"><mxGeometry x="750" y="453" width="18" height="16" as="geometry" /></mxCell>
+        <mxCell id="c6_val" value="180 / 182" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="555" y="473" width="130" height="30" as="geometry" /></mxCell>
+        <mxCell id="c6_sub" value="98.9% selesai" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#666666;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="555" y="505" width="140" height="16" as="geometry" /></mxCell>
+
+        <!-- Card 7: Jumlah Customer -->
+        <mxCell id="card_7" value="" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="795" y="445" width="240" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="c7_dot" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="810" y="457" width="8" height="8" as="geometry" /></mxCell>
+        <mxCell id="c7_lbl" value="Jumlah Customer" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="824" y="453" width="150" height="16" as="geometry" /></mxCell>
+        <mxCell id="c7_arrow" value="→" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontColor=#888888;" vertex="1" parent="1"><mxGeometry x="1005" y="453" width="18" height="16" as="geometry" /></mxCell>
+        <mxCell id="c7_val" value="36" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="810" y="473" width="100" height="30" as="geometry" /></mxCell>
+        <mxCell id="c7_sub" value="pihak/klien" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#666666;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="810" y="505" width="140" height="16" as="geometry" /></mxCell>
+
+        <!-- Card 8: Total Qty NG -->
+        <mxCell id="card_8" value="" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="445" width="240" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="c8_dot" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1065" y="457" width="8" height="8" as="geometry" /></mxCell>
+        <mxCell id="c8_lbl" value="Total Qty NG" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="1079" y="453" width="150" height="16" as="geometry" /></mxCell>
+        <mxCell id="c8_val" value="63,671" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="1065" y="473" width="130" height="30" as="geometry" /></mxCell>
+        <mxCell id="c8_sub" value="pcs terdeteksi" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#666666;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="1065" y="505" width="140" height="16" as="geometry" /></mxCell>
+
+
+        <!-- ==============================================================
+             CHART SECTION: TREND COMPLAINT (HITAM PUTIH WIREFRAME)
+        ============================================================== -->
+        <mxCell id="trend_card" value="" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="285" y="545" width="1005" height="235" as="geometry" />
+        </mxCell>
+        <mxCell id="trend_title" value="Trend Complaint" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="305" y="557" width="220" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="trend_desc" value="Menampilkan perkembangan jumlah customer complaint sebagai indikator performa kualitas produk." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#555555;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="305" y="579" width="580" height="16" as="geometry" />
+        </mxCell>
+
+        <!-- Dropdown Filter: Trend Bulanan -->
+        <mxCell id="trend_dropdown" value="Trend Bulanan  ▾" style="rounded=6;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=11;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1155" y="557" width="120" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Line Chart Axis & Grid Wireframe -->
+        <mxCell id="tr_axis_y" value="" style="endArrow=none;html=1;strokeColor=#000000;strokeWidth=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="345" y="615" as="sourcePoint"/><mxPoint x="345" y="730" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="tr_axis_x" value="" style="endArrow=none;html=1;strokeColor=#000000;strokeWidth=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="345" y="730" as="sourcePoint"/><mxPoint x="1265" y="730" as="targetPoint"/></mxGeometry></mxCell>
+
+        <!-- Horizontal Grid Lines -->
+        <mxCell id="tr_grid_1" value="" style="endArrow=none;html=1;strokeColor=#cccccc;strokeWidth=1;dashed=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="345" y="645" as="sourcePoint"/><mxPoint x="1265" y="645" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="tr_grid_2" value="" style="endArrow=none;html=1;strokeColor=#cccccc;strokeWidth=1;dashed=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="345" y="685" as="sourcePoint"/><mxPoint x="1265" y="685" as="targetPoint"/></mxGeometry></mxCell>
+
+        <!-- Polyline Trend Line Chart (Black Line) -->
+        <mxCell id="tr_line" value="" style="edgeStyle=none;endArrow=none;html=1;strokeColor=#000000;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="380" y="710" as="sourcePoint" />
+            <mxPoint x="1230" y="650" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="450" y="670" />
+              <mxPoint x="530" y="630" />
+              <mxPoint x="610" y="690" />
+              <mxPoint x="690" y="620" />
+              <mxPoint x="770" y="660" />
+              <mxPoint x="850" y="610" />
+              <mxPoint x="930" y="680" />
+              <mxPoint x="1010" y="640" />
+              <mxPoint x="1090" y="700" />
+              <mxPoint x="1160" y="630" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Sumbu X Label Bulan -->
+        <mxCell id="m_1" value="Jan" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="365" y="736" width="30" height="14" as="geometry" /></mxCell>
+        <mxCell id="m_2" value="Feb" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="440" y="736" width="30" height="14" as="geometry" /></mxCell>
+        <mxCell id="m_3" value="Mar" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="515" y="736" width="30" height="14" as="geometry" /></mxCell>
+        <mxCell id="m_4" value="Apr" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="595" y="736" width="30" height="14" as="geometry" /></mxCell>
+        <mxCell id="m_5" value="Mei" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="675" y="736" width="30" height="14" as="geometry" /></mxCell>
+        <mxCell id="m_6" value="Jun" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="755" y="736" width="30" height="14" as="geometry" /></mxCell>
+        <mxCell id="m_7" value="Jul" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="835" y="736" width="30" height="14" as="geometry" /></mxCell>
+        <mxCell id="m_8" value="Agu" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="915" y="736" width="30" height="14" as="geometry" /></mxCell>
+        <mxCell id="m_9" value="Sep" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="995" y="736" width="30" height="14" as="geometry" /></mxCell>
+        <mxCell id="m_10" value="Okt" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="1075" y="736" width="30" height="14" as="geometry" /></mxCell>
+        <mxCell id="m_11" value="Nov" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="1145" y="736" width="30" height="14" as="geometry" /></mxCell>
+        <mxCell id="m_12" value="Des" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="1215" y="736" width="30" height="14" as="geometry" /></mxCell>
+
+
+        <!-- ==============================================================
+             CHART SECTION 2: PARETO & APRIORI (2 KOLOM - HITAM PUTIH)
+        ============================================================== -->
+        <!-- Card Kiri: Diagram Pareto Ketidaksesuaian -->
+        <mxCell id="pareto_card" value="" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="285" y="792" width="495" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="pareto_title" value="Diagram Pareto — Detail Ketidaksesuaian" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="305" y="802" width="320" height="20" as="geometry" /></mxCell>
+        <mxCell id="pareto_sub" value="Detail uraian ketidaksesuaian dengan frekuensi tertinggi (aturan 80/20)." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#555555;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="305" y="822" width="380" height="16" as="geometry" /></mxCell>
+
+        <!-- Pareto Bar Charts Wireframe (Shades of Gray / Outline) -->
+        <mxCell id="p_b1" value="48" style="rounded=2;whiteSpace=wrap;html=1;fillColor=#222222;strokeColor=#000000;fontColor=#ffffff;fontSize=9;fontStyle=1;align=center;verticalAlign=top;spacingTop=2;" vertex="1" parent="1"><mxGeometry x="330" y="865" width="45" height="115" as="geometry" /></mxCell>
+        <mxCell id="p_b2" value="32" style="rounded=2;whiteSpace=wrap;html=1;fillColor=#666666;strokeColor=#000000;fontColor=#ffffff;fontSize=9;fontStyle=1;align=center;verticalAlign=top;spacingTop=2;" vertex="1" parent="1"><mxGeometry x="395" y="900" width="45" height="80" as="geometry" /></mxCell>
+        <mxCell id="p_b3" value="20" style="rounded=2;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#000000;fontColor=#ffffff;fontSize=9;fontStyle=1;align=center;verticalAlign=top;spacingTop=2;" vertex="1" parent="1"><mxGeometry x="460" y="930" width="45" height="50" as="geometry" /></mxCell>
+        <mxCell id="p_b4" value="12" style="rounded=2;whiteSpace=wrap;html=1;fillColor=#cccccc;strokeColor=#000000;fontColor=#000000;fontSize=9;fontStyle=1;align=center;verticalAlign=top;spacingTop=2;" vertex="1" parent="1"><mxGeometry x="525" y="950" width="45" height="30" as="geometry" /></mxCell>
+        <mxCell id="p_b5" value="6" style="rounded=2;whiteSpace=wrap;html=1;fillColor=#eeeeee;strokeColor=#000000;fontColor=#000000;fontSize=9;fontStyle=1;align=center;verticalAlign=top;spacingTop=2;" vertex="1" parent="1"><mxGeometry x="590" y="965" width="45" height="15" as="geometry" /></mxCell>
+
+        <!-- Pareto Cumulative Line (Dashed Black Line) -->
+        <mxCell id="p_line" value="" style="edgeStyle=none;endArrow=none;html=1;strokeColor=#000000;strokeWidth=1.8;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="352" y="885" as="sourcePoint"/><mxPoint x="612" y="845" as="targetPoint"/><Array as="points"><mxPoint x="417" y="870"/><mxPoint x="482" y="858"/><mxPoint x="547" y="850"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="p_lbl_1" value="Scratch" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="325" y="985" width="55" height="14" as="geometry" /></mxCell>
+        <mxCell id="p_lbl_2" value="Dent" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="390" y="985" width="55" height="14" as="geometry" /></mxCell>
+        <mxCell id="p_lbl_3" value="Dimensi" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="455" y="985" width="55" height="14" as="geometry" /></mxCell>
+        <mxCell id="p_lbl_4" value="Karat" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="520" y="985" width="55" height="14" as="geometry" /></mxCell>
+        <mxCell id="p_lbl_5" value="Lainnya" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="585" y="985" width="55" height="14" as="geometry" /></mxCell>
+
+
+        <!-- Card Kanan: Pola Keterkaitan Cacat (Lift Ratio Apriori) -->
+        <mxCell id="apriori_card" value="" style="rounded=8;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="795" y="792" width="495" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="ap_title" value="Pola Keterkaitan Cacat (Lift Ratio — Apriori)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#000000;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="815" y="802" width="330" height="20" as="geometry" /></mxCell>
+        <mxCell id="ap_sub" value="Tingkat kekuatan kaitan sebab-akibat antara jenis ketidaksesuaian dan penyebab utama." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#555555;fontFamily=Arial;" vertex="1" parent="1"><mxGeometry x="815" y="822" width="420" height="16" as="geometry" /></mxCell>
+
+        <!-- Apriori Horizontal Rules (Grayscale) -->
+        <mxCell id="r1_lbl" value="[Scratch] ➔ [Dies Aus / Mesin Press]" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=1;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="818" y="852" width="260" height="14" as="geometry" /></mxCell>
+        <mxCell id="r1_lift" value="Lift: 5.4x (Sangat Kuat)" style="text;html=1;strokeColor=none;fillColor=none;align=right;fontSize=9;fontColor=#000000;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="1145" y="852" width="130" height="14" as="geometry" /></mxCell>
+        <mxCell id="r1_bar_bg" value="" style="rounded=2;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#cccccc;strokeWidth=1;" vertex="1" parent="1"><mxGeometry x="818" y="868" width="455" height="10" as="geometry" /></mxCell>
+        <mxCell id="r1_bar" value="" style="rounded=2;whiteSpace=wrap;html=1;fillColor=#222222;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="818" y="868" width="455" height="10" as="geometry" /></mxCell>
+
+        <mxCell id="r2_lbl" value="[Dent] ➔ [Handling Forklift]" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=1;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="818" y="890" width="260" height="14" as="geometry" /></mxCell>
+        <mxCell id="r2_lift" value="Lift: 3.8x (Kuat)" style="text;html=1;strokeColor=none;fillColor=none;align=right;fontSize=9;fontColor=#000000;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="1145" y="890" width="130" height="14" as="geometry" /></mxCell>
+        <mxCell id="r2_bar_bg" value="" style="rounded=2;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#cccccc;strokeWidth=1;" vertex="1" parent="1"><mxGeometry x="818" y="906" width="455" height="10" as="geometry" /></mxCell>
+        <mxCell id="r2_bar" value="" style="rounded=2;whiteSpace=wrap;html=1;fillColor=#666666;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="818" y="906" width="320" height="10" as="geometry" /></mxCell>
+
+        <mxCell id="r3_lbl" value="[Dimensi NG] ➔ [Setting Parameter Mesin]" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=1;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="818" y="928" width="260" height="14" as="geometry" /></mxCell>
+        <mxCell id="r3_lift" value="Lift: 2.5x (Sedang)" style="text;html=1;strokeColor=none;fillColor=none;align=right;fontSize=9;fontColor=#000000;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="1145" y="928" width="130" height="14" as="geometry" /></mxCell>
+        <mxCell id="r3_bar_bg" value="" style="rounded=2;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#cccccc;strokeWidth=1;" vertex="1" parent="1"><mxGeometry x="818" y="944" width="455" height="10" as="geometry" /></mxCell>
+        <mxCell id="r3_bar" value="" style="rounded=2;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="818" y="944" width="210" height="10" as="geometry" /></mxCell>
+
+        <!-- Legend Apriori -->
+        <mxCell id="ap_legend" value="Keterangan:  [■] Sangat Kuat (&ge;5x)   [■] Kuat (&ge;3x)   [■] Sedang (&ge;1.5x)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=9;fontColor=#555555;" vertex="1" parent="1">
+          <mxGeometry x="818" y="985" width="440" height="16" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

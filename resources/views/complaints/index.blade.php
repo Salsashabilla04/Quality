@@ -179,8 +179,8 @@
     </div>
 </form>
 
-<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-    <div class="overflow-x-auto">
+<div class="bg-white rounded-xl shadow-sm border border-slate-200">
+    <div class="overflow-x-auto min-h-[320px] pb-12">
         <table class="w-full text-sm">
             <thead>
                 <tr class="bg-slate-50 text-left text-xs text-slate-500 uppercase tracking-wide border-b border-slate-200">
@@ -194,7 +194,9 @@
                     <th class="px-3.5 py-3 font-bold text-right whitespace-nowrap">Lead</th>
                     <th class="px-3.5 py-3 font-bold whitespace-nowrap">Status QA</th>
                     <th class="px-3.5 py-3 font-bold whitespace-nowrap">Validasi SPV</th>
-                    <th class="px-3.5 py-3 font-bold text-right whitespace-nowrap">Aksi</th>
+                    @can('manage-complaints')
+                        <th class="px-3.5 py-3 font-bold text-right whitespace-nowrap">Aksi</th>
+                    @endcan
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
@@ -245,21 +247,17 @@
                         {{-- STATUS QA COLUMN --}}
                         <td class="px-3.5 py-3 whitespace-nowrap">
                             @if($c->status === 'Open')
-                                <span class="inline-flex items-center justify-center gap-1.5 text-xs h-7 min-w-[82px] px-2.5 rounded-md font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                                <span class="inline-flex items-center justify-center gap-1.5 text-xs h-8 min-w-[90px] px-2.5 rounded-md font-bold bg-amber-100 text-amber-800 border border-amber-300" @if($isOverdue) title="Kasus berumur lebih dari 7 hari" @endif>
                                     <span class="w-2 h-2 rounded-full bg-amber-500"></span> Open
                                 </span>
                             @elseif($c->status === 'Diproses')
-                                <span class="inline-flex items-center justify-center gap-1.5 text-xs h-7 min-w-[82px] px-2.5 rounded-md font-bold bg-sky-100 text-sky-800 border border-sky-300">
+                                <span class="inline-flex items-center justify-center gap-1.5 text-xs h-8 min-w-[90px] px-2.5 rounded-md font-bold bg-sky-100 text-sky-800 border border-sky-300">
                                     <span class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span> Diproses
                                 </span>
                             @else
-                                <span class="inline-flex items-center justify-center gap-1.5 text-xs h-7 min-w-[82px] px-2.5 rounded-md font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                <span class="inline-flex items-center justify-center gap-1.5 text-xs h-8 min-w-[90px] px-2.5 rounded-md font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
                                     <span class="w-2 h-2 rounded-full bg-emerald-600"></span> Close
                                 </span>
-                            @endif
-
-                            @if($isOverdue)
-                                <span class="block mt-1 text-[9px] font-bold text-rose-600 uppercase tracking-wider text-center">Overdue</span>
                             @endif
                         </td>
 
@@ -267,49 +265,58 @@
                         <td class="px-3.5 py-3 whitespace-nowrap">
                             <div class="flex flex-col gap-1 items-start">
                                 @if($c->status === 'Close')
-                                    {{-- 3. Selesai -> Warna Hijau -> NCR Terbit (PDF) --}}
                                     <a href="{{ route('complaints.ncr', $c) }}" target="_blank"
-                                       class="inline-flex items-center justify-center gap-1.5 text-xs h-8 min-w-[150px] px-3.5 rounded-lg font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
-                                       title="Klik langsung untuk mengunduh Surat NCR (PDF)">
+                                       class="inline-flex items-center justify-center gap-1.5 text-xs h-8 w-[150px] rounded-lg font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
+                                       title="Klik untuk melihat / mengunduh Surat NCR (PDF)">
                                         <span>📄</span>
                                         <span>NCR Terbit (PDF)</span>
                                     </a>
                                 @elseif($c->status === 'Diproses')
-                                    {{-- 2. Sudah diajukan -> Diproses -> Warna Biru -> Keterangan (Sedang Diajukan) --}}
-                                    <span class="inline-flex items-center justify-center gap-1.5 text-xs h-8 min-w-[150px] px-3.5 rounded-lg font-bold bg-sky-100 text-sky-800 border border-sky-300 shadow-2xs"
-                                          title="Menunggu Validasi CAPA dari Supervisor QC">
-                                        <span class="w-2 h-2 rounded-full bg-sky-500 shrink-0 animate-pulse"></span>
-                                        <span>Sedang Diajukan</span>
-                                    </span>
+                                    @can('approve-ncr')
+                                        <button type="button"
+                                            onclick="openApproveModal({{ $c->id }}, '{{ $c->no_customer }}', '{{ $approval }}', '{{ addslashes($c->catatan_supervisor ?? '') }}', {{ $c->perlu_visit ? 1 : 0 }}, '{{ optional($c->tanggal_visit)->format('Y-m-d') }}', '{{ $c->jam_visit ? substr($c->jam_visit, 0, 5) : '' }}', '{{ addslashes($c->catatan_visit ?? '') }}', '{{ addslashes($c->nama_customer) }}', '{{ addslashes(implode(', ', $ketTags->all())) }}', '{{ addslashes(implode('; ', $detKetTags->all())) }}', '{{ addslashes(implode(', ', $penTags->all())) }}', '{{ addslashes(implode('; ', $detPenTags->all())) }}', '{{ addslashes($c->corrective_action ?? '') }}', '{{ addslashes($c->preventive_action ?? '') }}', '{{ addslashes($c->deskripsi_customer ?? '') }}', '{{ addslashes($c->ukuran ?? '') }}', '{{ $c->qty ? number_format($c->qty) : '' }}', '{{ addslashes($c->deskripsi_penyebab ?? '') }}')"
+                                            class="inline-flex items-center justify-center gap-1.5 text-xs h-8 w-[150px] rounded-lg font-bold bg-violet-600 hover:bg-violet-700 text-white shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                                            title="Klik untuk membuka Form Validasi & Persetujuan NCR">
+                                            <span>🛡️</span>
+                                            <span>Validasi SPV</span>
+                                        </button>
+                                    @else
+                                        <span class="inline-flex items-center justify-center gap-1.5 text-xs h-8 w-[150px] rounded-lg font-bold bg-sky-100 text-sky-800 border border-sky-300 shadow-2xs"
+                                              title="Menunggu Validasi CAPA dari Supervisor QC">
+                                            <span class="w-2 h-2 rounded-full bg-sky-500 shrink-0 animate-pulse"></span>
+                                            <span>Sedang Diajukan</span>
+                                        </span>
+                                    @endcan
                                 @elseif($approval === 'Rejected')
-                                    {{-- 4. SPV Minta Revisi -> Warna Merah -> Perlu Revisi --}}
                                     @can('manage-complaints')
                                         <a href="{{ route('complaints.edit', $c) }}"
-                                           class="inline-flex items-center justify-center gap-1.5 text-xs h-8 min-w-[150px] px-3.5 rounded-lg font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
-                                           title="Klik langsung untuk memperbarui data investigasi 6M / CAPA">
+                                           class="inline-flex items-center justify-center gap-1.5 text-xs h-8 w-[150px] rounded-lg font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
+                                           title="Klik langsung untuk memperbarui investigasi 6M / CAPA">
                                             <span>⚠️</span>
                                             <span>Perlu Revisi</span>
                                         </a>
                                     @else
-                                        <span class="inline-flex items-center justify-center gap-1.5 text-xs h-8 min-w-[150px] px-3.5 rounded-lg font-bold bg-rose-50 text-rose-700 border border-rose-200">
-                                            <span class="w-2 h-2 rounded-full bg-rose-500 shrink-0"></span>
-                                            <span>Perlu Revisi</span>
-                                        </span>
+                                        <button type="button"
+                                            onclick="openApproveModal({{ $c->id }}, '{{ $c->no_customer }}', '{{ $approval }}', '{{ addslashes($c->catatan_supervisor ?? '') }}', {{ $c->perlu_visit ? 1 : 0 }}, '{{ optional($c->tanggal_visit)->format('Y-m-d') }}', '{{ $c->jam_visit ? substr($c->jam_visit, 0, 5) : '' }}', '{{ addslashes($c->catatan_visit ?? '') }}', '{{ addslashes($c->nama_customer) }}', '{{ addslashes(implode(', ', $ketTags->all())) }}', '{{ addslashes(implode('; ', $detKetTags->all())) }}', '{{ addslashes(implode(', ', $penTags->all())) }}', '{{ addslashes(implode('; ', $detPenTags->all())) }}', '{{ addslashes($c->corrective_action ?? '') }}', '{{ addslashes($c->preventive_action ?? '') }}', '{{ addslashes($c->deskripsi_customer ?? '') }}', '{{ addslashes($c->ukuran ?? '') }}', '{{ $c->qty ? number_format($c->qty) : '' }}', '{{ addslashes($c->deskripsi_penyebab ?? '') }}')"
+                                            class="inline-flex items-center justify-center gap-1.5 text-xs h-8 w-[150px] rounded-lg font-bold bg-rose-100 hover:bg-rose-200 text-rose-800 border border-rose-300 transition-all cursor-pointer"
+                                            title="Klik untuk meninjau ulang status revisi">
+                                            <span>⚠️</span>
+                                            <span>Status Revisi</span>
+                                        </button>
                                     @endcan
                                 @else
-                                    {{-- 1. Input otomatis Open -> Warna Orange -> Keterangan (Ajukan Validasi) --}}
                                     @can('manage-complaints')
                                         <form action="{{ route('complaints.ajukan-validasi', $c) }}" method="POST" onsubmit="return confirm('Ajukan validasi CAPA kasus {{ $c->no_customer }} ke Supervisor QC?')" class="inline-block">
                                             @csrf @method('PATCH')
-                                            <button type="submit" class="inline-flex items-center justify-center gap-1.5 text-xs h-8 min-w-[150px] px-3.5 rounded-lg font-bold bg-orange-500 hover:bg-orange-600 text-white shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
+                                            <button type="submit" class="inline-flex items-center justify-center gap-1.5 text-xs h-8 w-[150px] rounded-lg font-bold bg-orange-500 hover:bg-orange-600 text-white shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
                                                     title="Klik langsung untuk mengajukan validasi ke Supervisor">
                                                 <span>🚀</span>
                                                 <span>Ajukan Validasi</span>
                                             </button>
                                         </form>
                                     @else
-                                        <span class="inline-flex items-center justify-center gap-1.5 text-xs h-8 min-w-[150px] px-3.5 rounded-lg font-bold bg-amber-50 text-amber-800 border border-amber-200">
-                                            <span>Draft QA (Open)</span>
+                                        <span class="inline-flex items-center justify-center gap-1.5 text-xs h-8 w-[150px] rounded-lg font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                                            <span>Draft (Open)</span>
                                         </span>
                                     @endcan
                                 @endif
@@ -323,72 +330,38 @@
                             </div>
                         </td>
 
-                        {{-- Actions Column --}}
-                        <td class="px-4 py-3 text-right">
-                            <div class="row-menu relative inline-block text-left">
-                                <button type="button" class="menu-btn p-1.5 rounded-lg hover:bg-slate-100 text-slate-500">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M10 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM10 11.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM10 17a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
-                                    </svg>
-                                </button>
-                                <div class="menu-panel hidden absolute right-0 mt-1 w-52 bg-white border border-slate-200 rounded-lg shadow-lg z-20 py-1">
-                                    
-                                    {{-- QA Actions --}}
-                                    @can('manage-complaints')
-                                        @if($c->status === 'Open')
-                                            <form action="{{ route('complaints.ajukan-validasi', $c) }}" method="POST" onsubmit="return confirm('Ajukan validasi CAPA kasus ini ke Supervisor QC?')">
-                                                @csrf @method('PATCH')
-                                                <button class="w-full text-left px-3 py-2 text-sm text-sky-700 font-semibold hover:bg-sky-50 flex items-center justify-between">
-                                                    <span>🚀 Ajukan Validasi SPV</span>
-                                                    <span class="text-[9px] bg-sky-100 text-sky-800 px-1.5 py-0.5 rounded font-bold">Kirim</span>
-                                                </button>
-                                            </form>
-                                            <div class="border-t border-slate-100 my-1"></div>
-                                        @endif
+                        {{-- Actions Column: Only rendered for QA --}}
+                        @can('manage-complaints')
+                            <td class="px-4 py-3 text-right whitespace-nowrap">
+                                <div class="row-menu relative inline-block text-left">
+                                    <button type="button" class="menu-btn p-1.5 rounded-lg hover:bg-slate-100 text-slate-500">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM10 11.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM10 17a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+                                        </svg>
+                                    </button>
+                                    <div class="menu-panel hidden absolute right-0 mt-1 w-52 bg-white border border-slate-200 rounded-lg shadow-xl z-30 py-1">
                                         <a href="{{ route('complaints.edit', $c) }}" class="block px-3 py-2 text-sm text-slate-700 hover:bg-slate-50">✏️ Edit / Investigasi QA</a>
-                                    @endcan
-
-                                    {{-- Supervisor Approval Action --}}
-                                    @can('approve-ncr')
-                                        <button type="button"
-                                            onclick="openApproveModal({{ $c->id }}, '{{ $c->no_customer }}', '{{ $approval }}', '{{ addslashes($c->catatan_supervisor ?? '') }}', {{ $c->perlu_visit ? 1 : 0 }}, '{{ optional($c->tanggal_visit)->format('Y-m-d') }}', '{{ $c->jam_visit ? substr($c->jam_visit, 0, 5) : '' }}', '{{ addslashes($c->catatan_visit ?? '') }}', '{{ addslashes($c->nama_customer) }}', '{{ addslashes(implode(', ', $ketTags->all())) }}', '{{ addslashes(implode('; ', $detKetTags->all())) }}', '{{ addslashes(implode(', ', $penTags->all())) }}', '{{ addslashes(implode('; ', $detPenTags->all())) }}', '{{ addslashes($c->corrective_action ?? '') }}', '{{ addslashes($c->preventive_action ?? '') }}', '{{ addslashes($c->deskripsi_customer ?? '') }}', '{{ addslashes($c->ukuran ?? '') }}', '{{ $c->qty ? number_format($c->qty) : '' }}', '{{ addslashes($c->deskripsi_penyebab ?? '') }}')"
-                                            class="w-full text-left px-3 py-2 text-sm text-violet-700 font-semibold hover:bg-violet-50 flex items-center justify-between">
-                                            <span>🛡️ Validasi SPV</span>
-                                            <span class="text-[10px] bg-violet-100 px-1.5 py-0.5 rounded font-bold">Aksi</span>
-                                        </button>
-                                        <div class="border-t border-slate-100 my-1"></div>
-                                    @endcan
-
-                                    {{-- Download Surat NCR PDF (Only active if status is Close) --}}
-                                    @if($c->status === 'Close')
-                                        <a href="{{ route('complaints.ncr', $c) }}" target="_blank"
-                                           class="w-full text-left px-3 py-2 text-sm text-emerald-700 font-medium hover:bg-emerald-50 flex items-center justify-between">
-                                            <span>📄 Surat NCR (PDF)</span>
-                                            <span class="text-[9px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold">Ready</span>
-                                        </a>
-                                    @else
-                                        <div class="px-3 py-2 text-xs text-slate-400 italic flex items-center justify-between cursor-not-allowed"
-                                             title="Surat NCR PDF hanya dapat diunduh setelah disetujui & berstatus Close">
-                                            <span>🔒 Surat NCR (PDF)</span>
-                                            <span class="text-[9px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-bold">Perlu SPV</span>
-                                        </div>
-                                    @endif
-
-                                    @can('manage-complaints')
+                                        @if($c->status !== 'Close' && $c->status !== 'Diproses')
+                                            <form action="{{ route('complaints.ajukan-validasi', $c) }}" method="POST"
+                                                  onsubmit="return confirm('Ajukan validasi CAPA kasus {{ $c->no_customer }} ke Supervisor QC?')">
+                                                @csrf @method('PATCH')
+                                                <button class="w-full text-left px-3 py-2 text-sm text-emerald-700 hover:bg-emerald-50">🚀 Ajukan Validasi</button>
+                                            </form>
+                                        @endif
                                         <div class="border-t border-slate-100 my-1"></div>
                                         <form action="{{ route('complaints.destroy', $c) }}" method="POST"
                                               onsubmit="return confirm('Hapus complaint {{ $c->no_customer }}?')">
                                             @csrf @method('DELETE')
                                             <button class="w-full text-left px-3 py-2 text-sm text-rose-600 hover:bg-rose-50">🗑️ Hapus</button>
                                         </form>
-                                    @endcan
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
+                            </td>
+                        @endcan
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="11" class="px-4 py-12 text-center text-slate-400">
+                        <td colspan="{{ auth()->user()->role === 'qa' ? 11 : 10 }}" class="px-4 py-12 text-center text-slate-400">
                             Tidak ada data complaint ditemukan.
                         </td>
                     </tr>

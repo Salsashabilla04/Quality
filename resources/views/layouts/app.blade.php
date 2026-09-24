@@ -120,23 +120,32 @@
         </nav>
         <div class="px-4 py-4 border-t border-slate-700">
             <div class="flex items-center gap-2 px-1 mb-3">
-                <div class="w-8 h-8 rounded-full bg-sky-600 text-white flex items-center justify-center text-xs font-bold">
+                <div class="w-8 h-8 rounded-full bg-sky-600 text-white flex items-center justify-center text-xs font-bold shrink-0">
                     {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
                 </div>
-                <div class="min-w-0">
+                <div class="min-w-0 flex-1">
                     <div class="text-xs font-medium text-white truncate">{{ auth()->user()->name ?? 'User' }}</div>
                     <div class="text-[10px] text-sky-400 font-bold uppercase truncate">{{ auth()->user()->role === 'supervisor' ? 'Supervisor QC' : 'Staff QA' }}</div>
                 </div>
             </div>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button class="w-full flex items-center justify-center gap-2 text-xs text-slate-300 hover:bg-slate-800 px-3 py-2 rounded-lg border border-slate-700">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            <div class="space-y-1.5">
+                <a href="{{ route('profile.password') }}" 
+                   class="w-full flex items-center justify-center gap-2 text-xs text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-lg border border-slate-700/80 transition {{ request()->routeIs('profile.password') ? 'bg-slate-800 text-white border-sky-500/50 ring-1 ring-sky-500/50' : '' }}">
+                    <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
                     </svg>
-                    Keluar
-                </button>
-            </form>
+                    Ganti Password
+                </a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button class="w-full flex items-center justify-center gap-2 text-xs text-slate-400 hover:text-rose-300 hover:bg-rose-950/30 px-3 py-2 rounded-lg border border-slate-800 hover:border-rose-900/50 transition">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                        Keluar
+                    </button>
+                </form>
+            </div>
         </div>
     </aside>
 

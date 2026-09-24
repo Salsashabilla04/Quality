@@ -1,0 +1,328 @@
+<mxfile host="app.diagrams.net" modified="2026-09-18T06:28:00.000Z" agent="Mozilla/5.0" version="21.6.8" type="device">
+  <diagram id="seq-approval-bce-laravel" name="Sequence Diagram - Validasi &amp; Approval NCR">
+    <mxGraphModel dx="1200" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="980" pageHeight="1120" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ===== FRAME LUAR DIAGRAM ===== -->
+        <mxCell id="outer_frame" value="sd Sequence Diagram Validasi, Approval &amp; Penerbitan Surat NCR"
+          style="shape=umlFrame;whiteSpace=wrap;html=1;width=390;height=26;fontSize=12;fontStyle=1;align=left;spacingLeft=8;strokeColor=#000000;strokeWidth=1.5;fillColor=none;"
+          vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="920" height="1070" as="geometry" />
+        </mxCell>
+
+        <!-- =========================================================
+             LIFELINES DENGAN STEREOTYPE BCE ASLI SISTEM
+             1. Supervisor QC      : x = 90  (Actor)
+             2. Halaman Approval   : x = 260 (Boundary Object)
+             3. Modal Validasi NCR : x = 430 (Boundary Object)
+             4. ComplaintController: x = 610 (Control Object)
+             5. Database MySQL     : x = 810 (Entity Object)
+        ========================================================= -->
+
+        <!-- 1. Supervisor QC (Actor) -->
+        <mxCell id="h_actor" value="Supervisor QC"
+          style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontStyle=1;fontSize=11;labelBackgroundColor=#ffffff;"
+          vertex="1" parent="1">
+          <mxGeometry x="70" y="55" width="40" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 2. Halaman Approval NCR (Boundary Object) -->
+        <mxCell id="h_page" value="Halaman Approval NCR&#xa;&lt;i&gt;&amp;laquo;boundary&amp;raquo;&lt;/i&gt;"
+          style="shape=mxgraph.uml.boundary;verticalLabelPosition=bottom;verticalAlign=top;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontStyle=1;fontSize=10;labelBackgroundColor=#ffffff;"
+          vertex="1" parent="1">
+          <mxGeometry x="238" y="60" width="44" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- 3. Modal Validasi NCR (Boundary Object) -->
+        <mxCell id="h_form" value="Modal Validasi NCR&#xa;&lt;i&gt;&amp;laquo;boundary&amp;raquo;&lt;/i&gt;"
+          style="shape=mxgraph.uml.boundary;verticalLabelPosition=bottom;verticalAlign=top;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontStyle=1;fontSize=10;labelBackgroundColor=#ffffff;"
+          vertex="1" parent="1">
+          <mxGeometry x="408" y="60" width="44" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- 4. ComplaintController (Control Object) -->
+        <mxCell id="h_ctrl" value="ComplaintController&#xa;&lt;i&gt;&amp;laquo;control&amp;raquo;&lt;/i&gt;"
+          style="shape=mxgraph.uml.control;verticalLabelPosition=bottom;verticalAlign=top;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontStyle=1;fontSize=10;labelBackgroundColor=#ffffff;"
+          vertex="1" parent="1">
+          <mxGeometry x="588" y="60" width="44" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- 5. Database MySQL (Entity Object) -->
+        <mxCell id="h_db" value="Database (complaints)&#xa;&lt;i&gt;&amp;laquo;entity&amp;raquo;&lt;/i&gt;"
+          style="shape=mxgraph.uml.entity;verticalLabelPosition=bottom;verticalAlign=top;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontStyle=1;fontSize=10;labelBackgroundColor=#ffffff;"
+          vertex="1" parent="1">
+          <mxGeometry x="788" y="60" width="44" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- ===== GARIS VERTIKAL PUTUS-PUTUS ===== -->
+        <mxCell id="ll_actor" style="endArrow=none;dashed=1;html=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="90" y="145" as="sourcePoint"/><mxPoint x="90" y="1065" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="ll_page" style="endArrow=none;dashed=1;html=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="260" y="145" as="sourcePoint"/><mxPoint x="260" y="1065" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="ll_form" style="endArrow=none;dashed=1;html=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="430" y="145" as="sourcePoint"/><mxPoint x="430" y="1065" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="ll_ctrl" style="endArrow=none;dashed=1;html=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="610" y="145" as="sourcePoint"/><mxPoint x="610" y="1065" as="targetPoint"/></mxGeometry>
+        </mxCell>
+        <mxCell id="ll_db" style="endArrow=none;dashed=1;html=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="810" y="145" as="sourcePoint"/><mxPoint x="810" y="1065" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- =========================================================
+             FRAGMEN 1: alt Setujui (Approve) NCR & Penerbitan Dokumen Surat NCR (PDF)
+        ========================================================= -->
+        <mxCell id="box_alt_approve" value="alt Setujui (Approve) NCR &amp; Penerbitan Surat NCR (PDF)"
+          style="shape=umlFrame;whiteSpace=wrap;html=1;width=350;height=22;fontSize=11;fontStyle=1;align=left;spacingLeft=6;strokeColor=#000000;strokeWidth=1.2;fillColor=none;"
+          vertex="1" parent="1">
+          <mxGeometry x="35" y="165" width="890" height="520" as="geometry" />
+        </mxCell>
+
+        <!-- Activations 1 -->
+        <mxCell id="act_act_1" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="85" y="190" width="10" height="480" as="geometry" />
+        </mxCell>
+        <mxCell id="act_page_1" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="255" y="195" width="10" height="470" as="geometry" />
+        </mxCell>
+        <mxCell id="act_form_1a" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="425" y="225" width="10" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="act_form_1b" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="425" y="265" width="10" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ctrl_1" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="605" y="305" width="10" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="act_db_1" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="805" y="335" width="10" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_db_valid_1" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="810" y="355" width="10" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ctrl_pdf" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="605" y="505" width="10" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="act_db_pdf" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="805" y="535" width="10" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ctrl_render" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="610" y="605" width="10" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Pesan 1: Akses Halaman Approval NCR() -->
+        <mxCell id="msg_1" value="Akses Halaman Approval NCR (Filter Pending)"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="95" y="200" as="sourcePoint"/><mxPoint x="255" y="200" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 2: Buka Modal Validasi() -->
+        <mxCell id="msg_2" value="Buka Modal Validasi NCR (modal)"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="265" y="230" as="sourcePoint"/><mxPoint x="425" y="230" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 3: Input Tindakan, Jadwal Visit & Setujui -->
+        <mxCell id="msg_3" value="Input CAPA, Opsi Jadwal Visit (perlu_visit), &amp; Setujui()"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="95" y="275" as="sourcePoint"/><mxPoint x="425" y="275" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 4: Kirim approveNcr() -->
+        <mxCell id="msg_4" value="Kirim Request approveNcr(request, complaint)"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="435" y="310" as="sourcePoint"/><mxPoint x="605" y="310" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 5: Update ke Database -->
+        <mxCell id="msg_5" value="UPDATE complaints SET approval = 'Approved', status = 'Close', perlu_visit = ?"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="615" y="340" as="sourcePoint"/><mxPoint x="805" y="340" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 6: Valid() Loop -->
+        <mxCell id="msg_valid_1" value="Valid() / Commit"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=left;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="815" y="355" as="sourcePoint"/>
+            <mxPoint x="820" y="375" as="targetPoint"/>
+            <Array as="points">
+              <mxPoint x="835" y="355"/>
+              <mxPoint x="835" y="375"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 7: Berhasil Disetujui (Dashed) -->
+        <mxCell id="msg_ret_1" value="Data Approval &amp; Status Close Berhasil Diperbarui"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;dashed=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="805" y="395" as="sourcePoint"/><mxPoint x="615" y="395" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 8: Notifikasi Approval Sukses (Dashed) -->
+        <mxCell id="msg_notif_1" value="Kirim Notifikasi &quot;NCR Berhasil Disetujui &amp; Dokumen NCR Terbit&quot;()"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;dashed=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="605" y="425" as="sourcePoint"/><mxPoint x="265" y="425" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 9: Klik Cetak Surat NCR -->
+        <mxCell id="msg_btn_pdf" value="Menekan Tombol &quot;NCR Terbit (PDF)&quot; pada Kasus yang Disetujui"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="95" y="475" as="sourcePoint"/><mxPoint x="255" y="475" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 10: Request ncrPdf() -->
+        <mxCell id="msg_req_pdf" value="Kirim Request ncrPdf(complaint)"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="265" y="510" as="sourcePoint"/><mxPoint x="605" y="510" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 11: Query Data Komplain Lengkap & Nomor Registrasi -->
+        <mxCell id="msg_db_pdf" value="SELECT complaints WITH items WHERE id = ? &amp; Hitung No. Urut Surat"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="615" y="540" as="sourcePoint"/><mxPoint x="805" y="540" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 12: Return Data Komplain Lengkap (Dashed) -->
+        <mxCell id="msg_ret_db_pdf" value="Return Data Komplain Lengkap, Cacat &amp; Approval SPV"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;dashed=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="805" y="575" as="sourcePoint"/><mxPoint x="615" y="575" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 13: Generate Nomor Surat & Render PDF (Loop) -->
+        <mxCell id="msg_render_pdf" value="Generate Nomor Registrasi (00x/NCR/QA/YYYY) &amp; Render PDF NCR()"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=left;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="615" y="605" as="sourcePoint"/>
+            <mxPoint x="620" y="630" as="targetPoint"/>
+            <Array as="points">
+              <mxPoint x="640" y="605"/>
+              <mxPoint x="640" y="630"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 14: Stream / Unduh Berkas Fisik PDF (Dashed) -->
+        <mxCell id="msg_dl_pdf" value="Stream / Unduh Berkas Fisik &quot;Surat_NCR.pdf&quot;"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;dashed=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="605" y="655" as="sourcePoint"/><mxPoint x="255" y="655" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+
+        <!-- =========================================================
+             FRAGMEN 2: alt Tolak (Reject) NCR
+        ========================================================= -->
+        <mxCell id="box_alt_reject" value="alt Tolak (Reject) NCR / Perlu Revisi"
+          style="shape=umlFrame;whiteSpace=wrap;html=1;width=240;height=22;fontSize=11;fontStyle=1;align=left;spacingLeft=6;strokeColor=#000000;strokeWidth=1.2;fillColor=none;"
+          vertex="1" parent="1">
+          <mxGeometry x="35" y="715" width="890" height="340" as="geometry" />
+        </mxCell>
+
+        <!-- Activations 2 -->
+        <mxCell id="act_act_2" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="85" y="740" width="10" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="act_page_2" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="255" y="745" width="10" height="265" as="geometry" />
+        </mxCell>
+        <mxCell id="act_form_2a" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="425" y="775" width="10" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="act_form_2b" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="425" y="815" width="10" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="act_ctrl_2" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="605" y="855" width="10" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="act_db_2" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="805" y="885" width="10" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_db_valid_2" value="" style="html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="810" y="900" width="10" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Pesan 1 (Reject): Akses Halaman Approval NCR() -->
+        <mxCell id="msg_r1" value="Akses Halaman Approval NCR (Filter Pending)"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="95" y="750" as="sourcePoint"/><mxPoint x="255" y="750" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 2 (Reject): Buka Modal Validasi() -->
+        <mxCell id="msg_r2" value="Buka Modal Validasi NCR (modal)"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="265" y="780" as="sourcePoint"/><mxPoint x="425" y="780" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 3 (Reject): Input Catatan Alasan & Tolak -->
+        <mxCell id="msg_r3" value="Input Catatan Alasan Penolakan &amp; Klik Reject()"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="95" y="825" as="sourcePoint"/><mxPoint x="425" y="825" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 4 (Reject): Kirim approveNcr status Rejected -->
+        <mxCell id="msg_r4" value="Kirim Request approveNcr (status: Rejected)()"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="435" y="865" as="sourcePoint"/><mxPoint x="605" y="865" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 5 (Reject): Simpan Perubahan Status ke DB -->
+        <mxCell id="msg_r5" value="UPDATE complaints SET approval = 'Rejected', catatan_supervisor = ?"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="615" y="895" as="sourcePoint"/><mxPoint x="805" y="895" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 6 (Reject): Valid() Loop -->
+        <mxCell id="msg_valid_2" value="Valid() / Commit"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=left;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="815" y="905" as="sourcePoint"/>
+            <mxPoint x="820" y="925" as="targetPoint"/>
+            <Array as="points">
+              <mxPoint x="835" y="905"/>
+              <mxPoint x="835" y="925"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 7 (Reject): Berhasil Disimpan (Dashed) -->
+        <mxCell id="msg_ret_2" value="Status Penolakan NCR Berhasil Disimpan"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;dashed=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="805" y="950" as="sourcePoint"/><mxPoint x="615" y="950" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+        <!-- Pesan 8 (Reject): Notifikasi Penolakan (Dashed) -->
+        <mxCell id="msg_notif_2" value="Kirim Notifikasi &quot;NCR Ditolak / Memerlukan Revisi QA&quot;()"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;dashed=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;align=center;"
+          edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="605" y="985" as="sourcePoint"/><mxPoint x="265" y="985" as="targetPoint"/></mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

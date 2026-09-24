@@ -1,0 +1,349 @@
+<mxfile host="app.diagrams.net" modified="2026-09-15T22:50:00.000Z" agent="Mozilla/5.0" version="21.6.8" type="device">
+  <diagram id="activity-validasi-approval-ncr" name="Activity Diagram - Validasi &amp; Approval NCR">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1150" pageHeight="950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ===== JUDUL DIAGRAM ===== -->
+        <mxCell id="title" value="ACTIVITY DIAGRAM - VALIDASI &amp; APPROVAL NCR"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;
+                 whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;fontColor=#000000;"
+          vertex="1" parent="1">
+          <mxGeometry x="250" y="16" width="650" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- =================================================== -->
+        <!-- SWIMLANE 1 : STAFF QA (INISIASI & REVISI)           -->
+        <!-- =================================================== -->
+        <mxCell id="lane_qa" value="Staff QA"
+          style="swimlane;startSize=30;fontSize=13;fontStyle=1;html=1;horizontal=1;
+                 fillColor=#eff6ff;strokeColor=#1d4ed8;strokeWidth=2;"
+          vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="340" height="850" as="geometry" />
+        </mxCell>
+
+        <!-- Start Node di Staff QA -->
+        <mxCell id="start_qa" value=""
+          style="ellipse;fillColor=#000000;strokeColor=#000000;html=1;"
+          vertex="1" parent="lane_qa">
+          <mxGeometry x="155" y="30" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- QA-0 : Ajukan Validasi Komplain -->
+        <mxCell id="qa_ajukan" value="Menekan Tombol &quot;Ajukan Validasi&quot;&#xa;pada Kasus yang Telah Diisi Analisis CAPA"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_qa">
+          <mxGeometry x="45" y="90" width="250" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- QA-1 : Terima Notifikasi Kasus Close -->
+        <mxCell id="qa_notif_close" value="Melihat Status Kasus Telah &quot;CLOSE&quot;&#xa;&amp; Validasi Telah Disetujui oleh Supervisor QC"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;
+                 fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=1.5;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_qa">
+          <mxGeometry x="45" y="350" width="250" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- QA-2 : Klik Tombol NCR Terbit (PDF) -->
+        <mxCell id="qa_klik_pdf" value="Menekan Tombol &quot;NCR Terbit (PDF)&quot;&#xa;pada Baris Kasus yang Telah Disetujui"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;
+                 fillColor=#dbeafe;strokeColor=#2563eb;strokeWidth=1.5;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_qa">
+          <mxGeometry x="45" y="445" width="250" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- QA-3 : Mengunduh Berkas Fisik PDF -->
+        <mxCell id="qa_unduh_pdf" value="Menerima dan Mengunduh Berkas Fisik&#xa;Surat NCR Resmi Format PDF"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;
+                 fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=1.5;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_qa">
+          <mxGeometry x="45" y="525" width="250" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Final Node (End) -->
+        <mxCell id="end_node" value=""
+          style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;strokeWidth=2;"
+          vertex="1" parent="lane_qa">
+          <mxGeometry x="155" y="605" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- QA-4 : Terima Arahan Revisi -->
+        <mxCell id="qa_terima_revisi" value="Melihat Kasus Berstatus &quot;Perlu Revisi&quot; &amp;&#xa;Membaca Catatan Arahan dari Supervisor QC"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;
+                 fillColor=#fff1f2;strokeColor=#e11d48;strokeWidth=1.5;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_qa">
+          <mxGeometry x="45" y="665" width="250" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- QA-5 : Perbaiki & Ajukan Validasi Ulang -->
+        <mxCell id="qa_perbaiki" value="Memperbaiki Analisis Investigasi CAPA&#xa;lalu Klik &quot;Ajukan Validasi Ulang&quot;"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;
+                 fillColor=#dbeafe;strokeColor=#2563eb;strokeWidth=1.5;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_qa">
+          <mxGeometry x="45" y="755" width="250" height="55" as="geometry" />
+        </mxCell>
+
+
+        <!-- =================================================== -->
+        <!-- SWIMLANE 2 : SISTEM                                  -->
+        <!-- =================================================== -->
+        <mxCell id="lane_sys" value="Sistem"
+          style="swimlane;startSize=30;fontSize=13;fontStyle=1;html=1;horizontal=1;
+                 fillColor=#f8fafc;strokeColor=#64748b;strokeWidth=2;"
+          vertex="1" parent="1">
+          <mxGeometry x="380" y="60" width="350" height="850" as="geometry" />
+        </mxCell>
+
+        <!-- SYS-0 : Update Kasus ke Diproses & Pending -->
+        <mxCell id="sys_proses_ajukan" value="Validasi Kelengkapan CAPA, Ubah Status&#xa;Kasus Jadi &quot;Diproses&quot; &amp; Approval: &quot;Pending&quot;"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_sys">
+          <mxGeometry x="50" y="90" width="250" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- SYS-1 : Tampilkan Modal Form Validasi CAPA -->
+        <mxCell id="sys_show_modal" value="Menampilkan Modal Form Validasi CAPA&#xa;(Detail Cacat, 6M Fishbone, Bukti Foto)"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_sys">
+          <mxGeometry x="50" y="175" width="250" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- SYS-2 : Simpan Approved, Close & Aktifkan NCR PDF -->
+        <mxCell id="sys_close" value="Memperbarui Status: &quot;CLOSE&quot;, Simpan Approval,&#xa;&amp; Mengaktifkan Tombol &quot;NCR Terbit (PDF)&quot;"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_sys">
+          <mxGeometry x="50" y="350" width="250" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- SYS-3 : Render Dokumen PDF -->
+        <mxCell id="sys_render_pdf" value="Generate Nomor Registrasi Resmi Surat NCR&#xa;&amp; Merender Dokumen PDF (Form + Fishbone)"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_sys">
+          <mxGeometry x="50" y="445" width="250" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- SYS-4 : Kirim File PDF untuk Download -->
+        <mxCell id="sys_download_pdf" value="Mengirimkan Berkas Fisik Surat NCR (PDF)&#xa;ke Perangkat Pengguna untuk Diunduh"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_sys">
+          <mxGeometry x="50" y="525" width="250" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- SYS-5 : Proses Rejected & Simpan Catatan Revisi -->
+        <mxCell id="sys_reject" value="Memperbarui Status: &quot;OPEN&quot;, Set Approval &quot;Rejected&quot;,&#xa;Simpan Catatan, &amp; Tampilkan Tombol &quot;Perlu Revisi&quot;"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_sys">
+          <mxGeometry x="45" y="665" width="260" height="55" as="geometry" />
+        </mxCell>
+
+
+        <!-- =================================================== -->
+        <!-- SWIMLANE 3 : SUPERVISOR QC                          -->
+        <!-- =================================================== -->
+        <mxCell id="lane_spv" value="Supervisor QC"
+          style="swimlane;startSize=30;fontSize=13;fontStyle=1;html=1;horizontal=1;
+                 fillColor=#fefce8;strokeColor=#ca8a04;strokeWidth=2;"
+          vertex="1" parent="1">
+          <mxGeometry x="730" y="60" width="340" height="850" as="geometry" />
+        </mxCell>
+
+        <!-- SPV-1 : Membuka Antrean Validasi -->
+        <mxCell id="spv_antrean" value="Membuka Menu / Notifikasi Antrean&#xa;Kasus Komplain Berstatus &quot;Diproses&quot;"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_spv">
+          <mxGeometry x="45" y="90" width="250" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- SPV-2 : Klik Tombol Validasi SPV -->
+        <mxCell id="spv_klik_validasi" value="Menekan Tombol &quot;Validasi SPV&quot;&#xa;pada Baris Kasus yang Hendak Ditinjau"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_spv">
+          <mxGeometry x="45" y="175" width="250" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- DECISION: Disetujui? -->
+        <mxCell id="dec_spv" value="Apakah&#xa;Investigasi CAPA&#xa;Disetujui?"
+          style="rhombus;whiteSpace=wrap;html=1;
+                 fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_spv">
+          <mxGeometry x="110" y="250" width="120" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- SPV-3 : Pilih Approved & Keterangan Penyelesaian -->
+        <mxCell id="spv_approve" value="Memilih &quot;Approved&quot;, Menentukan Keterangan&#xa;Penyelesaian (Feedback/Retur), lalu Klik &quot;Simpan Validasi&quot;"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;
+                 fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=1.5;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_spv">
+          <mxGeometry x="40" y="350" width="260" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- SPV-4 : Pilih Rejected & Simpan Revisi -->
+        <mxCell id="spv_reject" value="Memilih &quot;Rejected&quot;, Mengisi Catatan Arahan&#xa;Revisi CAPA, lalu Klik &quot;Simpan Validasi&quot;"
+          style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;
+                 fillColor=#fff1f2;strokeColor=#e11d48;strokeWidth=1.5;fontSize=10;fontStyle=1;"
+          vertex="1" parent="lane_spv">
+          <mxGeometry x="45" y="665" width="250" height="55" as="geometry" />
+        </mxCell>
+
+
+        <!-- =================================================== -->
+        <!-- CONNECTORS / TRANSITIONS                            -->
+        <!-- =================================================== -->
+
+        <!-- c01: Start -> QA Ajukan Validasi -->
+        <mxCell id="c01"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="start_qa" target="qa_ajukan">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c02: QA Ajukan Validasi -> Sistem Proses Status Diproses -->
+        <mxCell id="c02"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="qa_ajukan" target="sys_proses_ajukan">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c03: Sistem Proses Status -> SPV Antrean Validasi -->
+        <mxCell id="c03"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="sys_proses_ajukan" target="spv_antrean">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c04: SPV Antrean -> SPV Klik Validasi -->
+        <mxCell id="c04"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="spv_antrean" target="spv_klik_validasi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c05: SPV Klik Validasi -> Sistem Tampilkan Modal -->
+        <mxCell id="c05"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="spv_klik_validasi" target="sys_show_modal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c06: Sistem Modal -> SPV Decision -->
+        <mxCell id="c06"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="sys_show_modal" target="dec_spv">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c07_yes: Decision -> [Ya / Disetujui] -> SPV Approved -->
+        <mxCell id="c07_yes" value="[Ya / Disetujui]"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#16a34a;strokeWidth=1.2;fontSize=10;fontStyle=1;fontColor=#16a34a;"
+          edge="1" parent="1" source="dec_spv" target="spv_approve">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c08: SPV Approved -> Sistem Simpan Close -->
+        <mxCell id="c08"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="spv_approve" target="sys_close">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c09: Sistem Simpan Close -> QA Terima Notifikasi Close -->
+        <mxCell id="c09"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="sys_close" target="qa_notif_close">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c10: QA Terima Notifikasi -> QA Klik NCR Terbit (PDF) -->
+        <mxCell id="c10"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="qa_notif_close" target="qa_klik_pdf">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c11: QA Klik PDF -> Sistem Render Dokumen NCR -->
+        <mxCell id="c11"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="qa_klik_pdf" target="sys_render_pdf">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c12: Sistem Render PDF -> Sistem Download File PDF -->
+        <mxCell id="c12"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="sys_render_pdf" target="sys_download_pdf">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c13: Sistem Download PDF -> QA Unduh Berkas PDF -->
+        <mxCell id="c13"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="sys_download_pdf" target="qa_unduh_pdf">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c14: QA Unduh PDF -> Selesai (End Node) -->
+        <mxCell id="c14"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="qa_unduh_pdf" target="end_node">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c15_no: Decision -> [Tidak / Ditolak (Revisi)] -> SPV Reject -->
+        <mxCell id="c15_no" value="[Tidak / Ditolak (Revisi)]"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#e11d48;strokeWidth=1.2;fontSize=10;fontStyle=1;fontColor=#e11d48;"
+          edge="1" parent="1" source="dec_spv" target="spv_reject">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1030" y="285" />
+              <mxPoint x="1030" y="692" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- c16: SPV Reject -> Sistem Simpan Status Open -->
+        <mxCell id="c16"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="spv_reject" target="sys_reject">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c17: Sistem Reject -> QA Terima Notifikasi Revisi -->
+        <mxCell id="c17"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="sys_reject" target="qa_terima_revisi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c18: QA Terima Revisi -> QA Perbaiki Investigasi -->
+        <mxCell id="c18"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;"
+          edge="1" parent="1" source="qa_terima_revisi" target="qa_perbaiki">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c19_loop: QA Perbaiki -> Loop back ke QA Ajukan Validasi (Bypass tepi kiri luar) -->
+        <mxCell id="c19_loop" value="[Pengajuan Validasi Ulang]"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=block;endFill=1;strokeColor=#2563eb;strokeWidth=1.2;dashed=1;fontSize=10;fontStyle=1;fontColor=#2563eb;"
+          edge="1" parent="1" source="qa_perbaiki" target="qa_ajukan">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="18" y="842" />
+              <mxPoint x="18" y="175" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

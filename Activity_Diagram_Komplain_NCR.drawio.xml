@@ -1,0 +1,170 @@
+<mxfile host="app.diagrams.net" modified="2026-09-10T13:55:00.000Z" agent="Mozilla/5.0" version="21.6.8" type="device">
+  <diagram id="activity-complaint-ncr" name="Activity Diagram - Input Data Komplain">
+    <mxGraphModel dx="1100" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="950" pageHeight="950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- TITLE -->
+        <mxCell id="title_ncr" value="ACTIVITY DIAGRAM - INPUT DATA KOMPLAIN / NCR" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="225" y="20" width="500" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ================= SWIMLANE 1: STAFF QA ================= -->
+        <mxCell id="lane_qa" value="Staff QA" style="swimlane;startSize=30;fontSize=12;fontStyle=1;html=1;horizontal=1;startSize=30;fillColor=#f8fafc;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="100" y="70" width="370" height="780" as="geometry" />
+        </mxCell>
+
+        <!-- Initial Node (Start) -->
+        <mxCell id="start_ncr" value="" style="ellipse;fillColor=#000000;strokeColor=#000000;html=1;" vertex="1" parent="lane_qa">
+          <mxGeometry x="170" y="45" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Action 1: Akses Menu Komplain -->
+        <mxCell id="act_akses_menu" value="Mengakses Menu&#xa;&quot;Data Komplain &amp; NCR&quot;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=30;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontStyle=1;" vertex="1" parent="lane_qa">
+          <mxGeometry x="95" y="105" width="180" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Action 2: Klik Tambah Komplain -->
+        <mxCell id="act_klik_tambah" value="Menekan Tombol&#xa;&quot;+ Tambah Komplain / NCR&quot;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=30;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontStyle=1;" vertex="1" parent="lane_qa">
+          <mxGeometry x="95" y="205" width="180" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Action 3: Mengisi Form Komplain & NCR -->
+        <mxCell id="act_isi_form" value="Mengisi Form Komplain &amp; NCR:&#xa;• Customer, No. PO / Lot, &amp; Mesin&#xa;• Pilih Kategori Cacat (Kamus QC)&#xa;• Deskripsi &amp; Upload Bukti Foto&#xa;• Tindakan Penahanan Sementara&#xa;lalu Klik &quot;Simpan Complaint&quot;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;align=left;spacingLeft=8;" vertex="1" parent="lane_qa">
+          <mxGeometry x="85" y="305" width="200" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Action 4: Melihat Data Masuk & Status Open -->
+        <mxCell id="act_view_open" value="Menerima Konfirmasi Sukses &amp;&#xa;Melihat Data Komplain Masuk&#xa;dengan Status &quot;OPEN&quot;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;" vertex="1" parent="lane_qa">
+          <mxGeometry x="85" y="605" width="200" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Final Node (End) -->
+        <mxCell id="end_ncr" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;strokeWidth=2;" vertex="1" parent="lane_qa">
+          <mxGeometry x="170" y="695" width="30" height="30" as="geometry" />
+        </mxCell>
+
+
+        <!-- ================= SWIMLANE 2: SISTEM ================= -->
+        <mxCell id="lane_sys" value="Sistem" style="swimlane;startSize=30;fontSize=12;fontStyle=1;html=1;horizontal=1;startSize=30;fillColor=#f8fafc;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="470" y="70" width="380" height="780" as="geometry" />
+        </mxCell>
+
+        <!-- System Action 1: Tampilkan Tabel Data -->
+        <mxCell id="act_show_table" value="Menampilkan Daftar Tabel&#xa;Komplain &amp; Riwayat NCR" style="rounded=1;whiteSpace=wrap;html=1;arcSize=30;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontStyle=1;" vertex="1" parent="lane_sys">
+          <mxGeometry x="100" y="105" width="180" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- System Action 2: Tampilkan Form Input -->
+        <mxCell id="act_show_form" value="Menampilkan Form Input Komplain&#xa;(Load Customer &amp; Kamus Cacat)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=30;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontStyle=1;" vertex="1" parent="lane_sys">
+          <mxGeometry x="90" y="205" width="200" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- System Action 3: Validasi Form -->
+        <mxCell id="act_validate_form" value="Melakukan Validasi&#xa;Kelengkapan &amp; Format Input" style="rounded=1;whiteSpace=wrap;html=1;arcSize=30;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontStyle=1;" vertex="1" parent="lane_sys">
+          <mxGeometry x="100" y="325" width="180" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Decision: Input Valid? -->
+        <mxCell id="dec_valid" value="Apakah&#xa;Input Valid &amp;&#xa;Lengkap?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;" vertex="1" parent="lane_sys">
+          <mxGeometry x="135" y="415" width="110" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- System Action 4: Tampilkan Error -->
+        <mxCell id="act_show_err" value="Menampilkan Notifikasi Error:&#xa;&quot;Form Belum Lengkap / Format File Salah&quot;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=30;fillColor=#fff1f2;strokeColor=#e11d48;strokeWidth=1.2;fontSize=10;fontStyle=1;" vertex="1" parent="lane_sys">
+          <mxGeometry x="90" y="515" width="200" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- System Action 5: Generate No. NCR & Simpan DB -->
+        <mxCell id="act_save_db" value="Generate No. Registrasi NCR,&#xa;Simpan Bukti Foto &amp; Data Komplain ke DB&#xa;(Status Awal: OPEN)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;align=center;" vertex="1" parent="lane_sys">
+          <mxGeometry x="85" y="595" width="210" height="65" as="geometry" />
+        </mxCell>
+
+
+        <!-- ================= CONNECTORS / TRANSITIONS ================= -->
+        <!-- Start -> Akses Menu -->
+        <mxCell id="c1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1" source="start_ncr" target="act_akses_menu">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Akses Menu -> Tampilkan Tabel (Across lane) -->
+        <mxCell id="c2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1" source="act_akses_menu" target="act_show_table">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Tampilkan Tabel -> Klik Tambah (Across lane) -->
+        <mxCell id="c3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1" source="act_show_table" target="act_klik_tambah">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="660" y="180" />
+              <mxPoint x="285" y="180" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Klik Tambah -> Tampilkan Form Input (Across lane) -->
+        <mxCell id="c4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1" source="act_klik_tambah" target="act_show_form">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Tampilkan Form Input -> Isi Form (Across lane) -->
+        <mxCell id="c5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1" source="act_show_form" target="act_isi_form">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="660" y="280" />
+              <mxPoint x="285" y="280" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Isi Form -> Validasi Form (Across lane) -->
+        <mxCell id="c6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1" source="act_isi_form" target="act_validate_form">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Validasi -> Decision -->
+        <mxCell id="c7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1" source="act_validate_form" target="dec_valid">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Decision -> Tidak Valid -->
+        <mxCell id="c8_false" value="[Tidak Valid]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;" edge="1" parent="1" source="dec_valid" target="act_show_err">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Error -> Kembali ke Form Input -->
+        <mxCell id="c9_back" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1" source="act_show_err" target="act_show_form">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="780" y="537" />
+              <mxPoint x="780" y="228" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Decision -> Valid (Simpan DB) -->
+        <mxCell id="c10_true" value="[Valid / Lengkap]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontStyle=1;align=right;" edge="1" parent="1" source="dec_valid" target="act_save_db">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="525" y="450" />
+              <mxPoint x="525" y="628" />
+              <mxPoint x="555" y="628" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Simpan DB -> Tampil Hasil di QA (Across lane) -->
+        <mxCell id="c11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1" source="act_save_db" target="act_view_open">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- QA: Lihat Data Open -> Selesai -->
+        <mxCell id="c12_end" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1" source="act_view_open" target="end_ncr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
