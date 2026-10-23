@@ -1,30 +1,18 @@
 @extends('layouts.app')
 @section('title', 'Analisis Pola Hubungan (Apriori)')
-@section('subtitle', 'Menemukan hubungan antara jenis cacat produk dan penyebab utamanya dalam bahasa yang mudah dipahami')
+@section('subtitle', 'Mengidentifikasi pola hubungan antara jenis cacat produk dan faktor penyebabnya')
 @section('hide_create_btn', true)
 
 @section('content')
 
-{{-- Info Banner Awam --}}
-<div class="mb-6 bg-gradient-to-r from-sky-600 to-indigo-700 text-white rounded-2xl p-5 shadow-sm">
-    <div class="flex items-start gap-4">
-        <div class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-xl shrink-0">💡</div>
-        <div>
-            <h2 class="text-base font-bold">Panduan Analisis Pola Hubungan (Apriori)</h2>
-            <p class="text-xs text-sky-100 mt-1 leading-relaxed">
-                Halaman ini secara otomatis menemukan <b>sebab-akibat</b> antara jenis cacat barang dan faktor penyebabnya dari seluruh data komplain.
-                Staff QA &amp; Supervisor tidak perlu menghitung angka statistik — cukup perhatikan <b>panah hubungan (➔)</b> dan <b>tingkat kekuatan</b> (Sangat Kuat / Kuat).
-            </p>
-        </div>
-    </div>
-</div>
+
 
 <!-- Form Filter & Parameter -->
-<form method="GET" class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 mb-6">
+<form method="GET" class="bg-white rounded shadow-sm border border-gray-200 p-5 mb-6">
     <div class="flex flex-wrap items-end gap-4">
         <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-wide">Filter Tahun</label>
-            <select name="tahun" class="w-32 rounded-lg border-slate-300 text-sm focus:ring-sky-500 focus:border-sky-500 border px-3 py-2">
+            <label class="block text-xs font-bold text-gray-600 mb-1 uppercase tracking-wide">Filter Tahun</label>
+            <select name="tahun" class="w-32 rounded-md border-gray-300 text-xs font-semibold focus:ring-[#4e73df] focus:border-[#4e73df] border px-3 py-1.5 h-9 bg-white">
                 <option value="">Semua Tahun</option>
                 @foreach ($years as $y)
                     <option value="{{ $y }}" @selected(request()->integer('tahun') === (int) $y)>Tahun {{ $y }}</option>
@@ -32,8 +20,8 @@
             </select>
         </div>
         <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-wide">Filter Bulan</label>
-            <select name="bulan" class="w-36 rounded-lg border-slate-300 text-sm focus:ring-sky-500 focus:border-sky-500 border px-3 py-2">
+            <label class="block text-xs font-bold text-gray-600 mb-1 uppercase tracking-wide">Filter Bulan</label>
+            <select name="bulan" class="w-36 rounded-md border-gray-300 text-xs font-semibold focus:ring-[#4e73df] focus:border-[#4e73df] border px-3 py-1.5 h-9 bg-white">
                 <option value="">Semua Bulan</option>
                 @php
                     $namaBulan = [1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',
@@ -45,354 +33,586 @@
             </select>
         </div>
         <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-wide">Min. Kemungkinan (Confidence %)</label>
-            <input type="number" name="min_confidence" value="{{ $minConfidence }}" step="5" min="10" max="100"
-                   class="w-32 rounded-lg border-slate-300 text-sm focus:ring-sky-500 focus:border-sky-500 border px-3 py-2">
+            <label class="block text-xs font-bold text-gray-600 mb-1 uppercase tracking-wide" title="Frekuensi minimal pola harus muncul dari total komplain">Min. Support (%)</label>
+            <input type="number" name="min_support" value="{{ $minSupport }}" step="0.5" min="0.5" max="100"
+                   class="w-32 rounded-md border-gray-300 text-xs font-semibold focus:ring-[#4e73df] focus:border-[#4e73df] border px-3 py-1.5 h-9 bg-white"
+                   title="Contoh: 1.5% berarti pola harus muncul minimal 1.5% dari seluruh kasus">
         </div>
-        <input type="hidden" name="min_support" value="{{ $minSupport }}">
-        <button class="bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold px-5 py-2 rounded-lg shadow-sm">Tampilkan Pola</button>
-        @if (request()->hasAny(['tahun','bulan','min_confidence']))
-            <a href="{{ url()->current() }}" class="text-sm text-slate-500 hover:text-slate-700 py-2">Reset Filter</a>
+        <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1 uppercase tracking-wide" title="Tingkat kepastian minimal hubungan sebab-akibat">Min. Confidence (%)</label>
+            <input type="number" name="min_confidence" value="{{ $minConfidence }}" step="5" min="10" max="100"
+                   class="w-32 rounded-md border-gray-300 text-xs font-semibold focus:ring-[#4e73df] focus:border-[#4e73df] border px-3 py-1.5 h-9 bg-white"
+                   title="Contoh: 50% berarti jika cacat muncul, minimal 50% disebabkan oleh faktor tersebut">
+        </div>
+        <button class="btn btn-primary btn-sm h-9 rounded-md">
+            <i class="fas fa-search fa-sm"></i>
+            <span>Tampilkan Pola</span>
+        </button>
+        @if (request()->hasAny(['tahun','bulan','min_confidence','min_support']))
+            <a href="{{ url()->current() }}" class="btn btn-outline-secondary btn-sm h-9 rounded-md">
+                <i class="fas fa-undo"></i>
+                <span>Reset Filter</span>
+            </a>
         @endif
-        <div class="ml-auto text-xs text-slate-500 py-2">
-            Data teranalisis: <b class="text-slate-800 font-bold text-sm">{{ $totalTrx }}</b> komplain
+        <div class="ml-auto text-xs text-slate-500 flex items-center h-9">
+            Data teranalisis: <b class="text-slate-800 font-bold text-sm ml-1">{{ $totalTrx }}</b> 
+              <span class="ml-1">Komplain</span>
         </div>
     </div>
 </form>
 
-{{-- Mode Switcher (Kartu Awam vs Tabel Teknis) --}}
-<div class="flex items-center justify-between mb-4" x-data="{ mode: 'cards' }">
-    <div class="flex items-center gap-2">
-        <h2 class="text-base font-bold text-slate-800">Daftar Pola Hubungan Terdeteksi</h2>
-        <span class="text-xs bg-sky-100 text-sky-700 font-bold px-2.5 py-0.5 rounded-full">{{ count($rules) }} Pola</span>
+{{-- Matriks Aturan Analisis Apriori --}}
+
+{{-- Matriks Aturan Analisis Apriori --}}
+<div class="bg-white border border-gray-200 rounded-lg shadow-sm mb-6">
+
+    {{-- Header Utama --}}
+    <div class="px-5 py-3 border-b border-gray-200">
+        <h3 class="text-sm font-bold text-gray-800">
+            Matriks Aturan Analisis Apriori &amp; Rekomendasi Tindak Lanjut
+        </h3>
+        <p class="text-xs text-gray-500 mt-1">
+            Klasifikasi pola asosiasi sebagai dasar penentuan tindak lanjut mutu.
+        </p>
     </div>
-    <div class="flex items-center bg-slate-200 p-1 rounded-xl text-xs font-medium">
-        <button type="button" @click="mode = 'cards'" id="btnModeCards" onclick="toggleAprioriView('cards')"
-                class="px-3 py-1.5 rounded-lg bg-white shadow-sm text-slate-800 font-bold transition">
-            📱 Tampilan Kartu
-        </button>
-        <button type="button" @click="mode = 'table'" id="btnModeTable" onclick="toggleAprioriView('table')"
-                class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-800 transition">
-            📊 Tabel Data 
-        </button>
-    </div>
-</div>
 
-{{-- SECTION 1: TAMPILAN KARTU EXECUTIVE & SEGAR --}}
-<div id="aprioriCardsView" class="space-y-6 mb-8">
-    @if (!empty($rules))
-        {{-- TOP 3 HIGHLIGHT KRITIS BANNER (APRIORI HERO INSIGHTS) --}}
-        @php
-            $topThreeRules = array_slice($rules, 0, 3);
-        @endphp
-        <div class="bg-gradient-to-br from-slate-950 via-slate-900 to-sky-950 text-white rounded-3xl p-6 shadow-2xl border border-sky-500/30 relative overflow-hidden">
-            <!-- Subtle Ambient Background Glow -->
-            <div class="absolute -right-20 -top-20 w-80 h-80 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    {{-- Isi Card --}}
+    <div class="p-5">
 
-            <div class="flex items-center justify-between mb-5 pb-3 border-b border-slate-800">
-                <div class="flex items-center gap-2.5">
-                    <span class="w-3 h-3 rounded-full bg-amber-400 animate-pulse"></span>
-                    <h3 class="text-xs font-mono font-bold uppercase tracking-widest text-sky-400">🔥 TOP {{ count($topThreeRules) }} POLA HUBUNGAN PALING KRITIS</h3>
+        <div class="grid grid-cols-3 gap-4 items-stretch">
+
+            {{-- Prioritas --}}
+            <div class="bg-white border border-gray-200 border-l-4 border-l-red-500 rounded-md shadow-sm p-4 flex flex-col">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="w-3 h-3 rounded-full bg-red-500 flex-shrink-0"></span>
+                    <h4 class="text-sm font-bold text-red-600">Prioritas</h4>
                 </div>
-                <span class="text-[11px] font-mono text-slate-400">Berdasarkan {{ $totalTrx }} Data Komplain</span>
-            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                @foreach ($topThreeRules as $hIdx => $hRule)
-                    @php
-                        $hPct = round($hRule['confidence'] * 100);
-                        $hIsSangatKuat = $hRule['kekuatan'] === 'Sangat Kuat';
-                    @endphp
-                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between hover:border-sky-500/50 transition-all group shadow-lg">
-                        <div>
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">Pola Kritis #{{ $hIdx + 1 }}</span>
-                                <span class="text-xs font-black font-mono px-2.5 py-1 rounded-full {{ $hIsSangatKuat ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40' }}">
-                                    ⚡ {{ $hPct }}% Akurasi
-                                </span>
-                            </div>
+                <p class="text-xs text-gray-600 leading-relaxed flex-grow">
+                    Pola utama untuk tindakan korektif dan pencegahan.
+                </p>
 
-                            <div class="space-y-2 my-2">
-                                <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800">
-                                    <div class="text-[9px] uppercase font-mono font-bold text-sky-400">Kondisi Cacat:</div>
-                                    <div class="text-xs font-bold text-white leading-tight mt-0.5">{{ $hRule['antecedents'] }}</div>
-                                </div>
-                                <div class="flex items-center justify-center text-sky-400 text-xs font-mono font-bold my-1 gap-1">
-                                    <svg class="w-4 h-4 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
-                                    <span class="text-[10px] text-slate-400">Penyebab Dominan</span>
-                                </div>
-                                <div class="bg-amber-950/40 p-2.5 rounded-xl border border-amber-900/50">
-                                    <div class="text-[9px] uppercase font-mono font-bold text-amber-400">Akar Masalah:</div>
-                                    <div class="text-xs font-bold text-amber-200 leading-tight mt-0.5">{{ $hRule['consequents'] }}</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-3 pt-2.5 border-t border-slate-800/80 text-[11px] text-slate-300">
-                            <strong class="text-sky-300">Saran Preventif:</strong> Perbaiki faktor <span class="text-amber-300 font-semibold">{{ $hRule['consequents'] }}</span>.
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    @endif
-
-    {{-- DAFTAR SELURUH POLA (COLOR-CODED BY KEKUATAN) --}}
-    @forelse ($rules as $idx => $r)
-        @php
-            $isSangatKuat = $r['kekuatan'] === 'Sangat Kuat';
-            $isKuat       = $r['kekuatan'] === 'Kuat';
-            $isSedang     = $r['kekuatan'] === 'Sedang';
-
-            // COLOR CODING BERDASARKAN TINGKAT KEKUATAN POLA:
-            // 🔴 Sangat Kuat (Tinggi/Risiko Kritis) -> Rose / Merah
-            // 🟡 Kuat (Sedang/Perlu Waspada)        -> Amber / Kuning
-            // 🟢 Sedang/Rendah (Aman/Rendah)         -> Emerald / Hijau
-
-            $cardBg = $isSangatKuat 
-                ? 'bg-gradient-to-br from-rose-50/80 via-white to-rose-50/30 border-2 border-rose-300/90 hover:border-rose-400 shadow-sm hover:shadow-md' 
-                : ($isKuat 
-                    ? 'bg-gradient-to-br from-amber-50/80 via-white to-amber-50/30 border-2 border-amber-300/90 hover:border-amber-400 shadow-sm hover:shadow-md' 
-                    : 'bg-gradient-to-br from-emerald-50/80 via-white to-emerald-50/30 border-2 border-emerald-300/90 hover:border-emerald-400 shadow-sm hover:shadow-md');
-
-            $badgeBg = $isSangatKuat 
-                ? 'bg-rose-600 text-white border-rose-700' 
-                : ($isKuat 
-                    ? 'bg-amber-500 text-white border-amber-600' 
-                    : 'bg-emerald-600 text-white border-emerald-700');
-
-            $pctBadgeBg = $isSangatKuat 
-                ? 'bg-rose-100 text-rose-800 border-rose-300' 
-                : ($isKuat 
-                    ? 'bg-amber-100 text-amber-900 border-amber-300' 
-                    : 'bg-emerald-100 text-emerald-900 border-emerald-300');
-
-            $icon = $isSangatKuat ? '🚨' : ($isKuat ? '⚠️' : '✅');
-            $pct  = round($r['confidence'] * 100);
-        @endphp
-        <div x-data="{ showDetail: false }" class="rounded-2xl p-5 transition-all group {{ $cardBg }}">
-            {{-- Header Bar Kartu --}}
-            <div class="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-200/70">
-                <div class="flex items-center gap-2">
-                    <span class="text-xs font-bold font-mono px-3 py-1 rounded-xl bg-slate-900 text-white shadow-xs">Pola #{{ $idx + 1 }}</span>
-                    <span class="text-xs font-bold px-3 py-1 rounded-full border {{ $badgeBg }} flex items-center gap-1.5 font-mono shadow-2xs">
-                        <span>{{ $icon }}</span> Hubungan {{ $r['kekuatan'] }}
-                    </span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-xs text-slate-600 font-semibold">Tingkat Kepastian (Confidence):</span>
-                    <span class="text-sm font-black font-mono px-3 py-1 rounded-xl border shadow-2xs {{ $pctBadgeBg }}">
-                        {{ $pct }}%
+                <div class="border-t border-gray-200 mt-4 pt-3 flex items-center justify-between">
+                    <span class="text-xs text-gray-500">Jumlah pola</span>
+                    <span class="text-lg font-bold text-red-600">
+                        {{ collect($rules)->where('prioritas', 'Prioritas')->count() }}
                     </span>
                 </div>
             </div>
 
-            {{-- Flow Hubungan Visual Ringkas & Menarik --}}
-            <div class="bg-white/90 backdrop-blur-xs rounded-2xl p-4 border border-slate-200/80 flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xs">
-                {{-- Antecedent (Kondisi Cacat / Penyebab) --}}
-                <div class="flex-1 bg-slate-50/80 border border-slate-200 rounded-xl p-3.5 shadow-2xs w-full">
-                    <div class="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-600 mb-1 flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span> {{ $r['ant_label'] ?? 'JIKA TERJADI CACAT' }}:
-                    </div>
-                    <div class="text-sm font-black text-slate-900 leading-snug">{{ $r['antecedents'] }}</div>
+            {{-- Dipertimbangkan --}}
+            <div class="bg-white border border-gray-200 border-l-4 border-l-yellow-400 rounded-md shadow-sm p-4 flex flex-col">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="w-3 h-3 rounded-full bg-yellow-400 flex-shrink-0"></span>
+                    <h4 class="text-sm font-bold text-yellow-600">Dipertimbangkan</h4>
                 </div>
 
-                {{-- Panah Alur Modern --}}
-                <div class="flex flex-col items-center justify-center shrink-0 py-1 px-3 bg-slate-100/90 rounded-xl border border-slate-200 shadow-2xs">
-                    <div class="text-[11px] font-bold text-slate-800 font-mono flex items-center gap-1.5">
-                        <span>{{ $r['arrow_text'] ?? 'Cenderung Menyebabkan' }}</span>
-                        <svg class="w-4 h-4 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                    </div>
-                    <span class="text-[10px] text-slate-500 font-mono">Akurasi {{ $pct }}%</span>
-                </div>
+                <p class="text-xs text-gray-600 leading-relaxed flex-grow">
+                    Pola pendukung untuk menentukan tindakan perbaikan.
+                </p>
 
-                {{-- Consequent (Penyebab Utama / Dampak Cacat) --}}
-                <div class="flex-1 bg-amber-50/60 border border-amber-200 rounded-xl p-3.5 shadow-2xs w-full">
-                    <div class="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-700 mb-1 flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> {{ $r['con_label'] ?? 'MAKA PENYEBAB UTAMA' }}:
-                    </div>
-                    <div class="text-sm font-black text-amber-950 leading-snug">{{ $r['consequents'] }}</div>
+                <div class="border-t border-gray-200 mt-4 pt-3 flex items-center justify-between">
+                    <span class="text-xs text-gray-500">Jumlah pola</span>
+                    <span class="text-lg font-bold text-yellow-600">
+                        {{ collect($rules)->where('prioritas', 'Dipertimbangkan')->count() }}
+                    </span>
                 </div>
             </div>
 
-            {{-- Saran Ringkas & Akses Detail --}}
-            <div class="mt-4 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-200/60">
-                <div class="flex items-center gap-2 text-xs text-slate-700">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
-                    <span><strong>Saran Supervisor:</strong> {!! $r['saran_text'] ?? "Perbaiki faktor <strong class=\"text-slate-900\">{$r['consequents']}</strong> untuk mencegah cacat <strong class=\"text-slate-900\">{$r['antecedents']}</strong>." !!}</span>
+            {{-- Dipantau --}}
+            <div class="bg-white border border-gray-200 border-l-4 border-l-blue-500 rounded-md shadow-sm p-4 flex flex-col">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="w-3 h-3 rounded-full bg-blue-500 flex-shrink-0"></span>
+                    <h4 class="text-sm font-bold text-blue-600">Dipantau</h4>
                 </div>
 
-                <button type="button" @click="showDetail = !showDetail"
-                        class="inline-flex items-center gap-2 text-xs font-bold text-slate-800 hover:text-slate-900 bg-white hover:bg-slate-50 px-3.5 py-1.5 rounded-xl transition border border-slate-300 shadow-2xs cursor-pointer shrink-0">
-                    <span>🔍</span>
-                    <span x-text="showDetail ? 'Tutup Detail Lapangan' : 'Rincian Detail Lapangan'">Rincian Detail Lapangan</span>
-                    <svg class="w-3.5 h-3.5 transition-transform duration-200" :class="showDetail ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                </button>
+                <p class="text-xs text-gray-600 leading-relaxed flex-grow">
+                    Pola yang dipantau untuk melihat perubahan tren komplain.
+                </p>
+
+                <div class="border-t border-gray-200 mt-4 pt-3 flex items-center justify-between">
+                    <span class="text-xs text-gray-500">Jumlah pola</span>
+                    <span class="text-lg font-bold text-blue-600">
+                        {{ collect($rules)->where('prioritas', 'Dipantau')->count() }}
+                    </span>
+                </div>
             </div>
 
-            {{-- Breakdown Detail Real Lapangan (Multi-Level Drill-Down) --}}
-            @php
-                $dbd = $r['detail_breakdown'] ?? ['detail_ketidaksesuaian' => [], 'detail_penyebab' => [], 'total_matching' => 0];
-                $topKets = $dbd['detail_ketidaksesuaian'] ?? [];
-                $topPens = $dbd['detail_penyebab'] ?? [];
-            @endphp
-            @if (!empty($topKets) || !empty($topPens))
-                <div x-show="showDetail" x-cloak class="mt-3 pt-3.5 border-t border-slate-200/80 bg-slate-50 rounded-2xl p-4 text-xs transition-all">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="font-bold text-slate-800 font-mono flex items-center gap-1.5">
-                            <span>📊</span> Rincian Bukti Transaksi Real Komplain di Lapangan:
-                        </span>
-                        <span class="text-[11px] text-sky-700 font-mono font-bold bg-white px-2.5 py-0.5 rounded-full border border-slate-200">
-                            {{ $dbd['total_matching'] }} Kasus Komplain Terkait
-                        </span>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {{-- Detail Cacat --}}
-                        <div class="space-y-2 bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-                            <span class="text-[11px] font-bold font-mono text-sky-700 block border-b border-slate-100 pb-1.5">
-                                📌 Detail Cacat Terbanyak ({{ $r['antecedents'] }}):
-                            </span>
-                            @forelse ($topKets as $k => $item)
-                                <div class="flex items-center justify-between text-slate-700 text-xs py-0.5">
-                                    <span class="truncate pr-2 font-medium">• {{ $item['detail'] }}</span>
-                                    <span class="font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded font-mono text-[10px] shrink-0 border border-sky-100">
-                                        {{ $item['count'] }}x ({{ $item['percent'] }}%)
-                                    </span>
-                                </div>
-                            @empty
-                                <span class="text-slate-400 italic text-[11px]">Belum ada rincian detail cacat.</span>
-                            @endforelse
-                        </div>
+        </div>
 
-                        {{-- Detail Penyebab --}}
-                        <div class="space-y-2 bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-                            <span class="text-[11px] font-bold font-mono text-amber-700 block border-b border-slate-100 pb-1.5">
-                                ⚙️ Detail Penyebab Terbanyak ({{ $r['consequents'] }}):
-                            </span>
-                            @forelse ($topPens as $k => $item)
-                                <div class="flex items-center justify-between text-slate-700 text-xs py-0.5">
-                                    <span class="truncate pr-2 font-medium">• {{ $item['detail'] }}</span>
-                                    <span class="font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded font-mono text-[10px] shrink-0 border border-amber-100">
-                                        {{ $item['count'] }}x ({{ $item['percent'] }}%)
-                                    </span>
-                                </div>
-                            @empty
-                                <span class="text-slate-400 italic text-[11px]">Belum ada rincian detail penyebab.</span>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            @endif
-        </div>
-    @empty
-        <div class="bg-white rounded-2xl p-8 text-center text-slate-400 border border-slate-200">
-            <span class="text-3xl block mb-2">🔍</span>
-            <p class="text-sm font-medium">Tidak ada pola keterkaitan yang memenuhi ambang batas filter saat ini.</p>
-            <p class="text-xs text-slate-400 mt-1">Coba turunkan nilai Min. Kemungkinan (Confidence %) di atas.</p>
-        </div>
-    @endforelse
+    </div>
 </div>
 
-{{-- SECTION 2: TAMPILAN TABEL TEKNIS (Disembunyikan secara default, bisa ditoggle) --}}
-<div id="aprioriTableView" class="hidden mb-8">
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
-        <h3 class="font-semibold text-slate-800 mb-3">Tabel Matematika Association Rules</h3>
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead>
-                    <tr class="text-left text-xs text-slate-500 border-b border-slate-200 bg-slate-50">
-                        <th class="py-2.5 px-3">Kondisi Awal (Antecedent)</th>
-                        <th class="py-2.5 px-3">Penyebab / Akibat (Consequent)</th>
-                        <th class="py-2.5 px-3 text-right">Support (%)</th>
-                        <th class="py-2.5 px-3 text-right">Confidence (%)</th>
-                        <th class="py-2.5 px-3 text-right">Lift Ratio</th>
-                        <th class="py-2.5 px-3 text-center">Kekuatan</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100">
-                    @forelse ($rules as $r)
-                        <tr class="hover:bg-slate-50">
-                            <td class="py-2.5 px-3 font-medium text-slate-700">{{ $r['antecedents'] }}</td>
-                            <td class="py-2.5 px-3 font-semibold text-sky-700">{{ $r['consequents'] }}</td>
-                            <td class="py-2.5 px-3 text-right">{{ number_format($r['support']*100,1) }}%</td>
-                            <td class="py-2.5 px-3 text-right font-bold text-slate-800">{{ number_format($r['confidence']*100,1) }}%</td>
-                            <td class="py-2.5 px-3 text-right font-bold text-indigo-600">{{ number_format($r['lift'],2) }}</td>
-                            <td class="py-2.5 px-3 text-center">
-                                <span class="text-[11px] px-2.5 py-0.5 rounded-full font-medium
-                                    {{ $r['kekuatan']==='Sangat Kuat' ? 'bg-rose-100 text-rose-700' : ($r['kekuatan']==='Kuat' ? 'bg-amber-100 text-amber-700' : 'bg-slate-200 text-slate-600') }}">
-                                    {{ $r['kekuatan'] }}
-                                </span>
+<script>
+function aprioriManager() {
+    return {
+        mode: 'chart',
+        katFilter: 'all',
+        allRules: @json($rules),
+        search: '',
+        perPage: 25,
+        currentPage: 1,
+
+        get filteredRules() {
+            let list = this.allRules;
+            if (this.katFilter !== 'all') {
+                list = list.filter(r => r.prioritas === this.katFilter);
+            }
+            if (this.search && this.search.trim() !== '') {
+                const q = this.search.toLowerCase().trim();
+                list = list.filter(r => 
+                    (r.antecedents && r.antecedents.toLowerCase().includes(q)) ||
+                    (r.consequents && r.consequents.toLowerCase().includes(q)) ||
+                    (r.prioritas && r.prioritas.toLowerCase().includes(q))
+                );
+            }
+            return list;
+        },
+
+        get totalEntries() {
+            return this.filteredRules.length;
+        },
+
+        get totalPages() {
+            return Math.ceil(this.totalEntries / this.perPage) || 1;
+        },
+
+        get paginatedRules() {
+            const start = (this.currentPage - 1) * this.perPage;
+            return this.filteredRules.slice(start, start + this.perPage);
+        },
+
+        get startEntry() {
+            if (this.totalEntries === 0) return 0;
+            return (this.currentPage - 1) * this.perPage + 1;
+        },
+
+        get endEntry() {
+            return Math.min(this.currentPage * this.perPage, this.totalEntries);
+        },
+
+        setFilter(kat) {
+            this.katFilter = kat;
+            this.currentPage = 1;
+        },
+
+        gotoPage(p) {
+            if (p >= 1 && p <= this.totalPages) {
+                this.currentPage = p;
+            }
+        },
+
+        prevPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+            }
+        },
+
+        nextPage() {
+            if (this.currentPage < this.totalPages) {
+                this.currentPage++;
+            }
+        },
+
+        get paginationElements() {
+            const total = this.totalPages;
+            const current = this.currentPage;
+            if (total <= 5) {
+                return Array.from({ length: total }, (_, i) => i + 1);
+            }
+            if (current <= 2) {
+                return [1, 2, 3, '...'];
+            }
+            if (current === 3) {
+                return [1, 2, 3, 4, '...'];
+            }
+            if (current >= total - 1) {
+                return ['...', total - 2, total - 1, total];
+            }
+            if (current === total - 2) {
+                return ['...', total - 3, total - 2, total - 1, total];
+            }
+            return ['...', current - 1, current, current + 1, '...'];
+        },
+
+        get pageNumbers() {
+            return this.paginationElements;
+        }
+    };
+}
+</script>
+
+<div x-data="aprioriManager()">
+    {{-- Header Bar: Judul di Kiri dan Switcher Mode SEJAJAR di Kanan --}}
+    <div class="flex items-center justify-between gap-4 mb-4">
+        <h2 class="text-base font-bold text-slate-800" x-text="mode === 'chart' ? 'Grafik Top Pola Hubungan Prioritas' : 'Tabel Analisis Association Rules'">
+            Grafik Top Pola Hubungan Prioritas
+        </h2>
+
+        {{-- Switcher Mode (Tampilan Grafik & Tabel Data) SEJAJAR --}}
+        <div class="flex items-center bg-slate-200/80 p-1 rounded-full text-xs font-semibold gap-1 border border-slate-200 shrink-0">
+            <button type="button" @click="mode = 'chart'" id="btnModeChart" onclick="toggleAprioriView('chart')"
+                    :class="mode === 'chart' ? 'bg-white shadow-xs text-[#4e73df] font-bold' : 'text-slate-600 hover:text-slate-800'"
+                    class="h-8 px-3.5 rounded-full transition flex items-center gap-1.5 cursor-pointer">
+                <i class="fas fa-chart-bar fa-xs"></i> <span>Tampilan Grafik</span>
+            </button>
+            <button type="button" @click="mode = 'table'" id="btnModeTable" onclick="toggleAprioriView('table')"
+                    :class="mode === 'table' ? 'bg-white shadow-xs text-[#4e73df] font-bold' : 'text-slate-600 hover:text-slate-800'"
+                    class="h-8 px-3.5 rounded-full transition flex items-center gap-1.5 cursor-pointer">
+                <i class="fas fa-table fa-xs"></i> <span>Tabel Data</span>
+            </button>
+        </div>
+    </div>
+
+    {{-- SECTION 1: TAMPILAN GRAFIK (Top Prioritas yang Harus Ditangani - Template SB Admin 2) --}}
+    <div id="aprioriChartView" x-show="mode === 'chart'" class="mb-8">
+        @php
+            $priorityRulesList = collect($rules)->where('prioritas', 'Prioritas')->sortByDesc('lift')->values()->take(10);
+            $totalPriority = $priorityRulesList->count();
+            $maxLift = $priorityRulesList->isNotEmpty() ? $priorityRulesList->max('lift') : (collect($rules)->max('lift') ?? 0);
+            $totalPriorityKasus = $priorityRulesList->sum('count');
+        @endphp
+
+        {{-- Card Grafik Utama SB Admin 2 --}}
+        <div class="card-sb shadow-sm mb-6">
+            <div class="card-sb-header py-3 px-4 flex flex-row items-center justify-between">
+                <h6 class="m-0 font-bold text-[#4e73df] flex items-center gap-2">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Grafik Pola Top 10 Prioritas Mutu (Wajib Ditangani)</span>
+                </h6>
+
+            </div>
+            <div class="p-5">
+                <div class="relative w-full rounded-lg bg-white" style="height: 420px;">
+                    <canvas id="aprioriChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        {{-- Rincian Penanganan Top Prioritas --}}
+        @if($priorityRulesList->isNotEmpty())
+            <div class="card-sb shadow-sm">
+                <div class="card-sb-header py-3 px-4 flex items-center justify-between">
+                    <h6 class="m-0 font-bold text-[#e74a3b] flex items-center gap-2">
+                        <i class="fas fa-tasks"></i>
+                        <span>Daftar Tindakan Korektif &amp; Preventif untuk Pola Top 10 Prioritas</span>
+                    </h6>
+
+                </div>
+                <div class="divide-y divide-gray-100">
+                    @foreach($priorityRulesList as $idx => $pr)
+                        <div class="p-4 hover:bg-slate-50 transition flex flex-col md:flex-row md:items-center justify-between gap-3">
+                            <div class="flex items-start gap-3">
+                                <div class="w-7 h-7 rounded-full bg-rose-100 text-rose-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                                    #{{ $idx + 1 }}
+                                </div>
+                                <div>
+                                    <div class="flex flex-wrap items-center gap-2 mb-1">
+                                        <span class="font-bold text-sm text-slate-800">{{ $pr['antecedents'] }}</span>
+                                        <span class="text-rose-600 font-bold text-xs flex items-center gap-1">
+                                            <i class="fas fa-long-arrow-alt-right"></i> {{ $pr['consequents'] }}
+                                        </span>
+                                        <span class="badge badge-danger">
+                                            Prioritas Kritis
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 text-xs shrink-0 self-end md:self-center">
+                                <div class="text-right">
+                                    <div class="text-[10px] text-slate-400 font-semibold uppercase">Kasus</div>
+                                    <div class="font-bold text-slate-700 font-mono">{{ $pr['count'] }}x</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-[10px] text-slate-400 font-semibold uppercase">Confidence</div>
+                                    <div class="font-bold text-slate-700 font-mono">{{ number_format($pr['confidence'] * 100, 1) }}%</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-[10px] text-slate-400 font-semibold uppercase">Lift Ratio</div>
+                                    <div class="font-bold text-[#e74a3b] font-mono text-sm">{{ number_format($pr['lift'], 2) }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @else
+            <div class="card-sb shadow-sm p-6 text-center">
+                <i class="fas fa-check-circle text-emerald-500 text-3xl mb-2"></i>
+                <h5 class="text-base font-bold text-slate-800">Tidak Ada Pola Kritis (Prioritas) Pada Periode Ini</h5>
+                <p class="text-xs text-slate-500 max-w-md mx-auto mt-1">
+                    Seluruh pola hubungan berada dalam batas toleransi ("Dipertimbangkan" atau "Dipantau"). Silakan pilih tab <b>Tabel Data</b> untuk melihat seluruh association rules.
+                </p>
+            </div>
+        @endif
+    </div>
+
+    {{-- SECTION 2: TAMPILAN TABEL TEKNIS (Saling Bergantian dengan Grafik) --}}
+    <div id="aprioriTableView" x-show="mode === 'table'" class="hidden mb-8">
+
+        {{-- Filter Kategori Prioritas: Di Bawah Tulisan Judul, Di Atas Tabel --}}
+        <div class="flex flex-wrap items-center gap-2 mb-3">
+            <button type="button"
+                    @click="setFilter('all')"
+                    :class="katFilter === 'all'
+                        ? 'bg-[#4e73df] text-white border-[#4e73df] shadow-xs'
+                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-slate-900'"
+                    class="inline-flex items-center gap-2 rounded-full border px-3.5 h-8 text-xs font-bold transition cursor-pointer">
+                Semua
+                <span :class="katFilter === 'all' ? 'bg-white/25 text-white' : 'bg-slate-100 text-slate-600'"
+                      class="rounded-full px-2 py-0.5 text-[11px] font-bold font-mono">
+                    {{ count($rules) }}
+                </span>
+            </button>
+
+            <button type="button"
+                    @click="setFilter('Prioritas')"
+                    :class="katFilter === 'Prioritas'
+                        ? 'bg-[#e74a3b] text-white border-[#e74a3b] shadow-xs'
+                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-red-600'"
+                    class="inline-flex items-center gap-2 rounded-full border px-3.5 h-8 text-xs font-bold transition cursor-pointer">
+                <span :class="katFilter === 'Prioritas' ? 'bg-white' : 'bg-[#e74a3b]'" class="w-2 h-2 rounded-full"></span>
+                Prioritas
+                <span :class="katFilter === 'Prioritas' ? 'bg-white/25 text-white' : 'bg-slate-100 text-slate-600'"
+                      class="rounded-full px-2 py-0.5 text-[11px] font-bold font-mono">
+                    {{ collect($rules)->where('prioritas', 'Prioritas')->count() }}
+                </span>
+            </button>
+
+            <button type="button"
+                    @click="setFilter('Dipertimbangkan')"
+                    :class="katFilter === 'Dipertimbangkan'
+                        ? 'bg-[#f6c23e] text-white border-[#f6c23e] shadow-xs'
+                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-yellow-600'"
+                    class="inline-flex items-center gap-2 rounded-full border px-3.5 h-8 text-xs font-bold transition cursor-pointer">
+                <span :class="katFilter === 'Dipertimbangkan' ? 'bg-white' : 'bg-[#f6c23e]'" class="w-2 h-2 rounded-full"></span>
+                Dipertimbangkan
+                <span :class="katFilter === 'Dipertimbangkan' ? 'bg-white/25 text-white' : 'bg-slate-100 text-slate-600'"
+                      class="rounded-full px-2 py-0.5 text-[11px] font-bold font-mono">
+                    {{ collect($rules)->where('prioritas', 'Dipertimbangkan')->count() }}
+                </span>
+            </button>
+
+            <button type="button"
+                    @click="setFilter('Dipantau')"
+                    :class="katFilter === 'Dipantau'
+                        ? 'bg-[#36b9cc] text-white border-[#36b9cc] shadow-xs'
+                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-cyan-600'"
+                    class="inline-flex items-center gap-2 rounded-full border px-3.5 h-8 text-xs font-bold transition cursor-pointer">
+                <span :class="katFilter === 'Dipantau' ? 'bg-white' : 'bg-[#36b9cc]'" class="w-2 h-2 rounded-full"></span>
+                Dipantau
+                <span :class="katFilter === 'Dipantau' ? 'bg-white/25 text-white' : 'bg-slate-100 text-slate-600'"
+                      class="rounded-full px-2 py-0.5 text-[11px] font-bold font-mono">
+                    {{ collect($rules)->where('prioritas', 'Dipantau')->count() }}
+                </span>
+            </button>
+        </div>
+
+        <div class="card-sb shadow-sm">
+            <div class="card-sb-header py-3 px-4 flex items-center justify-between">
+                <h6 class="m-0 font-bold text-[#4e73df] flex items-center gap-2">
+                    <i class="fas fa-table"></i>
+                    <span>Tabel Matematika Association Rules &amp; Parameter Mutu</span>
+                </h6>
+                <span class="text-xs font-semibold text-slate-500 font-mono">
+                    Total: <span x-text="totalEntries"></span> Aturan
+                </span>
+            </div>
+
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="text-left text-xs text-slate-500 border-b border-slate-200 bg-slate-50">
+                            <th class="py-2.5 px-3">Kondisi Awal (Antecedent)</th>
+                            <th class="py-2.5 px-3">Penyebab / Akibat (Consequent)</th>
+                            <th class="py-2.5 px-3 text-center">Kejadian</th>
+                            <th class="py-2.5 px-3 text-right">Support (%)</th>
+                            <th class="py-2.5 px-3 text-right">Confidence (%)</th>
+                            <th class="py-2.5 px-3 text-right">Lift Ratio</th>
+                            <th class="py-2.5 px-3 text-center">Kategori Prioritas</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <template x-for="(r, idx) in paginatedRules" :key="idx">
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="py-2.5 px-3 font-medium text-slate-700" x-text="r.antecedents"></td>
+                                <td class="py-2.5 px-3 font-semibold text-[#4e73df]" x-text="r.consequents"></td>
+                                <td class="py-2.5 px-3 text-center font-bold text-slate-800 font-mono" x-text="r.count + 'x'"></td>
+                                <td class="py-2.5 px-3 text-right" x-text="(r.support * 100).toFixed(1) + '%'"></td>
+                                <td class="py-2.5 px-3 text-right font-bold text-slate-800" x-text="(r.confidence * 100).toFixed(1) + '%'"></td>
+                                <td class="py-2.5 px-3 text-right font-bold text-[#4e73df]" x-text="Number(r.lift).toFixed(2)"></td>
+                                <td class="py-2.5 px-3 text-center whitespace-nowrap">
+                                    <span :class="r.prioritas === 'Prioritas' ? 'badge badge-danger' : (r.prioritas === 'Dipertimbangkan' ? 'badge badge-warning' : 'badge badge-info')"
+                                          x-text="r.prioritas">
+                                    </span>
+                                </td>
+                            </tr>
+                        </template>
+                        <tr x-show="totalEntries === 0">
+                            <td colspan="7" class="py-6 text-center text-slate-400 text-sm">
+                                Tidak ada data association rules yang memenuhi kriteria pencarian atau filter.
                             </td>
                         </tr>
-                    @empty
-                        <tr><td colspan="6" class="py-4 text-center text-slate-400 text-sm">Tidak ada data.</td></tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+                    </tbody>
+                </table>
+            </div>
 
-<!-- Visualisasi Lift Chart -->
-<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
-    <h2 class="font-semibold text-slate-800 mb-1">Grafik Perbandingan Kekuatan Pola (Lift Ratio)</h2>
-    <p class="text-xs text-slate-500 mb-4">Grafik tingkat kekuatan kaitan sebab-akibat. Semakin tinggi batang grafik, semakin kuat hubungan antar variabel.</p>
-    <div class="relative w-full rounded-lg bg-white" style="height: 400px;">
-        <canvas id="aprioriChart"></canvas>
+            {{-- Footer: Rows per page & Pagination Controls --}}
+            <div class="px-4 py-3 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-sm bg-white">
+                {{-- Sisi Kiri Bawah: Rows per page --}}
+                <div class="flex items-center gap-3">
+                    <label for="apriori_per_page" class="text-sm font-normal text-slate-900 whitespace-nowrap">
+                        Rows per page
+                    </label>
+                    <div class="relative inline-flex items-center">
+                        <select id="apriori_per_page"
+                                x-model.number="perPage"
+                                @change="currentPage = 1"
+                                style="-webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: none;"
+                                class="no-native-arrow bg-white border border-slate-200 hover:border-slate-300 text-slate-900 text-sm font-semibold rounded-xl pl-3.5 pr-8 py-1.5 min-w-[70px] focus:outline-hidden focus:ring-2 focus:ring-primary/20 focus:border-primary shadow-[0_1px_2px_rgba(0,0,0,0.04)] cursor-pointer transition">
+                            <option :value="10">10</option>
+                            <option :value="25">25</option>
+                            <option :value="50">50</option>
+                            <option :value="100">100</option>
+                        </select>
+                        <div class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 flex items-center justify-center">
+                            <svg class="w-3.5 h-3.5 stroke-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Sisi Kanan Bawah: Pagination Controls (Maksimal 5) --}}
+                <div class="flex items-center justify-end">
+                    <nav role="navigation" aria-label="Pagination Navigation" class="flex items-center gap-1 sm:gap-1.5 text-sm select-none">
+                        {{-- Previous Button --}}
+                        <button type="button"
+                                @click="prevPage()"
+                                :disabled="currentPage === 1"
+                                :class="currentPage === 1 ? 'text-slate-300 cursor-not-allowed select-none' : 'text-slate-800 hover:text-primary cursor-pointer'"
+                                class="inline-flex items-center gap-1.5 transition-colors px-2 py-1.5 font-medium text-sm">
+                            <svg class="w-3.5 h-3.5 stroke-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                            Previous
+                        </button>
+
+                        {{-- Pagination Elements (Maksimal 5) --}}
+                        <template x-for="(elem, idx) in paginationElements" :key="idx">
+                            <div class="inline-flex items-center">
+                                <template x-if="elem === '...'">
+                                    <button type="button"
+                                            @click="gotoPage(idx === 0 ? Math.max(1, currentPage - 3) : Math.min(totalPages, currentPage + 3))"
+                                            class="inline-flex items-center justify-center min-w-[28px] h-9 px-1 text-slate-400 hover:text-slate-700 font-bold select-none text-base tracking-widest cursor-pointer transition-colors">
+                                        &hellip;
+                                    </button>
+                                </template>
+                                <template x-if="elem !== '...'">
+                                    <button type="button"
+                                            @click="gotoPage(elem)"
+                                            :class="currentPage === elem ? 'z-10 font-semibold text-slate-900 bg-white border border-slate-200/90 rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.05)] cursor-default select-none' : 'font-medium text-slate-800 hover:text-primary hover:bg-slate-100/60 rounded-xl cursor-pointer'"
+                                            class="inline-flex items-center justify-center min-w-[36px] h-9 px-3 text-sm transition-colors"
+                                            x-text="elem">
+                                    </button>
+                                </template>
+                            </div>
+                        </template>
+
+                        {{-- Next Button --}}
+                        <button type="button"
+                                @click="nextPage()"
+                                :disabled="currentPage === totalPages || totalEntries === 0"
+                                :class="(currentPage === totalPages || totalEntries === 0) ? 'text-slate-300 cursor-not-allowed select-none' : 'text-slate-800 hover:text-primary cursor-pointer'"
+                                class="inline-flex items-center gap-1.5 transition-colors px-2 py-1.5 font-medium text-sm">
+                            Next
+                            <svg class="w-3.5 h-3.5 stroke-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                    </nav>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
 
-
 @push('scripts')
 <script>
+let aprioriChartInstance = null;
+
 function toggleAprioriView(mode) {
-    const cardsView = document.getElementById('aprioriCardsView');
+    const chartView = document.getElementById('aprioriChartView');
     const tableView = document.getElementById('aprioriTableView');
-    const btnCards  = document.getElementById('btnModeCards');
+    const btnChart  = document.getElementById('btnModeChart');
     const btnTable  = document.getElementById('btnModeTable');
 
-    if (mode === 'cards') {
-        cardsView?.classList.remove('hidden');
+    if (mode === 'chart') {
+        chartView?.classList.remove('hidden');
         tableView?.classList.add('hidden');
-        btnCards?.classList.add('bg-white', 'shadow-sm', 'text-slate-800', 'font-bold');
-        btnCards?.classList.remove('text-slate-600');
-        btnTable?.classList.remove('bg-white', 'shadow-sm', 'text-slate-800', 'font-bold');
+        btnChart?.classList.add('bg-white', 'shadow-sm', 'text-[#4e73df]', 'font-bold');
+        btnChart?.classList.remove('text-slate-600');
+        btnTable?.classList.remove('bg-white', 'shadow-sm', 'text-[#4e73df]', 'font-bold');
         btnTable?.classList.add('text-slate-600');
+
+        // Resize chart jika instance tersedia
+        if (aprioriChartInstance) {
+            setTimeout(() => {
+                aprioriChartInstance.resize();
+            }, 50);
+        }
     } else {
-        cardsView?.classList.add('hidden');
+        chartView?.classList.add('hidden');
         tableView?.classList.remove('hidden');
-        btnTable?.classList.add('bg-white', 'shadow-sm', 'text-slate-800', 'font-bold');
+        btnTable?.classList.add('bg-white', 'shadow-sm', 'text-[#4e73df]', 'font-bold');
         btnTable?.classList.remove('text-slate-600');
-        btnCards?.classList.remove('bg-white', 'shadow-sm', 'text-slate-800', 'font-bold');
-        btnCards?.classList.add('text-slate-600');
+        btnChart?.classList.remove('bg-white', 'shadow-sm', 'text-[#4e73df]', 'font-bold');
+        btnChart?.classList.add('text-slate-600');
     }
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    const rules = @json($rules);
+    const allRules = @json($rules);
+    const chartCanvas = document.getElementById('aprioriChart');
     
-    if (rules.length === 0) {
-        document.getElementById('aprioriChart').parentElement.innerHTML = '<div class="flex items-center justify-center h-full text-sm text-slate-400">Tidak ada data untuk divisualisasikan.</div>';
+    if (!chartCanvas) return;
+
+    if (allRules.length === 0) {
+        chartCanvas.parentElement.innerHTML = '<div class="flex items-center justify-center h-full text-sm text-slate-400">Tidak ada data aturan untuk divisualisasikan.</div>';
         return;
     }
 
-    // Ambil maksimal 15 rules teratas (sudah diurutkan by lift desc di controller/service)
-    const topRules = rules.slice(0, 15);
+    // Filter fokus HANYA pada Top Prioritas yang harus ditangani (Dibatasi 10 Teratas)
+    let priorityRules = allRules.filter(r => r.prioritas === 'Prioritas');
     
-    const labels = topRules.map(r => r.antecedents + ' ➔ ' + r.consequents);
-    const dataLift = topRules.map(r => r.lift);
+    // Jika tidak ada yang berkategori 'Prioritas', fallback ke rules dengan Lift tertinggi
+    const isOnlyPriority = priorityRules.length > 0;
+    let targetRules = isOnlyPriority ? priorityRules : allRules;
     
-    const bgColors = topRules.map(r => {
-        if (r.lift >= 5) return '#e11d48'; // Sangat Kuat
-        if (r.lift >= 3) return '#d97706'; // Kuat
-        if (r.lift >= 1.5) return '#0ea5e9'; // Sedang
-        return '#94a3b8'; // Lemah
+    // Urutkan berdasarkan lift ratio descending dan batasi menjadi Top 10
+    targetRules.sort((a, b) => b.lift - a.lift);
+    targetRules = targetRules.slice(0, 10);
+
+    const labels = targetRules.map(r => r.antecedents + ' ➔ ' + r.consequents);
+    const dataLift = targetRules.map(r => r.lift);
+
+    // Styling SB Admin 2: Danger (#e74a3b) untuk Prioritas, Warning (#f6c23e), Primary (#4e73df)
+    const bgColors = targetRules.map(r => {
+        if (r.prioritas === 'Prioritas') return '#e74a3b'; // Danger SB Admin 2
+        if (r.prioritas === 'Dipertimbangkan') return '#f6c23e'; // Warning SB Admin 2
+        return '#4e73df'; // Primary SB Admin 2
     });
 
-    const ctx = document.getElementById('aprioriChart');
-    new Chart(ctx, {
+    const hoverColors = targetRules.map(r => {
+        if (r.prioritas === 'Prioritas') return '#be2617';
+        if (r.prioritas === 'Dipertimbangkan') return '#dfa824';
+        return '#2e59d9';
+    });
+
+    aprioriChartInstance = new Chart(chartCanvas, {
         type: 'bar',
         data: {
             labels: labels,
@@ -400,7 +620,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 label: 'Lift Ratio',
                 data: dataLift,
                 backgroundColor: bgColors,
+                hoverBackgroundColor: hoverColors,
+                borderColor: bgColors,
                 borderRadius: 4,
+                borderSkipped: false,
                 barThickness: 24
             }]
         },
@@ -411,13 +634,21 @@ document.addEventListener("DOMContentLoaded", function() {
             plugins: {
                 legend: { display: false },
                 tooltip: {
+                    backgroundColor: '#ffffff',
+                    titleColor: '#6e707e',
+                    bodyColor: '#858796',
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    padding: 12,
                     callbacks: {
                         label: function(ctx) {
-                            const r = topRules[ctx.dataIndex];
+                            const r = targetRules[ctx.dataIndex];
                             return [
-                                ` Lift: ${r.lift.toFixed(2)} (${r.kekuatan})`,
-                                ` Support: ${(r.support*100).toFixed(1)}%`,
-                                ` Confidence: ${(r.confidence*100).toFixed(1)}%`
+                                ` Status: ${r.prioritas} (Harus Ditangani)`,
+                                ` Kasus: ${r.count}x kejadian komplain`,
+                                ` Lift Ratio: ${r.lift.toFixed(2)} (${r.kekuatan})`,
+                                ` Confidence: ${(r.confidence * 100).toFixed(1)}% | Support: ${(r.support * 100).toFixed(1)}%`,
+                                ` Tindakan: ${r.tindak_lanjut ?? 'Tindakan Korektif & Preventif Segera'}`
                             ];
                         }
                     }
@@ -426,21 +657,36 @@ document.addEventListener("DOMContentLoaded", function() {
                     display: true,
                     anchor: 'end',
                     align: 'end',
-                    color: '#475569',
-                    font: { size: 11, weight: '600' },
+                    color: '#e74a3b',
+                    font: { size: 11, weight: 'bold' },
                     formatter: (v) => v.toFixed(2)
                 }
             },
-            layout: { padding: { right: 40 } },
+            layout: { padding: { right: 45 } },
             scales: {
                 x: { 
                     beginAtZero: true, 
-                    title: { display: true, text: 'Lift Ratio' },
-                    grid: { color: '#f1f5f9' }
+                    title: { 
+                        display: true, 
+                        text: 'Kekuatan Kaitan Hubungan (Lift Ratio)',
+                        color: '#6e707e',
+                        font: { size: 12, weight: 'bold' }
+                    },
+                    grid: { 
+                        color: '#eaecf4',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        color: '#858796'
+                    }
                 },
                 y: { 
                     grid: { display: false }, 
-                    ticks: { font: { size: 11 }, autoSkip: false }
+                    ticks: { 
+                        color: '#5a5c69',
+                        font: { size: 11, weight: '600' }, 
+                        autoSkip: false 
+                    }
                 }
             }
         }

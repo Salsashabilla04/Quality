@@ -1,0 +1,665 @@
+1: @extends('layouts.app')
+2: @section('title', 'Data Complaint & NCR')
+3: @section('subtitle', 'Monitoring, investigasi QA, dan persetujuan (approval) Supervisor QC')
+4: 
+5: @section('actions')
+6:     <div class="flex items-center gap-2">
+7: 
+8:         @can('manage-complaints')
+9:             <button
+10:                 type="button"
+11:                 onclick="document.getElementById('importModal').classList.remove('hidden')"
+12:                 class="inline-flex items-center justify-center gap-2
+13:                        h-10 px-4
+14:                        rounded-xl
+15:                        bg-amber-500 hover:bg-amber-600
+16:                        text-sm font-semibold text-white
+17:                        shadow-sm
+18:                        transition-all duration-200
+19:                        shrink-0
+20:                        whitespace-nowrap"
+21:             >
+22:                 <svg
+23:                     class="w-4 h-4"
+24:                     fill="none"
+25:                     stroke="currentColor"
+26:                     viewBox="0 0 24 24"
+27:                     stroke-width="2"
+28:                 >
+29:                     <path
+30:                         stroke-linecap="round"
+31:                         stroke-linejoin="round"
+32:                         d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"
+33:                     />
+34:                 </svg>
+35: 
+36:                 <span>Import Excel</span>
+37:             </button>
+38:         @endcan
+39: 
+40: 
+41:         @can('manage-complaints')
+42:             <a
+43:                 href="{{ route('export.complaints.excel', request()->query()) }}"
+44:                 class="inline-flex items-center justify-center gap-2
+45:                        h-10 px-4
+46:                        rounded-xl
+47:                        bg-emerald-600 hover:bg-emerald-700
+48:                        text-sm font-semibold text-white
+49:                        shadow-sm
+50:                        transition-all duration-200
+51:                        shrink-0
+52:                        whitespace-nowrap"
+53:             >
+54:                 <svg
+55:                     class="w-4 h-4"
+56:                     fill="none"
+57:                     stroke="currentColor"
+58:                     viewBox="0 0 24 24"
+59:                     stroke-width="2"
+60:                 >
+61:                     <path
+62:                         stroke-linecap="round"
+63:                         stroke-linejoin="round"
+64:                         d="M12 21V9m0 0 4 4m-4-4-4 4M5 3h14"
+65:                     />
+66:                 </svg>
+67: 
+68:                 <span>
+69:                     Export Excel
+70:                     @if (request()->hasAny([
+71:                         'q',
+72:                         'status',
+73:                         'tahun',
+74:                         'bulan',
+75:                         'anomali',
+76:                         'revisi',
+77:                         'approval'
+78:                     ]))
+79:                         (Terfilter)
+80:                     @endif
+81:                 </span>
+82:             </a>
+83:         @endcan
+84: 
+85:     </div>
+86: @endsection
+87: 
+88: @section('content')
+89: 
+90: @php
+91:     $namaBulan = [1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',
+92:                  7=>'Juli',8=>'Agustus',9=>'September',10=>'Oktober',11=>'November',12=>'Desember'];
+93: 
+94:     $revisiCount = \App\Models\Complaint::where('supervisor_approval', 'Rejected')->count();
+95:     $pendingSpvCount = \App\Models\Complaint::where('supervisor_approval', 'Pending')->count();
+96: @endphp
+97: 
+98: @can('manage-complaints')
+99:     @if($revisiCount > 0)
+100:     <div class="mb-5 bg-rose-50 border-2 border-rose-300 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+101:         <div class="flex items-center gap-3">
+102:             <div class="w-10 h-10 rounded-full bg-rose-600 text-white flex items-center justify-center font-extrabold text-xl shrink-0">!</div>
+103:             <div>
+104:                 <div class="text-sm font-bold text-rose-900">PERHATIAN QA: {{ $revisiCount }} Dokumen NCR Membutuhkan Perbaikan / Revisi dari Supervisor!</div>
+105:                 <div class="text-xs text-rose-700 mt-0.5">Supervisor QC meminta perbaikan pada analisis atau tindakan perbaikan. Klik tombol di kanan untuk memfilter dan memperbaiki kasus.</div>
+106:             </div>
+107:         </div>
+108:         <a href="{{ route('complaints.index', ['revisi' => 1]) }}" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-4 py-2.5 rounded-lg shrink-0 shadow-sm">Lihat Kasus Perlu Revisi ({{ $revisiCount }})</a>
+109:     </div>
+110:     @endif
+111: @endcan
+112: 
+113: @can('approve-ncr')
+114:     @if($pendingSpvCount > 0)
+115:     <div class="mb-5 bg-amber-50 border-2 border-amber-300 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+116:         <div class="flex items-center gap-3">
+117:             <div class="w-10 h-10 rounded-full bg-amber-500 text-white flex items-center justify-center font-extrabold text-xl shrink-0">⏳</div>
+118:             <div>
+119:                 <div class="text-sm font-bold text-amber-900">MEMBUTUHKAN VALIDASI: {{ $pendingSpvCount }} Dokumen NCR Menunggu Persetujuan Anda!</div>
+120:                 <div class="text-xs text-amber-700 mt-0.5">Silakan tinjau data komplain dan klik tombol "🛡️ Validasi SPV" pada baris komplain di bawah.</div>
+121:             </div>
+122:         </div>
+123:         <a href="{{ route('complaints.index', ['approval' => 'Pending']) }}" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold px-4 py-2.5 rounded-lg shrink-0 shadow-sm">Lihat Kasus Pending Approval ({{ $pendingSpvCount }})</a>
+124:     </div>
+125:     @endif
+126: @endcan
+127: 
+128: <form method="GET" class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 mb-5 flex flex-col gap-4">
+129:     <div class="flex flex-wrap gap-4 items-end">
+130:         <div class="flex-1 min-w-[250px]">
+131:             <label class="block text-xs font-medium text-slate-600 mb-1">Cari</label>
+132:             <input type="text" name="q" value="{{ request('q') }}" placeholder="Ketik nama customer, jenis defect, detail, atau penyebab..."
+133:                    class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500">
+134:         </div>
+135:         
+136:         <div>
+137:             <label class="block text-xs font-medium text-slate-600 mb-1">Status QA</label>
+138:             <select name="status" class="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500 w-36">
+139:                 <option value="">Semua Status</option>
+140:                 <option value="Open" @selected(request('status')==='Open')>Open (Baru)</option>
+141:                 <option value="Diproses" @selected(request('status')==='Diproses')>Diproses QA</option>
+142:                 <option value="Close" @selected(request('status')==='Close')>Close (Selesai)</option>
+143:             </select>
+144:         </div>
+145:         
+146:         <div>
+147:             <label class="block text-xs font-medium text-slate-600 mb-1">Tahun</label>
+148:             <select name="tahun" class="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500 w-28">
+149:                 <option value="">Semua</option>
+150:                 @foreach ($years as $y)
+151:                     <option value="{{ $y }}" @selected(request()->integer('tahun') === (int) $y)>{{ $y }}</option>
+152:                 @endforeach
+153:             </select>
+154:         </div>
+155:         
+156:         <div>
+157:             <label class="block text-xs font-medium text-slate-600 mb-1">Bulan</label>
+158:             <select name="bulan" class="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500 w-32">
+159:                 <option value="">Semua</option>
+160:                 @foreach ($namaBulan as $n => $label)
+161:                     <option value="{{ $n }}" @selected(request()->integer('bulan') === $n)>{{ $label }}</option>
+162:                 @endforeach
+163:             </select>
+164:         </div>
+165:     </div>
+166:     
+167:     <div class="flex flex-wrap gap-4 items-center pt-2 border-t border-slate-100">
+168:         <label class="inline-flex items-center gap-2 cursor-pointer bg-rose-50 border border-rose-200 px-3 py-1.5 rounded-lg hover:bg-rose-100 transition-colors">
+169:             <input type="checkbox" name="anomali" value="1" @checked(request('anomali')) class="rounded border-rose-300 text-rose-600 focus:ring-rose-500">
+170:             <span class="text-xs font-semibold text-rose-700">⚠️ Filter Anomali Lead Time</span>
+171:         </label>
+172:         
+173:         <div class="flex-1"></div>
+174: 
+175:         @if (request()->hasAny(['q','defect','detail_defect','status','tahun','bulan','anomali']))
+176:             <a href="{{ route('complaints.index') }}" class="text-sm font-medium text-slate-500 hover:text-slate-700 px-3 py-2">Reset</a>
+177:         @endif
+178:         <button class="bg-slate-800 hover:bg-slate-900 text-white font-medium text-sm px-6 py-2 rounded-lg transition-colors">Terapkan Filter</button>
+179:     </div>
+180: </form>
+181: 
+182: <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+183:     <div class="overflow-x-auto min-h-[320px] pb-12">
+184:         <table class="w-full text-sm">
+185:             <thead>
+186:                 <tr class="bg-slate-50 text-left text-xs text-slate-500 uppercase tracking-wide border-b border-slate-200">
+187:                     <th class="px-3.5 py-3 font-bold whitespace-nowrap">No</th>
+188:                     <th class="px-3.5 py-3 font-bold whitespace-nowrap">Tgl Complain</th>
+189:                     <th class="px-3.5 py-3 font-bold whitespace-nowrap">Customer</th>
+190:                     <th class="px-3.5 py-3 font-bold whitespace-nowrap">Ukuran</th>
+191:                     <th class="px-3.5 py-3 font-bold text-right whitespace-nowrap">Qty</th>
+192:                     <th class="px-3.5 py-3 font-bold whitespace-nowrap">Ketidaksesuaian</th>
+193:                     <th class="px-3.5 py-3 font-bold whitespace-nowrap">Penyebab</th>
+194:                     <th class="px-3.5 py-3 font-bold text-right whitespace-nowrap">Lead</th>
+195:                     <th class="px-3.5 py-3 font-bold whitespace-nowrap">Status QA</th>
+196:                     <th class="px-3.5 py-3 font-bold whitespace-nowrap">Validasi SPV</th>
+197:                     @can('manage-complaints')
+198:                         <th class="px-3.5 py-3 font-bold text-right whitespace-nowrap">Aksi</th>
+199:                     @endcan
+200:                 </tr>
+201:             </thead>
+202:             <tbody class="divide-y divide-slate-100">
+203:                 @forelse ($complaints as $c)
+204:                     @php
+205:                         $ketTags    = $c->items->pluck('jenis_ketidaksesuaian')->filter()->unique()->values();
+206:                         $detKetTags = $c->items->pluck('detail_ketidaksesuaian')->filter()->unique()->values();
+207:                         $penTags    = $c->items->pluck('penyebab')->filter()->unique()->values();
+208:                         $detPenTags = $c->items->pluck('detail_penyebab')->filter()->unique()->values();
+209:                         $isOverdue  = $c->status === 'Open' && $c->tanggal_complain && \Carbon\Carbon::parse($c->tanggal_complain)->diffInDays(now()) > 7;
+210:                         $isInvalidDates = $c->tanggal_complain && $c->tanggal_produksi && \Carbon\Carbon::parse($c->tanggal_complain)->lt(\Carbon\Carbon::parse($c->tanggal_produksi));
+211:                         $approval   = $c->supervisor_approval; // null, Approved, Rejected, Pending
+212:                     @endphp
+213:                     <tr class="hover:bg-slate-50/80 transition-colors align-middle {{ $isOverdue ? 'bg-rose-50/50' : '' }} {{ $isInvalidDates ? 'bg-amber-50/40 border-l-4 border-l-amber-500' : '' }}">
+214:                         <td class="px-3.5 py-3 font-mono text-xs font-semibold text-slate-600 whitespace-nowrap">{{ $c->no_customer }}</td>
+215:                         <td class="px-3.5 py-3 whitespace-nowrap text-slate-700 text-xs font-medium">{{ optional($c->tanggal_complain)->format('d M Y') }}</td>
+216:                         <td class="px-3.5 py-3 font-bold text-slate-800 whitespace-nowrap">{{ $c->nama_customer }}</td>
+217:                         <td class="px-3.5 py-3 text-xs text-slate-500 whitespace-nowrap">{{ $c->ukuran ?: '-' }}</td>
+218:                         <td class="px-3.5 py-3 text-right font-medium text-slate-700 whitespace-nowrap">{{ $c->qty ? number_format($c->qty) : '-' }}</td>
+219:                         <td class="px-3.5 py-3">
+220:                             <div class="flex flex-wrap gap-1 max-w-[200px]">
+221:                                 @forelse ($ketTags as $k)
+222:                                     <span class="text-xs font-medium bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded border border-indigo-100 whitespace-nowrap">{{ $k }}</span>
+223:                                 @empty
+224:                                     <span class="text-xs text-slate-300">-</span>
+225:                                 @endforelse
+226:                             </div>
+227:                         </td>
+228:                         <td class="px-3.5 py-3">
+229:                             <div class="flex flex-wrap gap-1 max-w-[200px]">
+230:                                 @forelse ($penTags as $p)
+231:                                     <span class="text-xs text-slate-600 font-medium">{{ $p }}{{ ! $loop->last ? ',' : '' }}</span>
+232:                                 @empty
+233:                                     <span class="text-xs text-slate-300">-</span>
+234:                                 @endforelse
+235:                             </div>
+236:                         </td>
+237:                         <td class="px-3.5 py-3 text-right text-xs whitespace-nowrap">
+238:                             @if ($isInvalidDates)
+239:                                 <span class="text-rose-600 font-bold inline-flex items-center gap-1" title="Tanggal Complain mendahului Tanggal Produksi!">
+240:                                     ⚠️ {{ $c->lead_time }} hr
+241:                                 </span>
+242:                             @else
+243:                                 <span class="text-slate-500 font-medium">{{ $c->lead_time !== null ? $c->lead_time.' hr' : '-' }}</span>
+244:                             @endif
+245:                         </td>
+246: 
+247:                         {{-- STATUS QA COLUMN --}}
+248:                         <td class="px-3.5 py-3 whitespace-nowrap">
+249:                             @if($c->status === 'Open')
+250:                                 <span class="inline-flex items-center justify-center gap-1.5 text-xs h-8 min-w-[90px] px-2.5 rounded-md font-bold bg-amber-100 text-amber-800 border border-amber-300" @if($isOverdue) title="Kasus berumur lebih dari 7 hari" @endif>
+251:                                     <span class="w-2 h-2 rounded-full bg-amber-500"></span> Open
+252:                                 </span>
+253:                             @elseif($c->status === 'Diproses')
+254:                                 <span class="inline-flex items-center justify-center gap-1.5 text-xs h-8 min-w-[90px] px-2.5 rounded-md font-bold bg-sky-100 text-sky-800 border border-sky-300">
+255:                                     <span class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span> Diproses
+256:                                 </span>
+257:                             @else
+258:                                 <span class="inline-flex items-center justify-center gap-1.5 text-xs h-8 min-w-[90px] px-2.5 rounded-md font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+259:                                     <span class="w-2 h-2 rounded-full bg-emerald-600"></span> Close
+260:                                 </span>
+261:                             @endif
+262:                         </td>
+263: 
+264:                         {{-- VALIDASI SUPERVISOR / STATUS NCR COLUMN --}}
+265:                         <td class="px-3.5 py-3 whitespace-nowrap">
+266:                             <div class="flex flex-col gap-1 items-start">
+267:                                 @if($c->status === 'Close')
+268:                                     <a href="{{ route('complaints.ncr', $c) }}" target="_blank"
+269:                                        class="inline-flex items-center justify-center gap-1.5 text-xs h-8 w-[150px] rounded-lg font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
+270:                                        title="Klik untuk melihat / mengunduh Surat NCR (PDF)">
+271:                                         <span>📄</span>
+272:                                         <span>NCR Terbit (PDF)</span>
+273:                                     </a>
+274:                                 @elseif($c->status === 'Diproses')
+275:                                     @can('approve-ncr')
+276:                                         <button type="button"
+277:                                             onclick="openApproveModal({{ $c->id }}, '{{ $c->no_customer }}', '{{ $approval }}', '{{ addslashes($c->catatan_supervisor ?? '') }}', {{ $c->perlu_visit ? 1 : 0 }}, '{{ optional($c->tanggal_visit)->format('Y-m-d') }}', '{{ $c->jam_visit ? substr($c->jam_visit, 0, 5) : '' }}', '{{ addslashes($c->catatan_visit ?? '') }}', '{{ addslashes($c->nama_customer) }}', '{{ addslashes(implode(', ', $ketTags->all())) }}', '{{ addslashes(implode('; ', $detKetTags->all())) }}', '{{ addslashes(implode(', ', $penTags->all())) }}', '{{ addslashes(implode('; ', $detPenTags->all())) }}', '{{ addslashes($c->corrective_action ?? '') }}', '{{ addslashes($c->preventive_action ?? '') }}', '{{ addslashes($c->deskripsi_customer ?? '') }}', '{{ addslashes($c->ukuran ?? '') }}', '{{ $c->qty ? number_format($c->qty) : '' }}', '{{ addslashes($c->deskripsi_penyebab ?? '') }}')"
+278:                                             class="inline-flex items-center justify-center gap-1.5 text-xs h-8 w-[150px] rounded-lg font-bold bg-violet-600 hover:bg-violet-700 text-white shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+279:                                             title="Klik untuk membuka Form Validasi & Persetujuan NCR">
+280:                                             <span>🛡️</span>
+281:                                             <span>Validasi SPV</span>
+282:                                         </button>
+283:                                     @else
+284:                                         <span class="inline-flex items-center justify-center gap-1.5 text-xs h-8 w-[150px] rounded-lg font-bold bg-sky-100 text-sky-800 border border-sky-300 shadow-2xs"
+285:                                               title="Menunggu Validasi CAPA dari Supervisor QC">
+286:                                             <span class="w-2 h-2 rounded-full bg-sky-500 shrink-0 animate-pulse"></span>
+287:                                             <span>Sedang Diajukan</span>
+288:                                         </span>
+289:                                     @endcan
+290:                                 @elseif($approval === 'Rejected')
+291:                                     @can('manage-complaints')
+292:                                         <a href="{{ route('complaints.edit', $c) }}"
+293:                                            class="inline-flex items-center justify-center gap-1.5 text-xs h-8 w-[150px] rounded-lg font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
+294:                                            title="Klik langsung untuk memperbarui investigasi 6M / CAPA">
+295:                                             <span>⚠️</span>
+296:                                             <span>Perlu Revisi</span>
+297:                                         </a>
+298:                                     @else
+299:                                         <button type="button"
+300:                                             onclick="openApproveModal({{ $c->id }}, '{{ $c->no_customer }}', '{{ $approval }}', '{{ addslashes($c->catatan_supervisor ?? '') }}', {{ $c->perlu_visit ? 1 : 0 }}, '{{ optional($c->tanggal_visit)->format('Y-m-d') }}', '{{ $c->jam_visit ? substr($c->jam_visit, 0, 5) : '' }}', '{{ addslashes($c->catatan_visit ?? '') }}', '{{ addslashes($c->nama_customer) }}', '{{ addslashes(implode(', ', $ketTags->all())) }}', '{{ addslashes(implode('; ', $detKetTags->all())) }}', '{{ addslashes(implode(', ', $penTags->all())) }}', '{{ addslashes(implode('; ', $detPenTags->all())) }}', '{{ addslashes($c->corrective_action ?? '') }}', '{{ addslashes($c->preventive_action ?? '') }}', '{{ addslashes($c->deskripsi_customer ?? '') }}', '{{ addslashes($c->ukuran ?? '') }}', '{{ $c->qty ? number_format($c->qty) : '' }}', '{{ addslashes($c->deskripsi_penyebab ?? '') }}')"
+301:                                             class="inline-flex items-center justify-center gap-1.5 text-xs h-8 w-[150px] rounded-lg font-bold bg-rose-100 hover:bg-rose-200 text-rose-800 border border-rose-300 transition-all cursor-pointer"
+302:                                             title="Klik untuk meninjau ulang status revisi">
+303:                                             <span>⚠️</span>
+304:                                             <span>Status Revisi</span>
+305:                                         </button>
+306:                                     @endcan
+307:                                 @else
+308:                                     @can('manage-complaints')
+309:                                         <form action="{{ route('complaints.ajukan-validasi', $c) }}" method="POST" onsubmit="return confirm('Ajukan validasi CAPA kasus {{ $c->no_customer }} ke Supervisor QC?')" class="inline-block">
+310:                                             @csrf @method('PATCH')
+311:                                             <button type="submit" class="inline-flex items-center justify-center gap-1.5 text-xs h-8 w-[150px] rounded-lg font-bold bg-orange-500 hover:bg-orange-600 text-white shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
+312:                                                     title="Klik langsung untuk mengajukan validasi ke Supervisor">
+313:                                                 <span>🚀</span>
+314:                                                 <span>Ajukan Validasi</span>
+315:                                             </button>
+316:                                         </form>
+317:                                     @else
+318:                                         <span class="inline-flex items-center justify-center gap-1.5 text-xs h-8 w-[150px] rounded-lg font-bold bg-slate-100 text-slate-600 border border-slate-200">
+319:                                             <span>Draft (Open)</span>
+320:                                         </span>
+321:                                     @endcan
+322:                                 @endif
+323: 
+324:                                 @if($c->perlu_visit)
+325:                                     <span class="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded font-semibold bg-purple-50 text-purple-700 border border-purple-200"
+326:                                           title="{{ $c->catatan_visit ?: 'Kunjungan Lapangan SPV' }}">
+327:                                         🚐 Visit: {{ optional($c->tanggal_visit)->format('d/m/Y') ?: 'Segera' }}
+328:                                     </span>
+329:                                 @endif
+330:                             </div>
+331:                         </td>
+332: 
+333:                         {{-- Actions Column: Only rendered for QA --}}
+334:                         @can('manage-complaints')
+335:                             <td class="px-4 py-3 text-right whitespace-nowrap">
+336:                                 <div class="row-menu relative inline-block text-left">
+337:                                     <button type="button" class="menu-btn p-1.5 rounded-lg hover:bg-slate-100 text-slate-500">
+338:                                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+339:                                             <path d="M10 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM10 11.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM10 17a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+340:                                         </svg>
+341:                                     </button>
+342:                                     <div class="menu-panel hidden absolute right-0 mt-1 w-52 bg-white border border-slate-200 rounded-lg shadow-xl z-30 py-1">
+343:                                         <a href="{{ route('complaints.edit', $c) }}" class="block px-3 py-2 text-sm text-slate-700 hover:bg-slate-50">✏️ Edit / Investigasi QA</a>
+344:                                         @if($c->status !== 'Close' && $c->status !== 'Diproses')
+345:                                             <form action="{{ route('complaints.ajukan-validasi', $c) }}" method="POST"
+346:                                                   onsubmit="return confirm('Ajukan validasi CAPA kasus {{ $c->no_customer }} ke Supervisor QC?')">
+347:                                                 @csrf @method('PATCH')
+348:                                                 <button class="w-full text-left px-3 py-2 text-sm text-emerald-700 hover:bg-emerald-50">🚀 Ajukan Validasi</button>
+349:                                             </form>
+350:                                         @endif
+351:                                         <div class="border-t border-slate-100 my-1"></div>
+352:                                         <form action="{{ route('complaints.destroy', $c) }}" method="POST"
+353:                                               onsubmit="return confirm('Hapus complaint {{ $c->no_customer }}?')">
+354:                                             @csrf @method('DELETE')
+355:                                             <button class="w-full text-left px-3 py-2 text-sm text-rose-600 hover:bg-rose-50">🗑️ Hapus</button>
+356:                                         </form>
+357:                                     </div>
+358:                                 </div>
+359:                             </td>
+360:                         @endcan
+361:                     </tr>
+362:                 @empty
+363:                     <tr>
+364:                         <td colspan="{{ auth()->user()->role === 'qa' ? 11 : 10 }}" class="px-4 py-12 text-center text-slate-400">
+365:                             Tidak ada data complaint ditemukan.
+366:                         </td>
+367:                     </tr>
+368:                 @endforelse
+369:             </tbody>
+370:         </table>
+371:     </div>
+372: 
+373:     @if ($complaints->hasPages())
+374:         <div class="p-4 border-t border-slate-100 bg-slate-50">
+375:             {{ $complaints->links() }}
+376:         </div>
+377:     @endif
+378: </div>
+379: 
+380: {{-- Modal Validasi CAPA & Persetujuan NCR Supervisor --}}
+381: @can('approve-ncr')
+382: <div id="approveModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 overflow-y-auto">
+383:     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl my-8 overflow-hidden">
+384:         <div class="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-violet-700 to-indigo-600 flex items-center justify-between">
+385:             <h3 class="text-base font-bold text-white flex items-center gap-2">
+386:                 🛡️ Validasi CAPA &amp; Persetujuan NCR Supervisor
+387:             </h3>
+388:             <button onclick="document.getElementById('approveModal').classList.add('hidden')" class="text-white/70 hover:text-white text-xl font-bold">&times;</button>
+389:         </div>
+390: 
+391:         <form id="approveForm" method="POST" action="" class="p-6 space-y-4 max-h-[85vh] overflow-y-auto">
+392:             @csrf
+393:             @method('PATCH')
+394: 
+395:             {{-- Summary Identitas Komplain --}}
+396:             <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-2.5 text-xs">
+397:                 <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+398:                     <div>
+399:                         <span class="text-[10px] text-slate-400 font-extrabold uppercase">Customer</span>
+400:                         <div class="font-bold text-slate-800 text-sm" id="approveCustomerName">-</div>
+401:                     </div>
+402:                     <div class="text-right">
+403:                         <span class="text-[10px] text-slate-400 font-extrabold uppercase">No. Registrasi NCR</span>
+404:                         <div class="font-mono font-bold text-sky-700 text-sm" id="approveNoCustomerBadge">-</div>
+405:                     </div>
+406:                 </div>
+407:                 
+408:                 <div class="grid grid-cols-2 gap-3">
+409:                     <div class="space-y-1">
+410:                         <div>
+411:                             <span class="text-[10px] text-slate-400 font-extrabold uppercase">Jenis Ketidaksesuaian</span>
+412:                             <div class="font-bold text-indigo-700 text-xs" id="approveKetidaksesuaian">-</div>
+413:                         </div>
+414:                         <div>
+415:                             <span class="text-[10px] text-slate-400 font-extrabold uppercase">Detail Ketidaksesuaian</span>
+416:                             <div class="text-xs text-slate-700 font-medium bg-white p-1.5 rounded border border-slate-200 min-h-[26px]" id="approveDetailKetidaksesuaian">-</div>
+417:                         </div>
+418:                     </div>
+419:                     <div class="space-y-1">
+420:                         <div>
+421:                             <span class="text-[10px] text-slate-400 font-extrabold uppercase">Penyebab Teridentifikasi</span>
+422:                             <div class="font-bold text-amber-700 text-xs" id="approvePenyebab">-</div>
+423:                         </div>
+424:                         <div>
+425:                             <span class="text-[10px] text-slate-400 font-extrabold uppercase">Detail Penyebab</span>
+426:                             <div class="text-xs text-slate-700 font-medium bg-white p-1.5 rounded border border-slate-200 min-h-[26px]" id="approveDetailPenyebab">-</div>
+427:                         </div>
+428:                     </div>
+429:                 </div>
+430: 
+431:                 {{-- Deskripsi & Kronologi Keluhan Customer --}}
+432:                 <div class="border-t border-slate-200/80 pt-2 mt-2">
+433:                     <div class="flex items-center justify-between mb-1">
+434:                         <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wide flex items-center gap-1">
+435:                             <span>📝</span> Deskripsi &amp; Rincian Keluhan Customer
+436:                         </span>
+437:                         <span class="text-[10px] text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded font-mono font-bold border border-indigo-100" id="approveSpecsQty">-</span>
+438:                     </div>
+439:                     <div class="text-xs text-slate-800 font-medium bg-amber-50/70 p-2.5 rounded-lg border border-amber-200/80 whitespace-pre-line leading-relaxed min-h-[38px]" id="approveDeskripsi">
+440:                         -
+441:                     </div>
+442:                 </div>
+443: 
+444:                 {{-- Deskripsi Narasi Penyebab NCR --}}
+445:                 <div class="border-t border-slate-200/80 pt-2 mt-2">
+446:                     <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wide flex items-center gap-1 mb-1">
+447:                         <span>🔍</span> Deskripsi Narasi Penyebab (Dicetak ke Surat NCR PDF)
+448:                     </span>
+449:                     <div class="text-xs text-slate-800 font-medium bg-sky-50/70 p-2.5 rounded-lg border border-sky-200/80 whitespace-pre-line leading-relaxed min-h-[38px]" id="approveDeskripsiPenyebab">
+450:                         -
+451:                     </div>
+452:                 </div>
+453:             </div>
+454: 
+455:             {{-- FOKUS UTAMA: PENINJAUAN & VALIDASI CAPA --}}
+456:             <div class="bg-violet-50/60 border-2 border-violet-200 rounded-xl p-4 space-y-3">
+457:                 <div class="flex items-center gap-2 border-b border-violet-200/80 pb-2">
+458:                     <span class="text-base">📋</span>
+459:                     <h4 class="font-bold text-violet-900 text-xs uppercase tracking-wide">Pemeriksaan &amp; Validasi Tindakan (CAPA)</h4>
+460:                     <span class="ml-auto text-[10px] bg-violet-200 text-violet-800 font-bold px-2 py-0.5 rounded">Tugas Utama SPV</span>
+461:                 </div>
+462: 
+463:                 {{-- Corrective Action --}}
+464:                 <div>
+465:                     <label class="block text-xs font-bold text-slate-800 mb-1 flex items-center justify-between">
+466:                         <span>🛠️ Corrective Action (Tindakan Penanganan Langsung)</span>
+467:                         <span class="text-[10px] font-normal text-slate-500">Penanggulangan cacat saat ini</span>
+468:                     </label>
+469:                     <textarea name="corrective_action" id="approveCorrectiveInput" rows="2"
+470:                               placeholder="Usulan tindakan perbaikan dari QA..."
+471:                               class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs focus:ring-violet-500 focus:border-violet-500 bg-white font-medium text-slate-800"></textarea>
+472:                 </div>
+473: 
+474:                 {{-- Preventive Action --}}
+475:                 <div>
+476:                     <label class="block text-xs font-bold text-slate-800 mb-1 flex items-center justify-between">
+477:                         <span>🛡️ Preventive Action (Tindakan Pencegahan Ulang)</span>
+478:                         <span class="text-[10px] font-normal text-slate-500">Pencegahan masalah terulang</span>
+479:                     </label>
+480:                     <textarea name="preventive_action" id="approvePreventiveInput" rows="2"
+481:                               placeholder="Usulan tindakan pencegahan dari QA..."
+482:                               class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs focus:ring-violet-500 focus:border-violet-500 bg-white font-medium text-slate-800"></textarea>
+483:                 </div>
+484:             </div>
+485: 
+486:             {{-- Keputusan Status Approval --}}
+487:             <div>
+488:                 <label class="block text-xs font-bold text-slate-800 mb-1.5">Keputusan Validasi Supervisor <span class="text-rose-500">*</span></label>
+489:                 <select name="approval_status" id="approveStatusSelect" class="w-full rounded-lg border-2 border-slate-300 px-3 py-2 text-sm focus:ring-violet-500 focus:border-violet-500 font-bold text-slate-800"
+490:                         onchange="document.getElementById('keteranganBox').classList.toggle('hidden', this.value !== 'Approved')">
+491:                     <option value="Approved">✅ Disetujui (Approved — CAPA Sah & Form NCR Terbit)</option>
+492:                     <option value="Pending">⏳ Pending (Membutuhkan Peninjauan/Data Tambahan)</option>
+493:                     <option value="Rejected">❌ Ditolak / Perlu Revisi CAPA oleh QA</option>
+494:                 </select>
+495:             </div>
+496: 
+497:             {{-- Keterangan Penyelesaian — hanya wewenang SPV, muncul saat Approved --}}
+498:             <div id="keteranganBox" class="bg-rose-50 border-2 border-rose-200 rounded-xl p-4">
+499:                 <div class="flex items-center gap-2 mb-3">
+500:                     <span class="text-base">📋</span>
+501:                     <h4 class="font-bold text-rose-900 text-xs uppercase tracking-wide">Keterangan Penyelesaian Akhir</h4>
+502:                     <span class="ml-auto text-[10px] bg-rose-200 text-rose-800 font-bold px-2 py-0.5 rounded">Wewenang SPV</span>
+503:                 </div>
+504:                 <p class="text-[11px] text-rose-700 mb-3">Tentukan keputusan akhir penanganan komplain ini: apakah barang dikembalikan (Retur) atau cukup diberikan masukan/klarifikasi (Feedback) kepada customer.</p>
+505:                 <div class="grid grid-cols-2 gap-3">
+506:                     <label class="flex items-center gap-3 p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer hover:border-emerald-400 hover:bg-emerald-50 transition has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50">
+507:                         <input type="radio" name="keterangan" value="Feedback" class="accent-emerald-600 w-4 h-4" checked>
+508:                         <div>
+509:                             <div class="font-bold text-emerald-700 text-xs">🟢 Feedback</div>
+510:                             <div class="text-[10px] text-slate-500 mt-0.5">Masukan / klarifikasi ke customer, tanpa pengembalian barang</div>
+511:                         </div>
+512:                     </label>
+513:                     <label class="flex items-center gap-3 p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer hover:border-rose-400 hover:bg-rose-50 transition has-[:checked]:border-rose-500 has-[:checked]:bg-rose-50">
+514:                         <input type="radio" name="keterangan" value="Retur" class="accent-rose-600 w-4 h-4">
+515:                         <div>
+516:                             <div class="font-bold text-rose-700 text-xs">🔴 Retur</div>
+517:                             <div class="text-[10px] text-slate-500 mt-0.5">Barang cacat dikembalikan ke pabrik untuk penggantian</div>
+518:                         </div>
+519:                     </label>
+520:                 </div>
+521:             </div>
+522: 
+523:             {{-- Catatan SPV untuk QA --}}
+524:             <div>
+525:                 <label class="block text-xs font-bold text-slate-700 mb-1">Catatan / Arahan Tambahan Supervisor (Tampil ke QA)</label>
+526:                 <textarea name="catatan_supervisor" id="approveCatatan" rows="2" placeholder="Masukkan arahan atau catatan revisi jika CAPA perlu diperbaiki QA..."
+527:                           class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs focus:ring-violet-500 focus:border-violet-500"></textarea>
+528:             </div>
+529: 
+530:             {{-- Section Visit Customer --}}
+531:             <div class="border-t border-slate-200 pt-3">
+532:                 <label class="inline-flex items-center gap-2 cursor-pointer mb-2">
+533:                     <input type="checkbox" name="perlu_visit" id="approvePerluVisit" value="1" onchange="toggleVisitFields(this.checked)" class="rounded border-slate-300 text-violet-600 focus:ring-violet-500 w-4 h-4">
+534:                     <span class="text-xs font-bold text-slate-800">🚐 Jadwalkan Kunjungan Lapangan (Visit Customer)</span>
+535:                 </label>
+536: 
+537:                 <div id="visitFieldsBox" class="hidden space-y-3 pl-6 border-l-2 border-violet-300 mt-2">
+538:                     <div class="grid grid-cols-2 gap-2">
+539:                         <div>
+540:                             <label class="block text-[11px] font-bold text-slate-600 mb-1">Tanggal Rencana Kunjungan</label>
+541:                             <input type="date" name="tanggal_visit" id="approveTanggalVisit" min="{{ date('Y-m-d') }}" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium">
+542:                         </div>
+543:                         <div>
+544:                             <label class="block text-[11px] font-bold text-slate-600 mb-1">Jam Visit</label>
+545:                             <input type="time" name="jam_visit" id="approveJamVisit" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium">
+546:                         </div>
+547:                     </div>
+548:                     <div>
+549:                         <label class="block text-[11px] font-bold text-slate-600 mb-1">Catatan Kunjungan Lapangan</label>
+550:                         <input type="text" name="catatan_visit" id="approveCatatanVisit" placeholder="Misal: Cek fisik sampel Moisture Content di lokasi customer"
+551:                                class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium">
+552:                     </div>
+553:                 </div>
+554:             </div>
+555: 
+556:             <div class="flex gap-3 pt-2">
+557:                 <button type="submit" class="flex-1 bg-violet-600 hover:bg-violet-700 text-white font-bold text-sm py-2.5 rounded-lg shadow-sm transition">
+558:                     Simpan Validasi CAPA &amp; NCR
+559:                 </button>
+560:                 <button type="button" onclick="document.getElementById('approveModal').classList.add('hidden')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm py-2.5 rounded-lg transition">
+561:                     Batal
+562:                 </button>
+563:             </div>
+564:         </form>
+565:     </div>
+566: </div>
+567: @endcan
+568: 
+569: {{-- Import Modal --}}
+570: @can('manage-complaints')
+571: <div id="importModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+572:     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden">
+573:         <div class="px-6 py-4 border-b border-slate-100 bg-amber-500 text-white flex items-center justify-between">
+574:             <h3 class="text-base font-bold flex items-center gap-2">📥 Import Data Complaint Excel</h3>
+575:             <button onclick="document.getElementById('importModal').classList.add('hidden')" class="text-white/70 hover:text-white">&times;</button>
+576:         </div>
+577:         <form action="{{ route('complaints.import') }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
+578:             @csrf
+579:             <div>
+580:                 <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih File Excel (.xlsx / .xls)</label>
+581:                 <input type="file" name="file" required accept=".xlsx,.xls" class="w-full text-sm border border-slate-300 rounded-lg p-2">
+582:             </div>
+583:             <div class="flex gap-3">
+584:                 <button type="submit" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 rounded-lg text-sm">Upload & Import</button>
+585:                 <button type="button" onclick="document.getElementById('importModal').classList.add('hidden')" class="flex-1 bg-slate-100 text-slate-700 py-2 rounded-lg text-sm font-semibold">Batal</button>
+586:             </div>
+587:         </form>
+588:     </div>
+589: </div>
+590: @endcan
+591: 
+592: @endsection
+593: 
+594: @push('scripts')
+595: <script>
+596: document.querySelectorAll('.row-menu').forEach(menu => {
+597:     const btn = menu.querySelector('.menu-btn');
+598:     const panel = menu.querySelector('.menu-panel');
+599: 
+600:     btn?.addEventListener('click', (e) => {
+601:         e.stopPropagation();
+602:         document.querySelectorAll('.menu-panel').forEach(p => p !== panel && p.classList.add('hidden'));
+603:         panel?.classList.toggle('hidden');
+604:     });
+605: });
+606: 
+607: document.addEventListener('click', () => {
+608:     document.querySelectorAll('.menu-panel').forEach(p => p.classList.add('hidden'));
+609: });
+610: 
+611: function toggleVisitFields(checked) {
+612:     const box = document.getElementById('visitFieldsBox');
+613:     if (box) {
+614:         if (checked) box.classList.remove('hidden');
+615:         else box.classList.add('hidden');
+616:     }
+617: }
+618: 
+619: function openApproveModal(id, noCust, currentStatus, currentCatatan, perluVisit, tanggalVisit, jamVisit, catatanVisit, customerName, ketidaksesuaian, detailKetidaksesuaian, penyebab, detailPenyebab, corrective, preventive, deskripsi, ukuran, qty, deskripsiPenyebab) {
+620:     const form = document.getElementById('approveForm');
+621:     form.action = `/complaints/${id}/approve`;
+622:     
+623:     document.getElementById('approveCustomerName').innerText = customerName || '-';
+624:     document.getElementById('approveNoCustomerBadge').innerText = noCust || '-';
+625:     document.getElementById('approveKetidaksesuaian').innerText = ketidaksesuaian || '-';
+626:     document.getElementById('approveDetailKetidaksesuaian').innerText = detailKetidaksesuaian || '-';
+627:     document.getElementById('approvePenyebab').innerText = penyebab || '-';
+628:     document.getElementById('approveDetailPenyebab').innerText = detailPenyebab || '-';
+629: 
+630:     document.getElementById('approveDeskripsi').innerText = (deskripsi && deskripsi.trim() !== '') ? deskripsi : 'Tidak ada deskripsi rinci dari customer/QA.';
+631:     const deskPenEl = document.getElementById('approveDeskripsiPenyebab');
+632:     if (deskPenEl) {
+633:         deskPenEl.innerText = (deskripsiPenyebab && deskripsiPenyebab.trim() !== '') ? deskripsiPenyebab : (penyebab || 'Tidak ada deskripsi narasi penyebab.');
+634:     }
+635:     let specs = '';
+636:     if (ukuran) specs += 'Ukuran: ' + ukuran;
+637:     if (qty) specs += (specs ? ' | ' : '') + 'Qty: ' + qty + ' pcs';
+638:     document.getElementById('approveSpecsQty').innerText = specs || 'Rincian: -';
+639:     
+640:     document.getElementById('approveCorrectiveInput').value = corrective || '';
+641:     document.getElementById('approvePreventiveInput').value = preventive || '';
+642: 
+643:     const statusSelect = document.getElementById('approveStatusSelect');
+644:     statusSelect.value = (currentStatus && currentStatus !== 'null') ? currentStatus : 'Approved';
+645:     const ketBox = document.getElementById('keteranganBox');
+646:     if (ketBox) {
+647:         ketBox.classList.toggle('hidden', statusSelect.value !== 'Approved');
+648:     }
+649:     document.getElementById('approveCatatan').value = currentCatatan;
+650: 
+651:     const chk = document.getElementById('approvePerluVisit');
+652:     chk.checked = !!perluVisit;
+653:     toggleVisitFields(!!perluVisit);
+654: 
+655:     const tglEl = document.getElementById('approveTanggalVisit');
+656:     if (tglEl) tglEl.value = tanggalVisit || '';
+657:     const jamEl = document.getElementById('approveJamVisit');
+658:     if (jamEl) jamEl.value = jamVisit || '';
+659:     const catEl = document.getElementById('approveCatatanVisit');
+660:     if (catEl) catEl.value = catatanVisit || '';
+661: 
+662:     document.getElementById('approveModal').classList.remove('hidden');
+663: }
+664: </script>
+665: @endpush

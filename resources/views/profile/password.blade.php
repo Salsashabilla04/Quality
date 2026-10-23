@@ -30,7 +30,7 @@
             @if ($errors->any())
                 <div class="rounded-xl bg-rose-50 border border-rose-200 p-4">
                     <div class="flex items-start gap-3">
-                        <span class="text-rose-600 text-lg">⚠️</span>
+                        <x-icon name="exclamation-triangle" class="w-6 h-6 text-rose-500 shrink-0"/>
                         <div class="text-xs text-rose-800 space-y-1">
                             <div class="font-bold">Gagal memperbarui password:</div>
                             <ul class="list-disc list-inside space-y-0.5">
@@ -87,7 +87,7 @@
                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition">
                 </div>
                 <p class="text-[11px] text-slate-500 mt-1.5 flex items-center gap-1">
-                    <span>💡</span> Gunakan kombinasi huruf dan angka minimal 6 karakter agar lebih aman.
+                    <x-icon name="light-bulb" class="w-4 h-4 shrink-0 text-amber-500"/> Gunakan kombinasi huruf dan angka minimal 6 karakter agar lebih aman.
                 </p>
             </div>
 
@@ -115,15 +115,14 @@
             {{-- Action Buttons --}}
             <div class="pt-4 flex items-center justify-between border-t border-slate-100">
                 <a href="{{ route('dashboard') }}" 
-                   class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-sm font-medium transition">
-                    Kembali ke Dashboard
+                   class="btn btn-light h-10 px-4 rounded-md border border-slate-200">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Kembali ke Dashboard</span>
                 </a>
                 <button type="submit" 
-                        class="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold shadow-sm transition flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-                    </svg>
-                    Simpan Password Baru
+                        class="btn btn-primary h-10 px-5 rounded-md">
+                    <i class="fas fa-save"></i>
+                    <span>Simpan Password Baru</span>
                 </button>
             </div>
         </form>

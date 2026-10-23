@@ -1,0 +1,67 @@
+Created At: 2026-10-13T11:57:10+07:00
+Completed At: 2026-10-13T11:57:11+07:00
+File Path: `file:///c:/laragon/www/Apriori/salsa-arpriory/resources/views/complaints/index.blade.php`
+Total Lines: 787
+Total Bytes: 54524
+Showing lines 350 to 408
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+350:                             </div>
+351:                         </td>
+352: 
+353:                         {{-- Actions Column: Only rendered for QA --}}
+354:                         @can('manage-complaints')
+355:                             <td class="px-4 py-3 text-right whitespace-nowrap">
+356:                                 <div class="row-menu relative inline-block text-left">
+357:                                     <button type="button" class="menu-btn p-1.5 rounded-md hover:bg-slate-100 text-slate-500">
+358:                                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+359:                                             <path d="M10 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM10 11.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM10 17a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+360:                                         </svg>
+361:                                     </button>
+362:                                     <div class="menu-panel hidden absolute right-0 mt-1 w-52 bg-white border border-slate-200 rounded-lg shadow-xl z-30 py-1">
+363:                                         <a href="{{ route('complaints.edit', $c) }}" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50">
+364:                                             <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+365:                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125"/>
+366:                                             </svg>
+367:                                             <span>Edit / Investigasi QA</span>
+368:                                         </a>
+369:                                         @if($c->status !== 'Close' && $c->status !== 'Diproses')
+370:                                             <form action="{{ route('complaints.ajukan-validasi', $c) }}" method="POST"
+371:                                                   onsubmit="return confirm('Ajukan validasi CAPA kasus {{ $c->no_customer }} ke Supervisor QC?')">
+372:                                                 @csrf @method('PATCH')
+373:                                                 <button class="w-full flex items-center gap-2 text-left px-3 py-2 text-sm text-emerald-700 hover:bg-emerald-50">
+374:                                                     <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+375:                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/>
+376:                                                     </svg>
+377:                                                     <span>Ajukan Validasi</span>
+378:                                                 </button>
+379:                                             </form>
+380:                                         @endif
+381:                                         <div class="border-t border-slate-100 my-1"></div>
+382:                                         <form action="{{ route('complaints.destroy', $c) }}" method="POST"
+383:                                               onsubmit="return confirm('Hapus complaint {{ $c->no_customer }}?')">
+384:                                             @csrf @method('DELETE')
+385:                                             <button class="w-full flex items-center gap-2 text-left px-3 py-2 text-sm text-rose-600 hover:bg-rose-50">
+386:                                                 <svg class="w-4 h-4 text-rose-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+387:                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
+388:                                                 </svg>
+389:                                                 <span>Hapus</span>
+390:                                             </button>
+391:                                         </form>
+392:                                     </div>
+393:                                 </div>
+394:                             </td>
+395:                         @endcan
+396:                     </tr>
+397:                 @empty
+398:                     <tr>
+399:                         <td colspan="{{ auth()->user()->role === 'qa' ? 11 : 10 }}" class="px-4 py-12 text-center text-slate-400">
+400:                             Tidak ada data complaint ditemukan.
+401:                         </td>
+402:                     </tr>
+403:                 @endforelse
+404:             </tbody>
+405:         </table>
+406:     </div>
+407: 
+408:     @if ($complaints->hasPages())
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.

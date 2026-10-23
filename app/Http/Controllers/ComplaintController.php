@@ -49,14 +49,13 @@ class ComplaintController extends Controller
             $q->where('supervisor_approval', $appFilter);
         }
         if ($request->boolean('anomali')) {
-            $q->whereNotNull('lead_time')
-              ->where(function ($w) {
-                  $w->where('lead_time', '<', 0)
-                    ->orWhere('lead_time', '>', 100);
-              });
+            // Definisi anomali terpusat di scope Complaint::anomali()
+            // (lead_time > 100 hari ATAU tanggal complain < tanggal produksi),
+            // sama seperti yang dipakai ExportController.
+            $q->anomali();
         }
 
-        $complaints = $q->orderByDesc('tanggal_complain')->orderByDesc('id')->paginate(20)->withQueryString();
+        $complaints = $q->orderByDesc('tanggal_complain')->orderByDesc('id')->paginate(25)->withQueryString();
 
         // Daftar detail ketidaksesuaian untuk dropdown
         $detailDefects = ComplaintItem::query()
@@ -118,6 +117,7 @@ class ComplaintController extends Controller
         $data['fishbone'] = $this->resolveFishbone($request, $items);
         $data['deskripsi_customer'] = $request->input('deskripsi_customer');
         $data['deskripsi_penyebab'] = $request->input('deskripsi_penyebab');
+        $data['supervisor_approval'] = null;
 
         $complaint = Complaint::create($data);
 

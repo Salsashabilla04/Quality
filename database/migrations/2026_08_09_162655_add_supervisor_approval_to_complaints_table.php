@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('complaints', function (Blueprint $table) {
-            $table->string('supervisor_approval')->default('Approved')->after('status');
+            $table->string('supervisor_approval')->nullable()->default(null)->after('status');
             $table->text('catatan_supervisor')->nullable()->after('supervisor_approval');
             $table->timestamp('approved_at')->nullable()->after('catatan_supervisor');
         });

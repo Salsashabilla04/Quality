@@ -90,7 +90,7 @@ class LaporanController extends Controller
         $fishbone      = $tools->fishbone($fishboneEfek, $fishboneLevel, $fishboneLimit);
 
         // --- Apriori Rules ---
-        $cachedApriori = \App\Services\AprioriService::getCachedResult(0.05, 0.5);
+        $cachedApriori = \App\Services\AprioriService::getCachedResult(0.015, 0.5);
         $topRules      = array_slice($cachedApriori['rules'], 0, 5);
         $totalTrx      = $cachedApriori['totalTrx'];
 

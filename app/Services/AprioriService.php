@@ -30,9 +30,9 @@ class AprioriService
      *
      * @return array{rules: array, frequent: array, totalTrx: int, calculated_at: string}
      */
-    public static function getCachedResult(float $minSupport = 0.05, float $minConfidence = 0.5): array
+    public static function getCachedResult(float $minSupport = 0.015, float $minConfidence = 0.5): array
     {
-        $key = "apriori_results_v2_{$minSupport}_{$minConfidence}";
+        $key = "apriori_results_v4_{$minSupport}_{$minConfidence}";
 
         return \Illuminate\Support\Facades\Cache::remember($key, now()->addHours(2), function () use ($minSupport, $minConfidence) {
             $service = (new self($minSupport, $minConfidence))->buildTransactions();
@@ -51,12 +51,13 @@ class AprioriService
     /**
      * Hapus Cache Apriori otomatis ketika ada data komplain baru ditambah/diperbarui/dihapus.
      */
-    public static function clearCache(float $minSupport = 0.05, float $minConfidence = 0.5): void
+    public static function clearCache(float $minSupport = 0.015, float $minConfidence = 0.5): void
     {
-        \Illuminate\Support\Facades\Cache::forget("apriori_results_{$minSupport}_{$minConfidence}");
+        // Kunci harus sama dengan yang dipakai di getCachedResult()
+        \Illuminate\Support\Facades\Cache::forget("apriori_results_v4_{$minSupport}_{$minConfidence}");
     }
 
-    public function __construct(float $minSupport = 0.05, float $minConfidence = 0.5)
+    public function __construct(float $minSupport = 0.015, float $minConfidence = 0.5)
     {
         $this->minSupport = $minSupport;
         $this->minConfidence = $minConfidence;
@@ -139,7 +140,8 @@ class AprioriService
 
         // ---- Level k >= 2 ----
         $k = 2;
-        while (! empty($current)) {
+        // Dibatasi maksimal 2 item (1 Ketidaksesuaian + 1 Penyebab) => aturan A -> B
+        while (! empty($current) && $k <= 2) {
             $candidates = $this->generateCandidates(array_values($current), $k);
             if (empty($candidates)) break;
 
@@ -192,6 +194,13 @@ class AprioriService
             for ($j = $i + 1; $j < $m; $j++) {
                 $union = array_values(array_unique(array_merge($frequentPrev[$i], $frequentPrev[$j])));
                 if (count($union) === $k) {
+                    // Wajib 1 Ketidaksesuaian + 1 Penyebab (bukan sejenis)
+                    $nKet = 0; $nPen = 0;
+                    foreach ($union as $u) {
+                        if (str_starts_with($u, 'Ketidaksesuaian=')) $nKet++;
+                        if (str_starts_with($u, 'Penyebab=')) $nPen++;
+                    }
+                    if ($nKet !== 1 || $nPen !== 1) continue;
                     sort($union);
                     $key = implode('||', $union);
                     $candidates[$key] = $union;
@@ -224,11 +233,18 @@ class AprioriService
             if ($f['size'] < 2) continue;
             $items = $f['items'];
             $supportAll = $f['support'];
+            $countAll = $f['count'] ?? 0;
 
             // semua subset non-kosong sebagai antecedent
             foreach ($this->properSubsets($items) as $antecedent) {
                 $consequent = array_values(array_diff($items, $antecedent));
                 if (empty($consequent)) continue;
+
+                // Aturan hanya A -> B: 1 item di antecedent, 1 item di consequent
+                if (count($antecedent) !== 1 || count($consequent) !== 1) continue;
+                $aIsKet = str_starts_with($antecedent[0], 'Ketidaksesuaian=');
+                $cIsKet = str_starts_with($consequent[0], 'Ketidaksesuaian=');
+                if ($aIsKet === $cIsKet) continue; // harus beda jenis (Ketidaksesuaian vs Penyebab)
 
                 $supA = $supportMap[$this->key($antecedent)] ?? null;
                 $supC = $supportMap[$this->key($consequent)] ?? null;
@@ -280,6 +296,9 @@ class AprioriService
                     $saranText = "Perbaiki faktor <strong class=\"text-slate-900\">{$conClean}</strong> dan <strong class=\"text-slate-900\">{$antClean}</strong> secara berkala.";
                 }
 
+                $prioritas = $this->kategoriPrioritas($countAll, $lift);
+                $tindakLanjut = $this->tindakLanjut($countAll, $lift);
+
                 $rules[] = [
                     'antecedents'      => $antClean,
                     'consequents'      => $conClean,
@@ -291,6 +310,9 @@ class AprioriService
                     'support'          => round($supportAll, 6),
                     'confidence'       => round($confidence, 6),
                     'lift'             => round($lift, 6),
+                    'count'            => $countAll,
+                    'prioritas'        => $prioritas,
+                    'tindak_lanjut'    => $tindakLanjut,
                     'kekuatan'         => $this->kekuatan($lift),
                     'interpretasi'     => $this->interpretasi(
                         $antClean,
@@ -303,8 +325,17 @@ class AprioriService
             }
         }
 
-        // urutkan lift desc
-        usort($rules, fn ($a, $b) => $b['lift'] <=> $a['lift']);
+        // urutkan berdasarkan kategori prioritas (Prioritas -> Dipertimbangkan -> Dipantau), lalu lift desc
+        $priorityRank = ['Prioritas' => 1, 'Dipertimbangkan' => 2, 'Dipantau' => 3];
+        usort($rules, function ($a, $b) use ($priorityRank) {
+            $rA = $priorityRank[$a['prioritas']] ?? 99;
+            $rB = $priorityRank[$b['prioritas']] ?? 99;
+            if ($rA !== $rB) {
+                return $rA <=> $rB;
+            }
+            return $b['lift'] <=> $a['lift'];
+        });
+
         return $rules;
     }
 
@@ -431,5 +462,38 @@ class AprioriService
             'Dari semua kasus "%s", sebanyak %d%% terkait dengan "%s". Kaitan keduanya %s (lift %.1fx).',
             $a, round($conf * 100), $c, strtolower($this->kekuatan($lift)), $lift
         );
+    }
+
+    /**
+     * Klasifikasi prioritas aturan asosiasi berdasarkan matriks:
+     * - Prioritas: Jumlah kejadian >= 5 dan Lift >= 3
+     * - Dipertimbangkan: Jumlah kejadian >= 5 dan 1,5 <= Lift < 3
+     * - Dipantau: Jumlah kejadian 3 sampai 4 (atau data awal)
+     */
+    public function kategoriPrioritas(int $count, float $lift): string
+    {
+        if ($count >= 5 && $lift >= 3.0) {
+            return 'Prioritas';
+        }
+        if ($count >= 5 && $lift >= 1.5 && $lift < 3.0) {
+            return 'Dipertimbangkan';
+        }
+        return 'Dipantau';
+    }
+
+    /**
+     * Rekomendasi tindak lanjut penanganan mutu kualitas berdasarkan prioritas:
+     * - Prioritas: Dijadikan dasar utama tindakan korektif dan pencegahan
+     * - Dipertimbangkan: Dipertimbangkan sebagai faktor pendukung
+     * - Dipantau: Dipantau seiring bertambahnya data
+     */
+    public function tindakLanjut(int $count, float $lift): string
+    {
+        $kat = $this->kategoriPrioritas($count, $lift);
+        return match ($kat) {
+            'Prioritas'       => 'Dijadikan dasar utama tindakan korektif dan pencegahan',
+            'Dipertimbangkan' => 'Dipertimbangkan sebagai faktor pendukung',
+            'Dipantau'        => 'Dipantau seiring bertambahnya data',
+        };
     }
 }

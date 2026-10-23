@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -49,6 +50,28 @@ class Complaint extends Model
         'fishbone'         => 'array',
         'foto_bukti'       => 'array',
     ];
+
+    /**
+     * Scope kasus anomali: lead time tidak wajar (lebih dari 100 hari)
+     * atau tanggal terbalik (tanggal complain lebih awal dari tanggal produksi).
+     *
+     * Dipakai bersama oleh filter "Anomali Lead Time" pada daftar complaint
+     * (ComplaintController::index) dan export Excel (ExportController),
+     * agar definisi anomali selalu konsisten di seluruh aplikasi.
+     */
+    public function scopeAnomali(Builder $query): Builder
+    {
+        return $query->where(function ($w) {
+            $w->where(function ($a) {
+                $a->whereNotNull('lead_time')
+                  ->where('lead_time', '>', 100);
+            })->orWhere(function ($b) {
+                $b->whereNotNull('tanggal_complain')
+                  ->whereNotNull('tanggal_produksi')
+                  ->whereColumn('tanggal_complain', '<', 'tanggal_produksi');
+            });
+        });
+    }
 
     /** Urutan kategori 6M untuk diagram fishbone. */
     public const FISHBONE_CATEGORIES = ['Man', 'Machine', 'Material', 'Method', 'Environment', 'Measurement'];

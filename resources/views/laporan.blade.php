@@ -11,7 +11,7 @@
 <form method="GET" class="bg-white rounded-xl border border-slate-200 shadow-sm px-6 py-4 mb-6 flex flex-wrap gap-4 items-end">
     <div>
         <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wide">Tahun</label>
-        <select name="tahun" class="rounded-lg border border-slate-300 px-3 py-2 text-sm w-28">
+        <select name="tahun" class="rounded-md border border-slate-300 px-3 py-1.5 text-xs h-9 w-28 bg-white font-semibold">
             @foreach($years as $y)
                 <option value="{{ $y }}" @selected($y == $tahun)>{{ $y }}</option>
             @endforeach
@@ -19,48 +19,52 @@
     </div>
     <div>
         <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wide">Bulan</label>
-        <select name="bulan" class="rounded-lg border border-slate-300 px-3 py-2 text-sm w-36">
+        <select name="bulan" class="rounded-md border border-slate-300 px-3 py-1.5 text-xs h-9 w-36 bg-white font-semibold">
             <option value="">Semua Bulan</option>
             @foreach(array_slice($bulanOptions,1) as $i => $bln)
                 <option value="{{ $i+1 }}" @selected(($i+1) == $bulan)>{{ $bln }}</option>
             @endforeach
         </select>
     </div>
-    <button class="bg-slate-800 hover:bg-slate-900 text-white text-sm font-semibold px-5 py-2 rounded-lg">Tampilkan</button>
+    <button class="btn btn-primary btn-sm h-9">
+        <i class="fas fa-filter"></i>
+        <span>Tampilkan</span>
+    </button>
     @if($bulan)
-        <a href="{{ route('laporan', ['tahun' => $tahun]) }}" class="text-sm text-slate-500 hover:text-slate-700 px-2 py-2">Reset Bulan</a>
+        <a href="{{ route('laporan', ['tahun' => $tahun]) }}" class="btn btn-outline-secondary btn-sm h-9">
+            <i class="fas fa-undo"></i>
+            <span>Reset Bulan</span>
+        </a>
     @endif
     <div class="flex-1"></div>
     <a href="{{ route('export.laporan.pdf', request()->query()) }}" target="_blank"
-       class="inline-flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold px-5 py-2 rounded-lg shadow-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-        </svg>
-        Export PDF {{ request()->hasAny(['tahun','bulan']) ? '(Terfilter)' : '' }}
+       class="btn btn-danger btn-sm h-9">
+        <i class="fas fa-file-pdf"></i>
+        <span>Export PDF {{ request()->hasAny(['tahun','bulan']) ? '(Terfilter)' : '' }}</span>
     </a>
 </form>
 
-{{-- KPI Cards --}}
+{{-- KPI Cards (SB Admin 2 Style) --}}
 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
     @php
         $kpis = [
-            ['Total Complaint', $totalComplaint, 'bg-indigo-500', 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2'],
-            ['Status Open', $totalOpen, 'bg-amber-500', 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'],
-            ['Diproses QA', $totalDiproses, 'bg-sky-500', 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'],
-            ['Close (Selesai)', $totalClose, 'bg-emerald-500', 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'],
-            ['Total Qty NG', number_format($totalQty), 'bg-rose-500', 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6'],
-            ['Avg Lead Time', $avgLeadTime.' hr', 'bg-violet-500', 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'],
+            ['Total Complaint', $totalComplaint, 'border-left-primary', 'text-[#4e73df]', 'fa-clipboard-list'],
+            ['Status Open', $totalOpen, 'border-left-warning', 'text-[#f6c23e]', 'fa-folder-open'],
+            ['Diproses QA', $totalDiproses, 'border-left-info', 'text-[#36b9cc]', 'fa-spinner'],
+            ['Close (Selesai)', $totalClose, 'border-left-success', 'text-[#1cc88a]', 'fa-check-circle'],
+            ['Total Qty NG', number_format($totalQty), 'border-left-danger', 'text-[#e74a3b]', 'fa-boxes'],
+            ['Avg Lead Time', $avgLeadTime.' hr', 'border-left-purple', 'text-[#6f42c1]', 'fa-stopwatch'],
         ];
     @endphp
-    @foreach($kpis as [$label, $val, $color, $icon])
-    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex flex-col gap-2">
-        <div class="w-9 h-9 rounded-lg {{ $color }} flex items-center justify-center">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
-                <path stroke-linecap="round" stroke-linejoin="round" d="{{ $icon }}"/>
-            </svg>
+    @foreach($kpis as [$label, $val, $borderClass, $textClass, $icon])
+    <div class="bg-white rounded shadow-sm border-l-4 {{ $borderClass }} p-3.5 flex items-center justify-between">
+        <div class="min-w-0 pr-1">
+            <div class="text-[10px] font-extrabold uppercase tracking-wider {{ $textClass }} mb-1 truncate">{{ $label }}</div>
+            <div class="text-lg md:text-xl font-black text-gray-800 leading-tight truncate">{{ $val }}</div>
         </div>
-        <div class="text-xl font-bold text-slate-800">{{ $val }}</div>
-        <div class="text-[11px] text-slate-500 font-medium">{{ $label }}</div>
+        <div class="shrink-0 text-gray-300">
+            <i class="fas {{ $icon }} text-xl md:text-2xl"></i>
+        </div>
     </div>
     @endforeach
 </div>
@@ -71,7 +75,7 @@
     {{-- Trend Bulanan / Tahunan --}}
     <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm p-5">
         <div class="flex items-center justify-between mb-4">
-            <h3 class="text-sm font-bold text-slate-700">📈 Trend Complaint {{ $tahun }}</h3>
+            <h3 class="text-sm font-bold text-slate-700 flex items-center gap-1.5"><x-icon name="chart-bar" class="w-4 h-4"/> Trend Complaint {{ $tahun }}</h3>
             @if($bulan)<span class="text-xs bg-sky-100 text-sky-700 px-2 py-0.5 rounded font-medium">{{ $bulanOptions[$bulan] }}</span>@endif
         </div>
         <canvas id="trendChart" height="100"></canvas>
@@ -79,7 +83,7 @@
 
     {{-- Status Pie --}}
     <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
-        <h3 class="text-sm font-bold text-slate-700 mb-4">🥧 Distribusi Status</h3>
+        <h3 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-1.5"><x-icon name="chart-pie" class="w-4 h-4"/> Distribusi Status</h3>
         <canvas id="statusChart" height="180"></canvas>
         <div class="mt-4 space-y-1.5">
             @foreach(['Open' => ['bg-amber-400', $totalOpen], 'Diproses' => ['bg-sky-400', $totalDiproses], 'Close' => ['bg-emerald-400', $totalClose]] as $s => [$cls, $n])
@@ -96,7 +100,7 @@
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
     {{-- Top Defect --}}
     <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
-        <h3 class="text-sm font-bold text-slate-700 mb-4">🔴 Top Jenis Ketidaksesuaian (Pareto)</h3>
+        <h3 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-1.5"><x-icon name="exclamation-circle" class="w-4 h-4 text-rose-500"/> Top Jenis Ketidaksesuaian (Pareto)</h3>
         @if($defectRaw->isEmpty())
             <p class="text-xs text-slate-400 text-center py-8">Belum ada data.</p>
         @else
@@ -106,7 +110,7 @@
 
     {{-- Top Penyebab --}}
     <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
-        <h3 class="text-sm font-bold text-slate-700 mb-4">⚠️ Top Penyebab Ketidaksesuaian</h3>
+        <h3 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-1.5"><x-icon name="exclamation-triangle" class="w-4 h-4 text-amber-500"/> Top Penyebab Ketidaksesuaian</h3>
         @if($penyebabRaw->isEmpty())
             <p class="text-xs text-slate-400 text-center py-8">Belum ada data.</p>
         @else
@@ -118,7 +122,7 @@
 {{-- Top Customer Table --}}
 <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-5">
     <div class="px-6 py-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
-        <h3 class="text-sm font-bold text-slate-700">🏆 Ranking Customer Berdasarkan Jumlah Komplain — {{ $tahun }}</h3>
+        <h3 class="text-sm font-bold text-slate-700 flex items-center gap-1.5"><x-icon name="trophy" class="w-4 h-4 text-amber-500"/> Ranking Customer Berdasarkan Jumlah Komplain — {{ $tahun }}</h3>
         <span class="text-xs text-slate-400">Top 10</span>
     </div>
     <div class="overflow-x-auto">
@@ -164,145 +168,172 @@
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
             <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
-                <span>🐟</span> Diagram Sebab-Akibat Spesifik (Fishbone / Ishikawa 6M)
+                <x-icon name="chart-bar" class="w-5 h-5"/> Diagram Sebab-Akibat Spesifik (Fishbone / Ishikawa 6M)
             </h3>
-            <p class="text-xs text-slate-500 mt-0.5">Penelusuran akar masalah berdasarkan Detail Cacat &amp; Detail Penyebab Spesifik 6M.</p>
         </div>
-
-        <form method="GET" action="{{ route('laporan') }}#fishbone-section" class="flex flex-wrap items-center gap-2">
-            @if(request('tahun')) <input type="hidden" name="tahun" value="{{ request('tahun') }}"> @endif
-            @if(request('bulan')) <input type="hidden" name="bulan" value="{{ request('bulan') }}"> @endif
-
-            <select name="fishbone_efek" onchange="this.form.submit()" class="bg-slate-50 text-slate-800 text-xs font-semibold px-3 py-1.5 rounded-xl border border-slate-300">
-                <option value="AUTO" {{ ($fishbone['selected_efek'] ?? 'AUTO') === 'AUTO' ? 'selected' : '' }}>
-                    ⚡ Auto Pareto (Kasus Tertinggi: {{ $fishbone['top_efek'] ?? '-' }})
-                </option>
-                <option value="ALL" {{ ($fishbone['selected_efek'] ?? '') === 'ALL' ? 'selected' : '' }}>
-                    🌐 Semua Masalah / Global
-                </option>
-                @if(!empty($fishbone['available_jenis']))
-                    <optgroup label="📌 Jenis Ketidaksesuaian">
-                        @foreach ($fishbone['available_jenis'] as $jOpt)
-                            <option value="{{ $jOpt }}" {{ ($fishbone['selected_efek'] ?? '') === $jOpt ? 'selected' : '' }}>🏷️ {{ $jOpt }}</option>
-                        @endforeach
-                    </optgroup>
-                @endif
-                @if(!empty($fishbone['available_detail']))
-                    <optgroup label="🔍 Detail Ketidaksesuaian Spesifik">
-                        @foreach ($fishbone['available_detail'] as $dOpt)
-                            <option value="{{ $dOpt }}" {{ ($fishbone['selected_efek'] ?? '') === $dOpt ? 'selected' : '' }}>🔍 {{ $dOpt }}</option>
-                        @endforeach
-                    </optgroup>
-                @endif
-            </select>
-
-            <button type="submit" name="fishbone_level" value="detail" class="px-3 py-1.5 text-xs font-bold rounded-lg transition {{ ($fishbone['level'] ?? 'detail') === 'detail' ? 'bg-sky-600 text-white' : 'bg-slate-100 text-slate-600' }}">
-                🔍 Detail Spesifik
-            </button>
-            <button type="submit" name="fishbone_level" value="general" class="px-3 py-1.5 text-xs font-bold rounded-lg transition {{ ($fishbone['level'] ?? '') === 'general' ? 'bg-sky-600 text-white' : 'bg-slate-100 text-slate-600' }}">
-                📊 Kategori Umum
-            </button>
-        </form>
     </div>
 
-    {{-- FISHBONE SKELETON --}}
-    <div class="overflow-x-auto pb-2">
-        <div class="min-w-[960px] bg-slate-950 text-white rounded-3xl p-6 relative border border-slate-800 shadow-xl overflow-hidden">
-            <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-800">
-                <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-sky-400 animate-pulse"></span>
-                    <h4 class="text-xs font-mono font-bold uppercase tracking-widest text-sky-400">DIAGRAM SEBAB-AKIBAT ISHIKAWA 6M</h4>
-                </div>
-                <div class="text-xs font-semibold text-sky-200 bg-sky-950 px-3 py-1 rounded-full border border-sky-800">
-                    Fokus Akibat: <strong class="text-white">{{ $fishbone['efek'] }}</strong>
+    <!-- ANALISIS SEBAB-AKIBAT ISHIKAWA 6M (SB ADMIN 2 CARD GRID STYLE) -->
+    <div class="card-sb mb-6 border border-[#e3e6f0] rounded shadow-sm overflow-hidden">
+        <!-- Header Rapi & Kompak: Judul + Filter Inline (Tanpa Box Bertumpuk) -->
+        <div class="card-sb-header py-3 px-4 bg-[#f8f9fc] border-b border-[#e3e6f0] flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+                <i class="fas fa-sitemap text-[#4e73df] text-lg"></i>
+                <div>
+                    <h6 class="m-0 font-bold text-[#4e73df] text-sm leading-tight">DIAGRAM SEBAB-AKIBAT ISHIKAWA (6M)</h6>
+                    <small class="text-xs text-[#858796] block mt-0.5">Pilih salah satu penyebab di bawah untuk menyorot tindakan perbaikan (CAPA)</small>
                 </div>
             </div>
 
-            <div class="grid grid-cols-12 gap-6 items-center relative py-2">
-                <div class="col-span-9 space-y-6">
-                    {{-- UPPER BRANCHES --}}
-                    <div class="grid grid-cols-3 gap-4">
-                        @foreach (['Man', 'Material', 'Environment'] as $catKey)
-                            @php $cData = collect($fishbone['categories'])->firstWhere('kategori', $catKey); @endphp
-                            <div class="bg-slate-900 border border-sky-500/30 rounded-2xl p-4 shadow text-white flex flex-col justify-between">
-                                <div>
-                                    <div class="flex items-center justify-between mb-2 pb-2 border-b border-slate-800">
-                                        <span class="font-bold text-xs text-sky-400 font-mono flex items-center gap-1.5 uppercase">
-                                            <span class="w-2 h-2 rounded-full bg-sky-400"></span> {{ $catKey }}
-                                        </span>
-                                        <span class="text-[10px] bg-sky-950 text-sky-300 font-mono px-2 py-0.5 rounded-full border border-sky-800 font-bold">
-                                            {{ $cData['total'] ?? 0 }} isu
-                                        </span>
-                                    </div>
-                                    <ul class="space-y-1.5">
-                                        @forelse ($cData['top_causes'] ?? [] as $c)
-                                            <li>
-                                                <button type="button" onclick='showFishboneModal(@json($c), "{{ $catKey }}")' class="w-full text-left p-2 rounded-xl text-xs flex items-center justify-between transition {{ $loop->first ? 'bg-sky-500/20 border border-sky-400 text-white font-bold' : 'bg-slate-800/90 text-slate-200 hover:bg-slate-700' }}">
-                                                    <span class="whitespace-normal break-words leading-tight flex-1 pr-1">{{ $c['nama'] }}</span>
-                                                    <span class="text-[10px] font-bold text-sky-300 bg-slate-900 px-1.5 py-0.5 rounded font-mono shrink-0">{{ $c['jumlah'] }}</span>
-                                                </button>
-                                            </li>
-                                        @empty
-                                            <li class="text-[11px] text-slate-500 italic text-center py-2">Tidak ada isu</li>
-                                        @endforelse
-                                    </ul>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
+            <!-- Form Filter Ringkas Inline (Hanya 1 baris di header) -->
+            <form method="GET" action="{{ route('laporan') }}#fishbone-section" class="flex flex-wrap items-center gap-2 m-0">
+                @if(request('tahun')) <input type="hidden" name="tahun" value="{{ request('tahun') }}"> @endif
+                @if(request('bulan')) <input type="hidden" name="bulan" value="{{ request('bulan') }}"> @endif
 
-                    {{-- CENTER SPINE LINE --}}
-                    <div class="relative py-2 flex items-center">
-                        <div class="w-full h-2 bg-gradient-to-r from-slate-700 via-sky-500 to-sky-400 rounded-full shadow"></div>
-                        <div class="text-sky-400 -ml-1">
-                            <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </div>
-                    </div>
-
-                    {{-- LOWER BRANCHES --}}
-                    <div class="grid grid-cols-3 gap-4">
-                        @foreach (['Machine', 'Method', 'Measurement'] as $catKey)
-                            @php $cData = collect($fishbone['categories'])->firstWhere('kategori', $catKey); @endphp
-                            <div class="bg-slate-900 border border-indigo-500/30 rounded-2xl p-4 shadow text-white flex flex-col justify-between">
-                                <div>
-                                    <div class="flex items-center justify-between mb-2 pb-2 border-b border-slate-800">
-                                        <span class="font-bold text-xs text-indigo-400 font-mono flex items-center gap-1.5 uppercase">
-                                            <span class="w-2 h-2 rounded-full bg-indigo-400"></span> {{ $catKey }}
-                                        </span>
-                                        <span class="text-[10px] bg-indigo-950 text-indigo-300 font-mono px-2 py-0.5 rounded-full border border-indigo-800 font-bold">
-                                            {{ $cData['total'] ?? 0 }} isu
-                                        </span>
-                                    </div>
-                                    <ul class="space-y-1.5">
-                                        @forelse ($cData['top_causes'] ?? [] as $c)
-                                            <li>
-                                                <button type="button" onclick='showFishboneModal(@json($c), "{{ $catKey }}")' class="w-full text-left p-2 rounded-xl text-xs flex items-center justify-between transition {{ $loop->first ? 'bg-indigo-500/20 border border-indigo-400 text-white font-bold' : 'bg-slate-800/90 text-slate-200 hover:bg-slate-700' }}">
-                                                    <span class="whitespace-normal break-words leading-tight flex-1 pr-1">{{ $c['nama'] }}</span>
-                                                    <span class="text-[10px] font-bold text-indigo-300 bg-slate-900 px-1.5 py-0.5 rounded font-mono shrink-0">{{ $c['jumlah'] }}</span>
-                                                </button>
-                                            </li>
-                                        @empty
-                                            <li class="text-[11px] text-slate-500 italic text-center py-2">Tidak ada isu</li>
-                                        @endforelse
-                                    </ul>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="text-xs text-[#858796] font-semibold">Akibat:</span>
+                    <select name="fishbone_efek" id="fishbone_efek_lap" onchange="this.form.submit()" class="text-xs font-semibold px-2.5 py-1 rounded border border-[#d1d3e2] bg-white text-[#5a5c69] focus:outline-none focus:border-[#4e73df] cursor-pointer shadow-none max-w-[220px]">
+                        <option value="AUTO" {{ ($fishbone['selected_efek'] ?? 'AUTO') === 'AUTO' ? 'selected' : '' }}>
+                            Auto: {{ $fishbone['top_efek'] ?? 'Tertinggi' }}
+                        </option>
+                        <option value="ALL" {{ ($fishbone['selected_efek'] ?? '') === 'ALL' ? 'selected' : '' }}>
+                            Semua Masalah (Global)
+                        </option>
+                        @if(!empty($fishbone['available_jenis']))
+                            <optgroup label="Jenis Ketidaksesuaian">
+                                @foreach ($fishbone['available_jenis'] as $jOpt)
+                                    <option value="{{ $jOpt }}" {{ ($fishbone['selected_efek'] ?? '') === $jOpt ? 'selected' : '' }}>{{ $jOpt }}</option>
+                                @endforeach
+                            </optgroup>
+                        @endif
+                        @if(!empty($fishbone['available_detail']))
+                            <optgroup label="Detail Ketidaksesuaian Spesifik">
+                                @foreach ($fishbone['available_detail'] as $dOpt)
+                                    <option value="{{ $dOpt }}" {{ ($fishbone['selected_efek'] ?? '') === $dOpt ? 'selected' : '' }}>{{ $dOpt }}</option>
+                                @endforeach
+                            </optgroup>
+                        @endif
+                    </select>
                 </div>
 
-                {{-- FISH HEAD --}}
-                <div class="col-span-3 pl-2">
-                    <div class="bg-gradient-to-b from-slate-900 via-slate-900 to-sky-950 text-white p-5 rounded-3xl shadow-xl text-center border-2 border-sky-400">
-                        <div class="text-[10px] font-mono tracking-widest text-sky-400 font-bold uppercase mb-1">AKIBAT (PROBLEM HEAD)</div>
-                        <div class="text-sm font-black text-white leading-snug break-words my-2">
-                            {{ $fishbone['efek'] }}
+                <input type="hidden" name="fishbone_level" value="detail">
+
+                <span class="badge badge-primary font-bold text-xs px-2.5 py-1">
+                    {{ array_sum(array_column($fishbone['categories'], 'total')) }} Isu
+                </span>
+            </form>
+        </div>
+
+        <!-- Body: Grid 6 Kategori (3 Kolom pada Desktop, 2 pada Tablet, 1 pada HP) -->
+        <div class="p-4 bg-[#f8f9fc]">
+            @php
+                $categoriesConfig = [
+                    'Man' => [
+                        'title' => 'Man (Tenaga Kerja)',
+                        'border' => 'border-left-primary',
+                        'text_color' => 'text-[#4e73df]',
+                        'icon' => 'fa-user',
+                        'badge' => 'badge-primary'
+                    ],
+                    'Material' => [
+                        'title' => 'Material (Bahan Baku)',
+                        'border' => 'border-left-success',
+                        'text_color' => 'text-[#1cc88a]',
+                        'icon' => 'fa-boxes',
+                        'badge' => 'badge-success'
+                    ],
+                    'Machine' => [
+                        'title' => 'Machine (Mesin & Alat)',
+                        'border' => 'border-left-warning',
+                        'text_color' => 'text-[#f6c23e]',
+                        'icon' => 'fa-cogs',
+                        'badge' => 'badge-warning text-dark'
+                    ],
+                    'Method' => [
+                        'title' => 'Method (Metode Kerja)',
+                        'border' => 'border-left-danger',
+                        'text_color' => 'text-[#e74a3b]',
+                        'icon' => 'fa-tasks',
+                        'badge' => 'badge-danger'
+                    ],
+                    'Measurement' => [
+                        'title' => 'Measurement (Pengukuran)',
+                        'border' => 'border-left-purple',
+                        'text_color' => 'text-[#6f42c1]',
+                        'icon' => 'fa-ruler-combined',
+                        'badge' => 'badge-purple'
+                    ],
+                    'Environment' => [
+                        'title' => 'Environment (Lingkungan)',
+                        'border' => 'border-left-info',
+                        'text_color' => 'text-[#36b9cc]',
+                        'icon' => 'fa-leaf',
+                        'badge' => 'badge-info'
+                    ],
+                ];
+            @endphp
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                @foreach ($categoriesConfig as $catKey => $cfg)
+                    @php $cData = collect($fishbone['categories'])->firstWhere('kategori', $catKey); @endphp
+                    <div class="bg-white border border-[#e3e6f0] {{ $cfg['border'] }} shadow-sm rounded flex flex-col justify-between h-full transition hover:shadow">
+                        <!-- Category Header -->
+                        <div class="px-4 py-2.5 border-b border-[#e3e6f0] flex items-center justify-between bg-white">
+                            <div class="flex items-center gap-2">
+                                <i class="fas {{ $cfg['icon'] }} {{ $cfg['text_color'] }} text-sm"></i>
+                                <span class="font-bold text-xs uppercase tracking-wide {{ $cfg['text_color'] }}">
+                                    {{ $cfg['title'] }}
+                                </span>
+                            </div>
+                            <span class="badge {{ ($cData['total'] ?? 0) > 0 ? $cfg['badge'] : 'badge-light border text-[#858796]' }} font-bold text-[11px] px-2 py-0.5">
+                                {{ $cData['total'] ?? 0 }} isu
+                            </span>
                         </div>
-                        <div class="mt-3 inline-block bg-sky-950 text-sky-300 border border-sky-800 text-[10px] font-bold font-mono px-3 py-1 rounded-full">
-                            Total 6M Isu: {{ array_sum(array_column($fishbone['categories'], 'total')) }}
+
+                        <!-- Causes List (Klik untuk Sorot Penyebab + CAPA) -->
+                        <div class="p-3 flex-1 flex flex-col justify-between">
+                            <ul class="space-y-2">
+                                @forelse ($cData['top_causes'] ?? [] as $c)
+                                    <li>
+                                        <button type="button" 
+                                                onclick='showFishboneModal(@json($c), "{{ $catKey }}")'
+                                                class="w-full text-left p-2.5 rounded border border-[#e3e6f0] bg-white hover:bg-[#f8f9fc] hover:border-[#4e73df] flex items-center justify-between transition group cursor-pointer">
+                                            <div class="flex-1 pr-2">
+                                                <div class="flex items-center gap-1.5 flex-wrap">
+                                                    @if($loop->first && ($c['jumlah'] ?? 0) > 0)
+                                                        <span class="badge badge-warning text-dark text-[9px] px-1.5 py-0.5 font-bold">
+                                                            <i class="fas fa-fire mr-0.5"></i>Top
+                                                        </span>
+                                                    @endif
+                                                    <span class="text-xs text-[#5a5c69] font-medium leading-snug group-hover:text-[#4e73df] transition">
+                                                        {{ $c['nama'] }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <span class="badge badge-light border border-[#d1d3e2] text-[#4e73df] font-bold text-xs px-2 py-1 shrink-0">
+                                                {{ $c['jumlah'] }}
+                                            </span>
+                                        </button>
+                                    </li>
+                                @empty
+                                    <li class="py-5 text-center">
+                                        <i class="fas fa-check-circle text-emerald-400 text-sm mb-1 block"></i>
+                                        <span class="text-xs text-[#858796] italic">Tidak ada isu terdeteksi</span>
+                                    </li>
+                                @endforelse
+                            </ul>
+
+                            @if(($cData['other_count'] ?? 0) > 0)
+                                <div class="mt-3 pt-2.5 border-t border-[#e3e6f0] text-center">
+                                    <button type="button" onclick='showFishboneCategoryAllModal(@json($cData), "{{ $catKey }}")' class="text-xs font-bold text-[#4e73df] hover:underline flex items-center justify-center gap-1.5 w-full py-1">
+                                        <i class="fas fa-list-ul"></i>
+                                        <span>Lihat +{{ $cData['other_count'] }} penyebab lainnya</span>
+                                    </button>
+                                </div>
+                            @endif
                         </div>
                     </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -312,7 +343,7 @@
 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 mb-6">
     <div class="flex items-center justify-between mb-3">
         <div>
-            <h3 class="font-bold text-slate-800 text-sm">📊 Grafik Pola Keterkaitan Cacat Spesifik &amp; Penyebab (Lift Ratio — Apriori)</h3>
+            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5"><x-icon name="share" class="w-4 h-4"/> Grafik Pola Keterkaitan Cacat Spesifik &amp; Penyebab (Lift Ratio — Apriori)</h3>
             <p class="text-xs text-slate-500 mt-0.5">Tingkat kekuatan kaitan sebab-akibat antara jenis ketidaksesuaian dan penyebab utama.</p>
         </div>
         <a href="{{ route('apriori') }}" class="text-xs text-sky-600 font-medium hover:underline whitespace-nowrap">Analisis lengkap →</a>
@@ -335,47 +366,55 @@
     @endif
 </div>
 
-{{-- MODAL LAPORAN PENELUSURAN MASALAH FISHBONE --}}
-<div id="fishboneDetailModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full border border-slate-200 overflow-hidden my-8">
-        <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between border-b border-slate-800">
-            <div class="flex items-center gap-3">
-                <span id="modalCategoryBadge" class="bg-sky-500 text-white text-xs font-mono font-bold px-3 py-1 rounded-full uppercase">MACHINE</span>
+{{-- MODAL LAPORAN PENELUSURAN MASALAH SPESIFIK (SB ADMIN 2 THEME) --}}
+<div id="fishboneDetailModal"
+     class="fixed inset-0 !m-0 z-[9999] hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+     onclick="if (event.target === this) closeFishboneModal()">
+    <div class="bg-white rounded max-w-4xl w-full border border-[#e3e6f0] shadow-2xl overflow-hidden transform transition-all my-8"
+         onclick="event.stopPropagation()">
+        <!-- Modal Header SB Admin 2 -->
+        <div class="bg-[#f8f9fc] text-[#5a5c69] px-4 py-3 flex items-center justify-between border-b border-[#e3e6f0]">
+            <div class="flex items-center gap-2.5">
+                <span id="modalCategoryBadge" class="badge badge-primary uppercase font-bold text-xs px-2.5 py-1">MACHINE</span>
                 <div>
-                    <h3 class="font-bold text-base text-white">Laporan Penelusuran Masalah Spesifik</h3>
-                    <p class="text-xs text-sky-300">Penyebab: <strong id="modalCauseTitle" class="text-white">-</strong></p>
+                    <h6 class="font-bold text-sm text-[#4e73df] m-0 flex items-center gap-1.5">
+                        <i class="fas fa-list-alt"></i>
+                        <span>Laporan Penelusuran Masalah Spesifik</span>
+                    </h6>
+                    <small class="text-xs text-[#858796]">Penyebab: <strong id="modalCauseTitle" class="text-[#5a5c69]">-</strong></small>
                 </div>
             </div>
-            <button type="button" onclick="closeFishboneModal()" class="text-slate-400 hover:text-white transition p-1 rounded-lg hover:bg-slate-800">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
+            <button type="button" onclick="closeFishboneModal()" class="text-[#858796] hover:text-[#5a5c69] text-2xl font-bold leading-none px-2">&times;</button>
         </div>
 
-        <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
-            <div class="flex items-center justify-between text-xs text-slate-500 pb-2 border-b border-slate-100">
+        <!-- Modal Content -->
+        <div class="p-4 space-y-3 max-h-[70vh] overflow-y-auto">
+            <div class="flex items-center justify-between text-xs text-[#858796] pb-2 border-b border-[#e3e6f0]">
                 <span>Daftar Transaksi Komplain &amp; Tindakan Perbaikan Lengkap</span>
-                <span id="modalTotalCount" class="font-bold text-slate-800 font-mono">Total 0 Komplain</span>
+                <span id="modalTotalCount" class="badge badge-light border font-bold text-[#5a5c69]">Total 0 Komplain</span>
             </div>
 
-            <div class="overflow-x-auto border border-slate-200 rounded-xl shadow-sm">
+            <div class="overflow-x-auto border border-[#e3e6f0] rounded">
                 <table class="w-full text-xs text-left">
-                    <thead class="bg-slate-50 text-slate-700 uppercase font-mono font-bold text-[11px] border-b border-slate-200">
+                    <thead class="bg-[#f8f9fc] text-[#5a5c69] uppercase font-bold text-[11px] border-b border-[#e3e6f0]">
                         <tr>
-                            <th class="px-3 py-3">No. Customer &amp; Name</th>
-                            <th class="px-3 py-3">Tanggal &amp; Area</th>
-                            <th class="px-3 py-3">Cacat Spesifik</th>
-                            <th class="px-3 py-3 text-right">Qty</th>
-                            <th class="px-3 py-3">Tindakan Perbaikan (CAPA)</th>
+                            <th class="px-3 py-2.5">No. NCR &amp; Customer</th>
+                            <th class="px-3 py-2.5">Tanggal &amp; Area</th>
+                            <th class="px-3 py-2.5">Cacat Spesifik</th>
+                            <th class="px-3 py-2.5 text-right">Qty</th>
+                            <th class="px-3 py-2.5">Tindakan Perbaikan (CAPA)</th>
                         </tr>
                     </thead>
-                    <tbody id="modalTableBody" class="divide-y divide-slate-100 text-slate-700">
+                    <tbody id="modalTableBody" class="divide-y divide-[#e3e6f0] text-[#5a5c69]">
+                        <!-- Populated dynamically via JS -->
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div class="bg-slate-50 px-6 py-3 border-t border-slate-200 flex items-center justify-end">
-            <button type="button" onclick="closeFishboneModal()" class="px-4 py-2 bg-slate-800 text-white text-xs font-bold rounded-xl hover:bg-slate-900 transition">
+        <!-- Modal Footer -->
+        <div class="bg-[#f8f9fc] px-4 py-2.5 border-t border-[#e3e6f0] flex items-center justify-end">
+            <button type="button" onclick="closeFishboneModal()" class="btn btn-secondary btn-sm">
                 Tutup Laporan
             </button>
         </div>
@@ -533,7 +572,7 @@ if (aprioriCanvas && topRules.length > 0) {
     });
 }
 
-// --- Fishbone Detail Modal JS ---
+// --- Fishbone Detail Modal JS (SB Admin 2) ---
 function showFishboneModal(causeData, categoryName) {
     const modal = document.getElementById('fishboneDetailModal');
     const badge = document.getElementById('modalCategoryBadge');
@@ -549,30 +588,30 @@ function showFishboneModal(causeData, categoryName) {
     total.innerText = `Total ${complaints.length} Kasus Komplain`;
 
     if (complaints.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-6 text-center text-slate-400 italic">Tidak ada rincian data komplain untuk penyebab ini.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-6 text-center text-[#858796] italic">Tidak ada rincian data komplain untuk penyebab ini.</td></tr>`;
     } else {
         tbody.innerHTML = complaints.map(c => `
-            <tr class="hover:bg-sky-50/50 transition">
-                <td class="px-3 py-3 font-medium">
-                    <div class="font-bold text-slate-900">${c.no_customer || '-'}</div>
-                    <div class="text-sky-600 font-semibold">${c.nama_customer || '-'}</div>
+            <tr class="hover:bg-slate-50 transition">
+                <td class="px-3 py-2.5 font-medium">
+                    <div class="font-bold text-[#4e73df]">${c.no_customer || '-'}</div>
+                    <div class="text-[#5a5c69] font-semibold">${c.nama_customer || '-'}</div>
                 </td>
-                <td class="px-3 py-3">
-                    <div>📅 ${c.tanggal_complain || '-'}</div>
-                    <div class="text-[11px] text-slate-500 font-mono">📍 ${c.area || '-'}</div>
+                <td class="px-3 py-2.5 text-[#5a5c69]">
+                    <div class="flex items-center gap-1.5"><i class="fas fa-calendar-alt text-[#858796]"></i> <span>${c.tanggal_complain || '-'}</span></div>
+                    <div class="text-[11px] text-[#858796] flex items-center gap-1.5 mt-0.5"><i class="fas fa-map-marker-alt text-[#858796]"></i> <span>${c.area || '-'}</span></div>
                 </td>
-                <td class="px-3 py-3">
-                    <span class="inline-block bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded font-mono">${c.jenis_ketidaksesuaian || '-'}</span>
-                    <div class="text-slate-600 mt-1 font-medium">${c.detail_ketidaksesuaian || '-'}</div>
+                <td class="px-3 py-2.5">
+                    <span class="badge badge-warning text-dark text-[10px] font-bold">${c.jenis_ketidaksesuaian || '-'}</span>
+                    <div class="text-[#5a5c69] mt-1 font-medium">${c.detail_ketidaksesuaian || '-'}</div>
                 </td>
-                <td class="px-3 py-3 text-right font-mono font-bold text-slate-900">
+                <td class="px-3 py-2.5 text-right font-bold text-[#5a5c69]">
                     ${c.qty ? c.qty.toLocaleString() : '-'}
                 </td>
-                <td class="px-3 py-3 space-y-1 text-[11px]">
-                    <div class="bg-emerald-50 text-emerald-900 p-2 rounded border border-emerald-200/60">
+                <td class="px-3 py-2.5 space-y-1 text-[11px]">
+                    <div class="bg-emerald-50 text-emerald-900 p-2 rounded border border-emerald-200">
                         <strong class="text-emerald-700">Corrective:</strong> ${c.corrective_action || '-'}
                     </div>
-                    <div class="bg-blue-50 text-blue-900 p-2 rounded border border-blue-200/60">
+                    <div class="bg-blue-50 text-blue-900 p-2 rounded border border-blue-200">
                         <strong class="text-blue-700">Preventive:</strong> ${c.preventive_action || '-'}
                     </div>
                 </td>
@@ -581,11 +620,45 @@ function showFishboneModal(causeData, categoryName) {
     }
 
     modal.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+}
+
+function showFishboneCategoryAllModal(cData, categoryName) {
+    if (!cData || !cData.causes) return;
+    let allComplaints = [];
+    cData.causes.forEach(c => {
+        if (c.complaints) allComplaints = allComplaints.concat(c.complaints);
+    });
+    const aggregatedCause = {
+        nama: `Seluruh Isu Kategori ${categoryName}`,
+        complaints: allComplaints
+    };
+    showFishboneModal(aggregatedCause, categoryName);
 }
 
 function closeFishboneModal() {
     const modal = document.getElementById('fishboneDetailModal');
-    if (modal) modal.classList.add('hidden');
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
 }
+
+// Tutup modal otomatis saat klik area latar belakang (luar dialog) atau tekan Escape
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('fishboneDetailModal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeFishboneModal();
+            }
+        });
+    }
+});
+window.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeFishboneModal();
+    }
+});
 </script>
 @endpush

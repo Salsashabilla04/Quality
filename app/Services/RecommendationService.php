@@ -92,7 +92,7 @@ class RecommendationService
         $targets = array_values(array_filter(array_unique($targets)));
         if (empty($targets)) return [];
 
-        $rules = (new AprioriService(0.05, 0.5))->buildTransactions()->associationRules();
+        $rules = (new AprioriService(0.015, 0.5))->buildTransactions()->associationRules();
 
         $matched = [];
         foreach ($rules as $rule) {

@@ -42,7 +42,7 @@ class DashboardController extends Controller
             $request->integer('pareto_cust_month') ?: null,
         );
 
-        $cachedApriori = AprioriService::getCachedResult(0.05, 0.5);
+        $cachedApriori = AprioriService::getCachedResult(0.015, 0.5);
         $rules = $cachedApriori['rules'];
 
         $trendType = $request->input('trend_type', 'bulan');
@@ -101,7 +101,7 @@ class DashboardController extends Controller
         }
 
         // ── Apriori ────────────────────────────────────────────────────────
-        $cachedApriori = AprioriService::getCachedResult(0.05, 0.5);
+        $cachedApriori = AprioriService::getCachedResult(0.015, 0.5);
         $topRules = array_slice($cachedApriori['rules'], 0, 5);
         $totalTrx = $cachedApriori['totalTrx'];
 
@@ -129,32 +129,105 @@ class DashboardController extends Controller
 
 
 
-        // ── Laporan Visual (Ringkas — tahun berjalan) ──────────────────────
-        $tahunLaporan = now()->year;
-        $baseQ = Complaint::query()->whereYear('tanggal_complain', $tahunLaporan);
+        // ── Laporan Visual (Rentang tahun maksimal 10 tahun) ──
+        $dbYears = Complaint::whereNotNull('tanggal_complain')
+            ->selectRaw('YEAR(tanggal_complain) as y')
+            ->distinct()
+            ->pluck('y')
+            ->map(fn($y) => (int)$y)
+            ->all();
 
-        $totalComplaint = $data->count();
+        $currentYear = (int) now()->year;
+        $dbMin = !empty($dbYears) ? min($dbYears) : $currentYear;
+        $dbMax = !empty($dbYears) ? max($dbYears) : $currentYear;
+        $startYear = min($dbMin, $currentYear - 5);
+        $endYear   = max($dbMax, $currentYear);
+        if (($endYear - $startYear + 1) < 10) {
+            $startYear = $endYear - 9;
+        }
+        $laporanYears = range($startYear, $endYear);
+
+        $namaBulan       = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        $namaBulanPendek = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+
+        // ── Rentang tahun: Dari Tahun → Sampai Tahun (maksimal 10 tahun) ──────
+        // 1 tahun  → grafik per bulan; >1 tahun → grafik per tahun
+        $maxRange = 10;
+        $minYear  = min($laporanYears);
+        $maxYear  = max($laporanYears);
+        $legacy   = $request->input('laporan_year'); // kompatibel dengan link lama
+        $defYear  = ($legacy && $legacy !== 'all') ? (int) $legacy : (in_array(2024, $laporanYears, true) ? 2024 : $currentYear);
+
+        $fromYear = (int) $request->input('laporan_from', $defYear);
+        $toYear   = (int) $request->input('laporan_to', $request->has('laporan_from') ? $fromYear : $defYear);
+        $fromYear = max($minYear, min($maxYear, $fromYear));
+        $toYear   = max($minYear, min($maxYear, $toYear));
+        if ($fromYear > $toYear) {
+            [$fromYear, $toYear] = [$toYear, $fromYear];
+        }
+        if ($toYear - $fromYear + 1 > $maxRange) {
+            $fromYear = $toYear - $maxRange + 1;
+        }
+        $isSingleYear = $fromYear === $toYear;
+        $selectedYear = $isSingleYear ? (string) $fromYear : 'all'; // dipakai link Laporan PDF
+
+
+        $baseQ = Complaint::query()
+            ->whereYear('tanggal_complain', '>=', $fromYear)
+            ->whereYear('tanggal_complain', '<=', $toYear);
+
+        $totalComplaint = (clone $baseQ)->count();
         $totalOpen      = (clone $baseQ)->where('status', 'Open')->count();
         $totalDiproses  = (clone $baseQ)->where('status', 'Diproses')->count();
         $totalClose     = (clone $baseQ)->where('status', 'Close')->count();
         $totalQtyTahun  = (clone $baseQ)->sum('qty') ?? 0;
 
-        // Trend bulanan tahun ini
-        $trendRaw = Complaint::selectRaw('MONTH(tanggal_complain) as bulan_no, COUNT(*) as total')
-            ->whereYear('tanggal_complain', $tahunLaporan)
-            ->groupBy('bulan_no')
-            ->orderBy('bulan_no')
-            ->pluck('total', 'bulan_no');
+        $periodeLabel = $isSingleYear ? (string) $fromYear : $fromYear . '–' . $toYear;
+        $rangeCount   = $toYear - $fromYear + 1;
 
-        $namaBulanPendek = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-        $trendLabels = [];
-        $trendData   = [];
-        for ($i = 1; $i <= 12; $i++) {
-            $trendLabels[] = $namaBulanPendek[$i - 1];
-            $trendData[]   = $trendRaw[$i] ?? 0;
-        }
+        // ── Trend Bulanan (khusus 1 tahun) + pembanding tahun sebelumnya ───────
+        $monthlyOf = function (int $year) {
+            $raw = Complaint::selectRaw('MONTH(tanggal_complain) as bulan_no, COUNT(*) as total')
+                ->whereYear('tanggal_complain', $year)
+                ->groupBy('bulan_no')
+                ->pluck('total', 'bulan_no');
+            $out = [];
+            for ($i = 1; $i <= 12; $i++) $out[] = (int) ($raw[$i] ?? 0);
+            return $out;
+        };
+        $trendMonthly     = $isSingleYear ? $monthlyOf($fromYear) : null;
+        $trendMonthlyPrev = $isSingleYear ? $monthlyOf($fromYear - 1) : null;
 
-        // Top Customer tahun ini
+        // ── Trend Tahunan (rentang >1 tahun, maks 10 batang) ────────────────
+        $rangeYears  = range($fromYear, $toYear);
+        $yearlyRaw   = (clone $baseQ)
+            ->selectRaw('YEAR(tanggal_complain) as tahun_no, COUNT(*) as total')
+            ->groupBy('tahun_no')
+            ->pluck('total', 'tahun_no');
+        $trendYearly = array_map(fn($y) => (int) ($yearlyRaw[$y] ?? 0), $rangeYears);
+
+        // ── Bulan tertinggi dalam periode ───────────────────────────────────
+        $peak = (clone $baseQ)
+            ->selectRaw('YEAR(tanggal_complain) as y, MONTH(tanggal_complain) as m, COUNT(*) as total')
+            ->groupBy('y', 'm')
+            ->orderByDesc('total')
+            ->first();
+        $peakMonth = $peak ? $namaBulan[(int) $peak->m] . ($isSingleYear ? '' : ' ' . $peak->y) : null;
+        $peakCount = $peak ? (int) $peak->total : 0;
+
+        // ── Rata-rata lead time (complain → close) ─────────────────────────
+        $avgLeadTime = (clone $baseQ)
+            ->where('status', 'Close')
+            ->whereNotNull('tanggal_complain')
+            ->selectRaw('AVG(DATEDIFF(COALESCE(approved_at, updated_at), tanggal_complain)) as avg_lt')
+            ->value('avg_lt');
+        $avgLeadTime = $avgLeadTime !== null ? max(0, round((float) $avgLeadTime, 1)) : null;
+
+        $trendTitle  = 'Tren Komplain';
+        $trendLabels = $isSingleYear ? $namaBulanPendek : array_map('strval', $rangeYears);
+        $trendData   = $isSingleYear ? $trendMonthly : $trendYearly;
+
+        // Top Customer periode ini
         $topCustomer = (clone $baseQ)
             ->selectRaw('nama_customer, COUNT(*) as total, SUM(qty) as total_qty')
             ->groupBy('nama_customer')
@@ -181,7 +254,10 @@ class DashboardController extends Controller
             'paretoCust'     => $bundleCust['pareto'],
             'paretoCause'    => $bundleCause['pareto'],
             // Laporan Visual
-            'tahunLaporan'   => $tahunLaporan,
+            'laporanYears'   => $laporanYears,
+            'selectedYear'   => $selectedYear,
+            'trendTitle'     => $trendTitle,
+            'tahunLaporan'   => $selectedYear,
             'totalComplaint' => $totalComplaint,
             'totalOpen'      => $totalOpen,
             'totalDiproses'  => $totalDiproses,
@@ -190,6 +266,21 @@ class DashboardController extends Controller
             'trendLabels'    => $trendLabels,
             'trendData'      => $trendData,
             'topCustomer'    => $topCustomer,
+            'namaBulan'        => $namaBulan,
+            'periodeLabel'     => $periodeLabel,
+            'fromYear'         => $fromYear,
+            'toYear'           => $toYear,
+            'maxRange'         => $maxRange,
+            'rangeCount'       => $rangeCount,
+            'isSingleYear'     => $isSingleYear,
+            'currentYear'      => $currentYear,
+            'rangeYears'       => $rangeYears,
+            'trendMonthly'     => $trendMonthly,
+            'trendMonthlyPrev' => $trendMonthlyPrev,
+            'trendYearly'      => $trendYearly,
+            'peakMonth'        => $peakMonth,
+            'peakCount'        => $peakCount,
+            'avgLeadTime'      => $avgLeadTime,
         ]);
     }
 }

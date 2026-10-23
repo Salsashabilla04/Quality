@@ -42,8 +42,19 @@ class CustomerController extends Controller
             ->pluck('y')
             ->all();
 
+        if ($request->has('per_page')) {
+            $perPage = (int) $request->input('per_page');
+            if (in_array($perPage, [10, 25, 50, 100])) {
+                session(['customers_per_page' => $perPage]);
+            }
+        }
+        $perPage = (int) session('customers_per_page', 25);
+        if (!in_array($perPage, [10, 25, 50, 100])) {
+            $perPage = 25;
+        }
+
         $customers = $query->orderByDesc('total_complaint')
-            ->paginate(20)
+            ->paginate($perPage)
             ->withQueryString();
 
         return view('customers.index', [

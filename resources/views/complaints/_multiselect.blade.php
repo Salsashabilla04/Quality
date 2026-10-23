@@ -25,7 +25,9 @@
         <div class="border-t border-slate-100 p-2 flex gap-2 bg-slate-50">
             <input type="text" class="ms-new flex-1 rounded border border-slate-300 px-2 py-1.5 text-sm focus:ring-sky-500 focus:border-sky-500"
                    placeholder="{{ $newPlaceholder }}">
-            <button type="button" class="ms-add shrink-0 text-xs bg-sky-600 hover:bg-sky-700 text-white px-3 rounded">Tambah</button>
+            <button type="button" class="ms-add btn btn-primary btn-sm shrink-0">
+                <i class="fas fa-plus"></i> Tambah
+            </button>
         </div>
     </div>
 </div>

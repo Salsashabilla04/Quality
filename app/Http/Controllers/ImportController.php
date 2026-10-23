@@ -105,6 +105,7 @@ class ImportController extends Controller
                 $complaint->keterangan = trim((string)$getVal($row, ['keterangan']));
                 $statusStr = trim((string)$getVal($row, ['status']));
                 $complaint->status = (strtolower($statusStr) === 'close') ? 'Close' : 'Open';
+                $complaint->supervisor_approval = ($complaint->status === 'Close') ? 'Approved' : null;
 
                 $complaint->save();
 

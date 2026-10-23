@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/visit', [VisitController::class, 'index'])->name('visit.index');
         Route::post('/visit/{complaint}/schedule', [VisitController::class, 'schedule'])->name('visit.schedule');
         Route::patch('/visit/{complaint}/done', [VisitController::class, 'markDone'])->name('visit.done');
+        Route::delete('/visit/{complaint}', [VisitController::class, 'destroy'])->name('visit.destroy');
 
         // Kamus Cacat QC (Knowledge Base)
         Route::get('/defect-dictionary', [\App\Http\Controllers\DefectDictionaryController::class, 'index'])->name('defect-dictionary.index');

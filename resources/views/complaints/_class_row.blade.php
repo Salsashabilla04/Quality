@@ -18,14 +18,14 @@
             @foreach ($ketOpts as $o)
                 <option value="{{ $o }}" @selected($ketVal === $o)>{{ $o }}</option>
             @endforeach
-            <option value="__new__">➕ Tambah baru…</option>
+            <option value="__new__">+ Tambah baru…</option>
         </select>
         <input type="text" name="complaint_items[{{ $i }}][ket_new]" autocomplete="off"
                class="cr-new cr-ket-new hidden w-full rounded-lg border border-sky-300 bg-sky-50 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500"
                placeholder="Ketik jenis baru…">
         <select class="cr-ket-det-select w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-700 focus:ring-sky-500 focus:border-sky-500">
             <option value="">— pilih detail ketidaksesuaian —</option>
-            <option value="__custom__">✍️ Ketik manual / bahasa awam…</option>
+            <option value="__custom__">Ketik manual / bahasa awam…</option>
         </select>
         <input type="text" name="complaint_items[{{ $i }}][ket_det]" value="{{ $ketDet }}" autocomplete="off"
                class="cr-ket-detail hidden w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-600 focus:ring-sky-500 focus:border-sky-500"
@@ -41,14 +41,14 @@
             @foreach ($penOpts as $o)
                 <option value="{{ $o }}" @selected($penVal === $o)>{{ $o }}</option>
             @endforeach
-            <option value="__new__">➕ Tambah baru…</option>
+            <option value="__new__">+ Tambah baru…</option>
         </select>
         <input type="text" name="complaint_items[{{ $i }}][pen_new]" autocomplete="off"
                class="cr-new cr-pen-new hidden w-full rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500"
                placeholder="Ketik penyebab baru…">
         <select class="cr-pen-det-select w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-700 focus:ring-sky-500 focus:border-sky-500">
             <option value="">— pilih detail penyebab —</option>
-            <option value="__custom__">✍️ Ketik manual / bahasa awam…</option>
+            <option value="__custom__">Ketik manual / bahasa awam…</option>
         </select>
         <input type="text" name="complaint_items[{{ $i }}][pen_det]" value="{{ $penDet }}" autocomplete="off"
                class="cr-pen-detail hidden w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-600 focus:ring-sky-500 focus:border-sky-500"
@@ -61,5 +61,7 @@
     </div>
 
     {{-- Tombol hapus baris --}}
-    <button type="button" class="item-remove absolute top-2 right-2 text-slate-300 hover:text-rose-500 text-lg leading-none" title="Hapus baris">&times;</button>
+    <button type="button" class="item-remove absolute top-2 right-2 text-slate-400 hover:text-white hover:bg-rose-500 w-6 h-6 rounded-full flex items-center justify-center transition-all cursor-pointer" title="Hapus baris klasifikasi ini">
+        <i class="fas fa-times text-xs"></i>
+    </button>
 </div>

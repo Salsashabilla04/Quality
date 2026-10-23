@@ -3,28 +3,10 @@
 @section('subtitle', 'Ringkasan monitoring Customer Complaint & Non-Conformance Report')
 
 @section('actions')
-    <div class="flex items-center gap-3">
-         {{-- Laporan PDF --}}
-        <a href="{{ route('export.laporan.pdf') }}"
-           class="inline-flex items-center justify-center gap-2
-                  h-10 px-5
-                  rounded-xl
-                  bg-rose-600 hover:bg-rose-700
-                  text-white text-sm font-semibold
-                  shadow-sm
-                  transition-all duration-200
-                  whitespace-nowrap">
-            <svg xmlns="http://www.w3.org/2000/svg"
-                 class="w-4 h-4"
-                 fill="none"
-                 viewBox="0 0 24 24"
-                 stroke="currentColor"
-                 stroke-width="2">
-                <path stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M12 10v6m0 0 3-3m-3 3-3-3M5 20h14a2 2 0 002-2V8l-5-5H7a2 2 0 00-2 2v13a2 2 0 002 2z"/>
-            </svg>
-
+    <div class="flex items-center gap-2">
+        {{-- Laporan PDF --}}
+        <a href="{{ route('export.laporan.pdf') }}" class="btn btn-danger btn-sm whitespace-nowrap">
+            <i class="fas fa-file-pdf"></i>
             <span>Laporan PDF</span>
         </a>
     </div>
@@ -43,201 +25,209 @@
     $visitActiveTotal = \App\Models\Complaint::where('perlu_visit', true)->count();
 
     $cards = [
-        ['Total Complaint', $kpi['total_complaint'], 'kasus (all time)', 'bg-sky-500', route('complaints.index')],
-        ['NCR Divalidasi ✅', $approvedSpvTotal, 'divalidasi SPV', 'bg-emerald-500', route('complaints.index', ['approval' => 'Approved'])],
-        ['NCR Belum Validasi ⏳', $pendingSpvTotal, 'menunggu review SPV', 'bg-purple-500', route('complaints.index', ['approval' => 'Pending'])],
-        ['NCR Butuh Revisi 🔄', $revisiQaTotal, 'dikembalikan ke QA', 'bg-rose-500', route('complaints.index', ['revisi' => 1])],
-        ['Status Open', $kpi['open'], 'belum selesai', 'bg-amber-500', route('complaints.index', ['status' => 'Open'])],
-        ['Status Close', $kpi['close'].' / '.$kpi['total_complaint'], $kpi['persen_close'].'% selesai', 'bg-teal-500', route('complaints.index', ['status' => 'Close'])],
-        ['Jumlah Customer', $kpi['jumlah_customer'], 'pihak/klien', 'bg-indigo-500', route('customers.index')],
-        ['Total Qty NG', number_format($kpi['total_qty']), 'pcs terdeteksi', 'bg-orange-500', null],
+        ['Total Complaint', $kpi['total_complaint'], 'kasus (all time)', 'border-left-primary', 'text-[#4e73df]', 'fa-clipboard-list', route('complaints.index')],
+        ['NCR Divalidasi', $approvedSpvTotal, 'divalidasi SPV', 'border-left-success', 'text-[#1cc88a]', 'fa-check-circle', route('complaints.index', ['approval' => 'Approved'])],
+        ['NCR Belum Validasi', $pendingSpvTotal, 'menunggu review SPV', 'border-left-purple', 'text-[#6f42c1]', 'fa-clock', route('complaints.index', ['approval' => 'Pending'])],
+        ['NCR Butuh Revisi', $revisiQaTotal, 'dikembalikan ke QA', 'border-left-danger', 'text-[#e74a3b]', 'fa-exclamation-triangle', route('complaints.index', ['revisi' => 1])],
+        ['Status Open', $kpi['open'], 'belum selesai', 'border-left-warning', 'text-[#f6c23e]', 'fa-folder-open', route('complaints.index', ['status' => 'Open'])],
+        ['Status Close', $kpi['close'].' / '.$kpi['total_complaint'], $kpi['persen_close'].'% selesai', 'border-left-info', 'text-[#36b9cc]', 'fa-tasks', route('complaints.index', ['status' => 'Close'])],
+        ['Jumlah Customer', $kpi['jumlah_customer'], 'pihak/klien', 'border-left-primary', 'text-[#4e73df]', 'fa-users', route('customers.index')],
+        ['Total Qty NG', number_format($kpi['total_qty']), 'pcs terdeteksi', 'border-left-orange', 'text-[#fd7e14]', 'fa-boxes', null],
     ];
 @endphp
 
 {{-- EWS Alert Banners --}}
 @if(($isQa || !$isSpv) && $revisiQaTotal > 0)
-    <div class="mb-5 bg-rose-50 border-2 border-rose-300 rounded-2xl p-5 shadow-sm flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-3.5">
-            <div class="w-10 h-10 rounded-full bg-rose-600 text-white flex items-center justify-center font-extrabold text-xl shrink-0">!</div>
+    <div class="mb-4 bg-white border-l-4 border-l-[#e74a3b] rounded shadow-sm p-4 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-rose-100 text-[#e74a3b] flex items-center justify-center font-bold text-lg shrink-0">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
             <div>
-                <div class="text-sm font-bold text-rose-900">⚠️ PERHATIAN QA: {{ $revisiQaTotal }} Dokumen NCR Dikembalikan untuk Perbaikan!</div>
-                <div class="text-xs text-rose-700 mt-0.5">Supervisor QC telah memberikan instruksi perbaikan pada investigasi 6M/CAPA.</div>
+                <div class="text-sm font-bold text-gray-800">PERHATIAN QA: {{ $revisiQaTotal }} Dokumen NCR Dikembalikan untuk Perbaikan!</div>
+                <div class="text-xs text-gray-500 mt-0.5">Supervisor QC telah memberikan instruksi perbaikan pada investigasi 6M/CAPA.</div>
             </div>
         </div>
-        <a href="{{ route('complaints.index', ['revisi' => 1]) }}" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm whitespace-nowrap">Perbaiki Kasus Sekarang →</a>
+        <a href="{{ route('complaints.index', ['revisi' => 1]) }}" class="btn btn-danger btn-sm whitespace-nowrap">
+            <span>Perbaiki Kasus Sekarang</span>
+            <i class="fas fa-arrow-right"></i>
+        </a>
     </div>
 @endif
 
 @if(($isQa || !$isSpv) && $pendingSpvTotal > 0)
-    <div class="mb-5 bg-purple-50 border-2 border-purple-300 rounded-2xl p-5 shadow-sm flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-3.5">
-            <div class="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-extrabold text-xl shrink-0">⏳</div>
+    <div class="mb-4 bg-white border-l-4 border-l-[#6f42c1] rounded shadow-sm p-4 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-purple-100 text-[#6f42c1] flex items-center justify-center font-bold text-lg shrink-0">
+                <i class="fas fa-clock"></i>
+            </div>
             <div>
-                <div class="text-sm font-bold text-purple-900">🛡️ MENUNGGU VALIDASI: {{ $pendingSpvTotal }} Dokumen NCR Menunggu Persetujuan Supervisor!</div>
-                <div class="text-xs text-purple-700 mt-0.5">Dokumen telah diajukan dan sedang dalam antrean peninjauan oleh Supervisor QC.</div>
+                <div class="text-sm font-bold text-gray-800">Menunggu Validasi: {{ $pendingSpvTotal }} Dokumen NCR Menunggu Persetujuan Supervisor!</div>
+                <div class="text-xs text-gray-500 mt-0.5">Dokumen telah diajukan dan sedang dalam antrean peninjauan oleh Supervisor QC.</div>
             </div>
         </div>
-        <a href="{{ route('complaints.index', ['approval' => 'Pending']) }}" class="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm whitespace-nowrap">Lihat Kasus Pending →</a>
+        <a href="{{ route('complaints.index', ['approval' => 'Pending']) }}" class="btn btn-info btn-sm whitespace-nowrap">
+            <span>Lihat Kasus Pending</span>
+            <i class="fas fa-arrow-right"></i>
+        </a>
     </div>
 @endif
 
-@if(($isQa || !$isSpv) && $approvedSpvTotal > 0)
-    <div class="mb-5 bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-5 shadow-sm flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-3.5">
-            <div class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-extrabold text-xl shrink-0">📄</div>
-            <div>
-                <div class="text-sm font-bold text-emerald-900">✅ SURAT NCR DIVALIDASI SPV: {{ $approvedSpvTotal }} Dokumen Surat NCR Telah Disetujui!</div>
-                <div class="text-xs text-emerald-700 mt-0.5">Supervisor QC telah memvalidasi dokumen. Tim QA dapat langsung mengunduh & mencetak Surat NCR PDF resmi.</div>
-            </div>
-        </div>
-        <a href="{{ route('complaints.index', ['approval' => 'Approved']) }}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm whitespace-nowrap">Lihat & Unduh Surat NCR →</a>
-    </div>
-@endif
-
-@if(($isQa || !$isSpv) && ($overdueQa > 0 || $kpi['open'] > 0))
-    <div class="mb-5 bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-xl flex items-center justify-between gap-4 shadow-sm">
-        <div class="flex items-center gap-2 text-xs">
-            <span class="text-sm">⚠️</span>
-            <span>Terdapat <span class="font-bold">{{ $kpi['open'] > 0 ? $kpi['open'] : $overdueQa }} kasus komplain</span> yang perlu untuk ditinjau dan ditindaklanjuti.</span>
-        </div>
-        <a href="{{ route('complaints.index', ['status' => 'Open']) }}" class="text-xs font-bold text-amber-900 underline hover:text-amber-950 shrink-0">Tinjau Kasus Sekarang →</a>
-    </div>
-@endif
 
 @if($isSpv && $pendingSpvTotal > 0)
-    <div class="mb-6 bg-purple-50 border-2 border-purple-300 rounded-2xl p-5 shadow-sm flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-3.5">
-            <div class="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-extrabold text-xl shrink-0">⏳</div>
+    <div class="mb-4 bg-white border-l-4 border-l-[#6f42c1] rounded shadow-sm p-4 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-purple-100 text-[#6f42c1] flex items-center justify-center font-bold text-lg shrink-0">
+                <i class="fas fa-user-shield"></i>
+            </div>
             <div>
-                <div class="text-sm font-bold text-purple-900">🛡️ APPROVAL SPV: {{ $pendingSpvTotal }} Dokumen NCR Menunggu Persetujuan Anda!</div>
-                <div class="text-xs text-purple-700 mt-0.5">Silakan tinjau kelayakan data sebelum memberikan approval atau menentukan jadwal kunjungan.</div>
+                <div class="text-sm font-bold text-gray-800">APPROVAL SPV: {{ $pendingSpvTotal }} Dokumen NCR Menunggu Persetujuan Anda!</div>
+                <div class="text-xs text-gray-500 mt-0.5">Silakan tinjau kelayakan data sebelum memberikan approval atau menentukan jadwal kunjungan.</div>
             </div>
         </div>
-        <a href="{{ route('complaints.index', ['approval' => 'Pending']) }}" class="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm whitespace-nowrap">Tinjau Kasus Pending →</a>
+        <a href="{{ route('complaints.index', ['approval' => 'Pending']) }}" class="bg-[#6f42c1] hover:bg-purple-800 text-white text-xs font-bold px-3.5 py-2 rounded shadow-sm whitespace-nowrap">Tinjau Kasus Pending &rarr;</a>
     </div>
 @endif
 
 @if($isSpv && $visitActiveTotal > 0)
-    <div class="mb-6 bg-indigo-50 border-2 border-indigo-300 rounded-2xl p-4 shadow-sm flex items-center justify-between">
+    <div class="mb-4 bg-white border-l-4 border-l-[#36b9cc] rounded shadow-sm p-4 flex items-center justify-between">
         <div class="flex items-center gap-3">
-            <span class="text-xl">🚐</span>
-            <div class="text-xs text-indigo-900 font-semibold">JADWAL VISIT: Terdapat {{ $visitActiveTotal }} kunjungan lapangan ke customer yang sedang aktif.</div>
+            <i class="fas fa-truck text-[#36b9cc] text-xl"></i>
+            <div class="text-xs text-gray-700 font-semibold">JADWAL VISIT: Terdapat {{ $visitActiveTotal }} kunjungan lapangan ke customer yang sedang aktif.</div>
         </div>
-        <a href="{{ route('visit.index') }}" class="text-xs font-bold text-indigo-800 underline">Buka Kalender Visit →</a>
+        <a href="{{ route('visit.index') }}" class="text-xs font-bold text-[#36b9cc] hover:underline">Buka Kalender Visit &rarr;</a>
     </div>
 @endif
 
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-    @foreach ($cards as [$label, $value, $sub, $color, $url])
+{{-- SB Admin 2 Metric KPI Cards --}}
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    @foreach ($cards as [$label, $value, $sub, $borderClass, $textClass, $icon, $url])
         @if($url)
-            <a href="{{ $url }}" class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 hover:shadow-md hover:border-slate-300 transition-all group block">
-                <div class="flex items-center justify-between gap-2">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full {{ $color }} shrink-0"></span>
-                        <span class="text-xs text-slate-600 font-semibold group-hover:text-sky-600 transition-colors">{{ $label }}</span>
-                    </div>
-                    <span class="text-xs text-slate-300 group-hover:text-sky-500 transition-colors">→</span>
+            <a href="{{ $url }}" class="bg-white rounded shadow-sm hover:shadow transition-shadow border-l-4 {{ $borderClass }} p-4 flex items-center justify-between group block">
+                <div class="min-w-0 flex-1 pr-2">
+                    <div class="text-[11px] font-extrabold uppercase tracking-wider {{ $textClass }} mb-1 truncate">{{ $label }}</div>
+                    <div class="text-xl md:text-2xl font-black text-gray-800 leading-tight truncate">{{ $value }}</div>
+                    <div class="text-xs text-gray-500 mt-1 truncate">{!! $sub !!}</div>
                 </div>
-                <div class="mt-2 text-2xl font-bold text-slate-900 truncate">{{ $value }}</div>
-                <div class="text-xs text-slate-400 mt-0.5">{!! $sub !!}</div>
+                <div class="shrink-0 text-gray-300 group-hover:text-gray-400 transition-colors pl-2">
+                    <i class="fas {{ $icon }} text-2xl md:text-3xl"></i>
+                </div>
             </a>
         @else
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full {{ $color }} shrink-0"></span>
-                    <span class="text-xs text-slate-500 font-medium">{{ $label }}</span>
+            <div class="bg-white rounded shadow-sm border-l-4 {{ $borderClass }} p-4 flex items-center justify-between">
+                <div class="min-w-0 flex-1 pr-2">
+                    <div class="text-[11px] font-extrabold uppercase tracking-wider {{ $textClass }} mb-1 truncate">{{ $label }}</div>
+                    <div class="text-xl md:text-2xl font-black text-gray-800 leading-tight truncate">{{ $value }}</div>
+                    <div class="text-xs text-gray-500 mt-1 truncate">{!! $sub !!}</div>
                 </div>
-                <div class="mt-2 text-2xl font-bold text-slate-900 truncate">{{ $value }}</div>
-                <div class="text-xs text-slate-400 mt-0.5">{!! $sub !!}</div>
+                <div class="shrink-0 text-gray-300 pl-2">
+                    <i class="fas {{ $icon }} text-2xl md:text-3xl"></i>
+                </div>
             </div>
         @endif
     @endforeach
 </div>
 
-<div class="grid grid-cols-1 gap-6 mb-6">
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-            <div>
-                <h2 class="font-semibold text-slate-800 mb-1">Trend Complaint</h2>
-                <p class="text-xs text-slate-500">Menampilkan perkembangan jumlah customer complaint sebagai indikator performa kualitas produk.</p>
-            </div>
-            <form method="GET" action="{{ route('dashboard') }}" class="flex items-center gap-2">
-                @foreach (request()->except('trend_type') as $k => $v)
-                    <input type="hidden" name="{{ $k }}" value="{{ $v }}">
-                @endforeach
-                <select name="trend_type" onchange="this.form.submit()" class="text-xs font-medium rounded-lg border-slate-200 focus:ring-sky-500 focus:border-sky-500 bg-slate-50">
-                    <option value="bulan" {{ $trendType === 'bulan' ? 'selected' : '' }}>Trend Bulanan</option>
-                    <option value="tahun" {{ $trendType === 'tahun' ? 'selected' : '' }}>Trend Tahunan</option>
-                </select>
-            </form>
+{{-- Trend Complaint Card (SB Admin 2 Card Format) --}}
+<div class="bg-white rounded shadow-sm border border-gray-200 mb-6 overflow-hidden">
+    <div class="bg-[#f8f9fc] border-b border-gray-200 py-3 px-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <h2 class="font-bold text-[#4e73df] text-base mb-0.5">Trend Complaint</h2>
+            <p class="text-xs text-gray-500">Menampilkan perkembangan jumlah customer complaint sebagai indikator performa kualitas produk.</p>
         </div>
+        <form method="GET" action="{{ route('dashboard') }}" class="flex items-center gap-2">
+            @foreach (request()->except('trend_type') as $k => $v)
+                <input type="hidden" name="{{ $k }}" value="{{ $v }}">
+            @endforeach
+            <select name="trend_type" onchange="this.form.submit()" class="text-xs font-semibold rounded border-gray-300 focus:ring-[#4e73df] focus:border-[#4e73df] bg-white text-gray-700 py-1.5 px-3">
+                <option value="bulan" {{ $trendType === 'bulan' ? 'selected' : '' }}>Trend Bulanan</option>
+                <option value="tahun" {{ $trendType === 'tahun' ? 'selected' : '' }}>Trend Tahunan</option>
+            </select>
+        </form>
+    </div>
+    <div class="p-4 md:p-6">
         <div class="relative h-72"><canvas id="trendChart"></canvas></div>
     </div>
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-    <div id="paretoDetailCard" class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 scroll-mt-6">
-        <h2 class="font-semibold text-slate-800 mb-1">Diagram Pareto — Detail Ketidaksesuaian</h2>
-        <p class="text-xs text-slate-500 mb-4">Detail uraian ketidaksesuaian dengan frekuensi tertinggi (aturan 80/20).</p>
-        @include('partials._pareto_detail_filter')
-        <div class="relative h-72">
-            @if (empty($paretoDetail['labels']))
-                <div class="absolute inset-0 flex items-center justify-center text-sm text-slate-400">Tidak ada data pada periode ini.</div>
-            @else
-                <canvas id="paretoDetailChart"></canvas>
-            @endif
+    <div id="paretoDetailCard" class="bg-white rounded shadow-sm border border-gray-200 overflow-hidden scroll-mt-6">
+        <div class="bg-[#f8f9fc] border-b border-gray-200 py-3 px-4">
+            <h2 class="font-bold text-[#4e73df] text-base mb-0.5">Diagram Pareto — Detail Ketidaksesuaian</h2>
+            <p class="text-xs text-gray-500">Detail uraian ketidaksesuaian dengan frekuensi tertinggi (aturan 80/20).</p>
+        </div>
+        <div class="p-4 md:p-6">
+            @include('partials._pareto_detail_filter')
+            <div class="relative h-72">
+                @if (empty($paretoDetail['labels']))
+                    <div class="absolute inset-0 flex items-center justify-center text-sm text-gray-400">Tidak ada data pada periode ini.</div>
+                @else
+                    <canvas id="paretoDetailChart"></canvas>
+                @endif
+            </div>
         </div>
     </div>
 
-    <div id="paretoCustCard" class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 scroll-mt-6">
-        <h2 class="font-semibold text-slate-800 mb-1">Diagram Pareto — Frekuensi Customer</h2>
-        <p class="text-xs text-slate-500 mb-4">Customer dengan complaint terbanyak (aturan 80/20).</p>
-        @include('partials._pareto_cust_filter')
-        <div class="relative h-72">
-            @if (empty($paretoCust['labels']))
-                <div class="absolute inset-0 flex items-center justify-center text-sm text-slate-400">Tidak ada data pada periode ini.</div>
-            @else
-                <canvas id="paretoCustChart"></canvas>
-            @endif
+    <div id="paretoCustCard" class="bg-white rounded shadow-sm border border-gray-200 overflow-hidden scroll-mt-6">
+        <div class="bg-[#f8f9fc] border-b border-gray-200 py-3 px-4">
+            <h2 class="font-bold text-[#4e73df] text-base mb-0.5">Diagram Pareto — Frekuensi Customer</h2>
+            <p class="text-xs text-gray-500">Customer dengan complaint terbanyak (aturan 80/20).</p>
+        </div>
+        <div class="p-4 md:p-6">
+            @include('partials._pareto_cust_filter')
+            <div class="relative h-72">
+                @if (empty($paretoCust['labels']))
+                    <div class="absolute inset-0 flex items-center justify-center text-sm text-gray-400">Tidak ada data pada periode ini.</div>
+                @else
+                    <canvas id="paretoCustChart"></canvas>
+                @endif
+            </div>
         </div>
     </div>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
-        <div class="flex items-center justify-between mb-1">
-            <h2 class="font-semibold text-slate-800">Stratifikasi per Area</h2>
-            <span class="text-[11px] text-slate-400">Top {{ count($strat['area']['labels']) }} area</span>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+    <div class="bg-white rounded shadow-sm border border-gray-200 overflow-hidden">
+        <div class="bg-[#f8f9fc] border-b border-gray-200 py-3 px-4 flex items-center justify-between">
+            <h2 class="font-bold text-[#4e73df] text-base">Stratifikasi per Area</h2>
+            <span class="text-[11px] text-gray-400">Top {{ count($strat['area']['labels']) }} area</span>
         </div>
-        <p class="text-xs text-slate-500 mb-4">Sebaran complaint berdasarkan area produksi (terbanyak di atas).</p>
-        <div class="relative" style="height: {{ max(260, count($strat['area']['labels']) * 34) }}px">
-            <canvas id="areaChart"></canvas>
+        <div class="p-4 md:p-6">
+            <p class="text-xs text-gray-500 mb-4">Sebaran complaint berdasarkan area produksi (terbanyak di atas).</p>
+            <div class="relative" style="height: {{ max(260, count($strat['area']['labels']) * 34) }}px">
+                <canvas id="areaChart"></canvas>
+            </div>
         </div>
     </div>
-    <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-5">
-        <div class="flex items-center justify-between mb-4">
+    
+    <div class="lg:col-span-2 bg-white rounded shadow-sm border border-gray-200 overflow-hidden">
+        <div class="bg-[#f8f9fc] border-b border-gray-200 py-3 px-4 flex items-center justify-between">
             <div>
-                <h2 class="font-semibold text-slate-800">📊 Grafik Pola Keterkaitan Cacat (Lift Ratio — Apriori)</h2>
-                <p class="text-xs text-slate-500 mt-0.5">Tingkat kekuatan kaitan sebab-akibat antara jenis ketidaksesuaian dan penyebab utama.</p>
+                <h2 class="font-bold text-[#4e73df] text-base flex items-center gap-2">
+                    <i class="fas fa-chart-bar text-sm"></i>
+                    <span>Grafik Pola Keterkaitan Cacat (Lift Ratio — Apriori)</span>
+                </h2>
+                <p class="text-xs text-gray-500 mt-0.5">Tingkat kekuatan kaitan sebab-akibat antara jenis ketidaksesuaian dan penyebab utama.</p>
             </div>
-            <a href="{{ route('apriori') }}" class="text-xs text-sky-600 font-medium hover:underline whitespace-nowrap ml-2">Lihat semua →</a>
+            <a href="{{ route('apriori') }}" class="text-xs text-[#4e73df] font-bold hover:underline whitespace-nowrap ml-2">Lihat semua &rarr;</a>
         </div>
-        
-        @if(empty($topRules))
-            <p class="text-sm text-slate-400 py-8 text-center">Belum ada pola. Tambah data complaint untuk melihat hasil.</p>
-        @else
-            <div class="relative h-64 bg-slate-50/50 p-3 rounded-xl border border-slate-100">
-                <canvas id="qaAprioriChart"></canvas>
-            </div>
-            <div class="flex flex-wrap items-center justify-between text-[11px] text-slate-400 mt-3 gap-2">
-                <span>Berdasarkan <b>{{ $totalTrx }}</b> transaksi komplain · Terurut dari kaitan terkuat</span>
-                <div class="flex items-center gap-3 font-medium">
-                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-rose-500 inline-block"></span> Sangat Kuat (&ge;5x)</span>
-                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-amber-500 inline-block"></span> Kuat (&ge;3x)</span>
-                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-sky-500 inline-block"></span> Sedang (&ge;1.5x)</span>
+        <div class="p-4 md:p-6">
+            @if(empty($topRules))
+                <p class="text-sm text-gray-400 py-8 text-center">Belum ada pola. Tambah data complaint untuk melihat hasil.</p>
+            @else
+                <div class="relative h-64 bg-[#f8f9fc] p-3 rounded border border-gray-200">
+                    <canvas id="qaAprioriChart"></canvas>
                 </div>
-            </div>
-        @endif
+                <div class="flex flex-wrap items-center justify-between text-[11px] text-gray-500 mt-3 gap-2">
+                    <span>Berdasarkan <b>{{ $totalTrx }}</b> transaksi komplain &middot; Terurut dari kaitan terkuat</span>
+                    <div class="flex items-center gap-3 font-semibold">
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-[#e74a3b] inline-block"></span> Sangat Kuat (&ge;5x)</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-[#f6c23e] inline-block"></span> Kuat (&ge;3x)</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-[#4e73df] inline-block"></span> Sedang (&ge;1.5x)</span>
+                    </div>
+                </div>
+            @endif
+        </div>
     </div>
 </div>
 
@@ -274,6 +264,7 @@ if (paretoCanvas) new Chart(paretoCanvas, {
 const paretoDetailCanvas = document.getElementById('paretoDetailChart');
 if (paretoDetailCanvas && paretoDetail.labels && paretoDetail.labels.length) {
     new Chart(paretoDetailCanvas, {
+        type: 'bar',
         data: {
             labels: paretoDetail.labels,
             datasets: [
@@ -297,6 +288,7 @@ if (paretoDetailCanvas && paretoDetail.labels && paretoDetail.labels.length) {
 
 const paretoCustCanvas = document.getElementById('paretoCustChart');
 if (paretoCustCanvas) new Chart(paretoCustCanvas, {
+    type: 'bar',
     data: {
         labels: paretoCust.labels,
         datasets: [

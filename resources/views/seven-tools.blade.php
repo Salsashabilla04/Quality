@@ -7,397 +7,423 @@
 @php
     function tool_header($no, $title, $desc) {
         return "<div class='flex items-start gap-3 mb-4'>
-            <span class='shrink-0 w-8 h-8 rounded-lg bg-sky-600 text-white flex items-center justify-center font-bold text-sm shadow-sm'>{$no}</span>
-            <div><h2 class='font-bold text-slate-800 text-base'>{$title}</h2><p class='text-xs text-slate-500'>{$desc}</p></div>
+            <span class='shrink-0 w-8 h-8 rounded bg-[#4e73df] text-white flex items-center justify-center font-bold text-sm shadow-sm'>{$no}</span>
+            <div><h2 class='font-bold text-[#4e73df] text-base mb-0.5'>{$title}</h2><p class='text-xs text-gray-500'>{$desc}</p></div>
         </div>";
     }
 @endphp
 
 <div class="space-y-8">
 
-    <!-- 1. CHECK SHEET -->
-    <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-        {!! tool_header(1, 'Check Sheet (Lembar Pemeriksaan Mutu)', 'Tabulasi frekuensi kemunculan ketidaksesuaian per bulan untuk rekapitulasi data lapangan.') !!}
+    <!-- 1. CHECK SHEET (SB Admin 2 Style) -->
+    <div class="card-sb border border-[#e3e6f0] rounded shadow-sm overflow-hidden mb-8">
+        <div class="card-sb-header py-3 px-4 bg-[#f8f9fc] border-b border-[#e3e6f0] flex flex-col md:flex-row md:items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+                <span class="w-6 h-6 rounded bg-[#4e73df] text-white flex items-center justify-center font-bold text-xs shrink-0">1</span>
+                <div>
+                    <h6 class="m-0 font-bold text-[#4e73df] text-sm leading-tight">Check Sheet (Lembar Pemeriksaan Mutu)</h6>
+                    <small class="text-xs text-[#858796] block mt-0.5">Tabulasi frekuensi kemunculan ketidaksesuaian per bulan untuk rekapitulasi data lapangan</small>
+                </div>
+            </div>
+        </div>
 
-        {{-- Mode CheckSheet --}}
-        <form method="GET" action="{{ url()->current() }}" class="flex flex-wrap items-center gap-2 mb-4 text-xs">
-            {{-- Preserve all other filter params --}}
-            @foreach (['pareto_year','pareto_month','pareto_detail_year','pareto_detail_month','pareto_cust_year','pareto_cust_month','pareto_cause_year','pareto_cause_month'] as $p)
-                @if (request($p))<input type="hidden" name="{{ $p }}" value="{{ request($p) }}">@endif
-            @endforeach
+        {{-- Mode CheckSheet Filter Bar --}}
+        <div class="px-4 py-2.5 border-b border-[#e3e6f0] bg-[#f8f9fc] flex flex-wrap items-center justify-between gap-3 text-xs">
+            <form method="GET" action="{{ url()->current() }}" class="flex flex-wrap items-center gap-2">
+                @foreach (['pareto_year','pareto_month','pareto_detail_year','pareto_detail_month','pareto_cust_year','pareto_cust_month','pareto_cause_year','pareto_cause_month'] as $p)
+                    @if (request($p))<input type="hidden" name="{{ $p }}" value="{{ request($p) }}">@endif
+                @endforeach
 
-            <span class="text-slate-500 font-medium">Tabulasi Berdasarkan:</span>
-            <select name="cs_mode" onchange="this.form.submit()"
-                    class="rounded-xl border border-slate-300 px-3 py-1.5 text-xs focus:ring-2 focus:ring-sky-500 focus:border-sky-500 font-semibold bg-slate-50">
-                <option value="jenis_ketidaksesuaian" @selected($csMode === 'jenis_ketidaksesuaian')>Jenis Ketidaksesuaian</option>
-                <option value="detail_ketidaksesuaian" @selected($csMode === 'detail_ketidaksesuaian')>Detail Ketidaksesuaian</option>
-            </select>
-        </form>
+                <label class="text-gray-600 font-bold uppercase tracking-wide text-[11px] m-0">Tabulasi Berdasarkan:</label>
+                <select name="cs_mode" onchange="this.form.submit()"
+                        class="rounded-md border border-gray-300 px-3 py-1 text-xs font-semibold focus:ring-[#4e73df] focus:border-[#4e73df] bg-white h-8 text-gray-700 cursor-pointer shadow-2xs">
+                    <option value="jenis_ketidaksesuaian" @selected($csMode === 'jenis_ketidaksesuaian')>Jenis Ketidaksesuaian</option>
+                    <option value="detail_ketidaksesuaian" @selected($csMode === 'detail_ketidaksesuaian')>Detail Ketidaksesuaian</option>
+                </select>
+            </form>
 
-        <div class="overflow-x-auto rounded-xl border border-slate-200">
-            <table class="w-full text-xs border-collapse">
+            <div class="text-xs text-gray-500">
+                Total Komplain: <b class="text-[#4e73df] font-bold">{{ $checkSheet['grand_total'] }}</b> Kasus
+            </div>
+        </div>
+
+        <div class="p-4 overflow-x-auto">
+            <table class="w-full text-xs border border-[#e3e6f0] border-collapse">
                 <thead>
-                    <tr class="bg-slate-800 text-white font-bold">
-                        <th class="border border-slate-700 px-3 py-2.5 text-left sticky left-0 bg-slate-800">
+                    <tr class="bg-[#f8f9fc] text-[#4e73df] border-b-2 border-gray-200 text-xs font-bold uppercase tracking-wider">
+                        <th class="border border-[#e3e6f0] px-3.5 py-2.5 text-left sticky left-0 bg-[#f8f9fc] z-10">
                             {{ $csMode === 'detail_ketidaksesuaian' ? 'Detail Ketidaksesuaian' : 'Jenis Ketidaksesuaian' }}
                         </th>
                         @foreach ($checkSheet['bulan'] as $b)
-                            <th class="border border-slate-700 px-3 py-2.5 whitespace-nowrap text-center">{{ $b }}</th>
+                            <th class="border border-[#e3e6f0] px-2.5 py-2.5 whitespace-nowrap text-center text-gray-700 font-bold">{{ $b }}</th>
                         @endforeach
-                        <th class="border border-slate-700 px-3 py-2.5 bg-sky-900 text-center">Total</th>
+                        <th class="border border-[#e3e6f0] px-3.5 py-2.5 bg-[#4e73df]/10 text-[#4e73df] text-center font-extrabold">Total</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-[#e3e6f0]">
                     @foreach ($checkSheet['rows'] as $row)
-                        <tr class="hover:bg-slate-50 transition">
-                            <td class="border border-slate-200 px-3 py-2 font-medium text-slate-700 sticky left-0 bg-white">{{ $row['kategori'] }}</td>
+                        <tr class="hover:bg-[#f8f9fc] transition-colors">
+                            <td class="border border-[#e3e6f0] px-3.5 py-2 font-semibold text-gray-700 sticky left-0 bg-white z-5">{{ $row['kategori'] }}</td>
                             @foreach ($row['per_bulan'] as $v)
-                                <td class="border border-slate-200 px-2 py-2 text-center {{ $v ? 'text-slate-800 font-semibold' : 'text-slate-300' }}">{{ $v ?: '·' }}</td>
+                                <td class="border border-[#e3e6f0] px-2 py-2 text-center {{ $v ? 'text-gray-800 font-bold' : 'text-gray-300' }}">{{ $v ?: '·' }}</td>
                             @endforeach
-                            <td class="border border-slate-200 px-3 py-2 text-center font-bold bg-slate-50 text-sky-800">{{ $row['total'] }}</td>
+                            <td class="border border-[#e3e6f0] px-3.5 py-2 text-center font-bold bg-[#f8f9fc] text-[#4e73df]">{{ $row['total'] }}</td>
                         </tr>
                     @endforeach
-                    <tr class="bg-slate-100 font-bold text-slate-900">
-                        <td class="border border-slate-200 px-3 py-2.5 sticky left-0 bg-slate-100 uppercase tracking-wider">TOTAL KESELURUHAN</td>
+                    <tr class="bg-[#eaecf4] font-bold text-gray-800 border-t-2 border-gray-300">
+                        <td class="border border-[#e3e6f0] px-3.5 py-2.5 sticky left-0 bg-[#eaecf4] uppercase tracking-wider text-gray-800 z-5">TOTAL KESELURUHAN</td>
                         @foreach ($checkSheet['total_per_bulan'] as $v)
-                            <td class="border border-slate-200 px-2 py-2.5 text-center font-mono text-xs">{{ $v }}</td>
+                            <td class="border border-[#e3e6f0] px-2.5 py-2.5 text-center font-mono font-bold text-gray-800 text-xs">{{ $v }}</td>
                         @endforeach
-                        <td class="border border-slate-200 px-3 py-2.5 text-center bg-sky-100 text-sky-900 font-mono text-sm">{{ $checkSheet['grand_total'] }}</td>
+                        <td class="border border-[#e3e6f0] px-3.5 py-2.5 text-center bg-[#4e73df] text-white font-mono font-bold text-sm shadow-xs">{{ $checkSheet['grand_total'] }}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-    </section>
+    </div>
 
-    <!-- 2. DIAGRAM PARETO (4 VARIAN) -->
-    <div class="space-y-4">
-        <div class="flex items-center justify-between">
-            <div>
-                <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                    <span class="w-8 h-8 rounded-lg bg-sky-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">2</span>
-                    Diagram Pareto (Prinsip 80/20 Prioritas Masalah)
-                </h3>
-                <p class="text-xs text-slate-500 mt-0.5">Identifikasi 20% penyebab utama yang menimbulkan 80% total masalah mutu.</p>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- 2a. PARETO JENIS -->
-            <section id="paretoCard" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 scroll-mt-6">
-                <div class="flex items-center justify-between mb-2">
-                    <h4 class="font-bold text-slate-800 text-sm">2a. Pareto — Jenis Ketidaksesuaian</h4>
+    <!-- 2. DIAGRAM PARETO (4 VARIAN - 1-BY-1 SB ADMIN 2 THEME) -->
+    <section id="pareto-section" class="mb-8">
+        <div class="card-sb border border-[#e3e6f0] rounded shadow-sm overflow-hidden">
+            <div class="card-sb-header py-3 px-4 bg-[#f8f9fc] border-b border-[#e3e6f0] flex flex-col md:flex-row md:items-center justify-between gap-2">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-6 h-6 rounded bg-[#4e73df] text-white flex items-center justify-center font-bold text-xs shrink-0">2</span>
+                    <div>
+                        <h6 class="m-0 font-bold text-[#4e73df] text-sm leading-tight">Diagram Pareto (Prinsip 80/20 Prioritas Masalah)</h6>
+                        <small class="text-xs text-[#858796] block mt-0.5">Visualisasi frekuensi dan persentase kumulatif untuk menentukan 20% faktor vital pengendali 80% masalah</small>
+                    </div>
                 </div>
-                @include('partials._pareto_filter')
-                <div class="relative h-72 mt-2">
-                    @if (empty($pareto['labels']))
-                        <div class="absolute inset-0 flex items-center justify-center text-sm text-slate-400">Tidak ada data pada periode ini.</div>
-                    @else
-                        <canvas id="paretoChart"></canvas>
-                    @endif
+            </div>
+
+            <div class="p-4 bg-[#f8f9fc] space-y-6">
+            <!-- 2a. PARETO JENIS -->
+            <section id="paretoCard" class="card shadow-sm border border-[#e3e6f0] rounded overflow-hidden scroll-mt-6">
+                <div class="card-header py-3 px-4 bg-[#f8f9fc] border-b border-[#e3e6f0] flex flex-wrap items-center justify-between gap-2">
+                    <h6 class="m-0 font-bold text-[#4e73df] text-sm flex items-center gap-2">
+                        <i class="fas fa-chart-bar text-[#4e73df]"></i>
+                        <span>Diagram Pareto — Jenis Ketidaksesuaian</span>
+                    </h6>
+                    <span class="badge badge-primary font-bold text-xs px-2.5 py-1">Prioritas Kategori Masalah</span>
+                </div>
+                <div class="card-body p-4 bg-white">
+                    @include('partials._pareto_filter')
+                    <div class="relative h-80 md:h-96 w-full mt-2">
+                        @if (empty($pareto['labels']))
+                            <div class="absolute inset-0 flex items-center justify-center text-sm text-[#858796] italic">
+                                <i class="fas fa-info-circle mr-1.5"></i> Tidak ada data pada periode ini.
+                            </div>
+                        @else
+                            <canvas id="paretoChart"></canvas>
+                        @endif
+                    </div>
                 </div>
             </section>
 
             <!-- 2b. PARETO DETAIL -->
-            <section id="paretoDetailCard" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 scroll-mt-6">
-                <div class="flex items-center justify-between mb-2">
-                    <h4 class="font-bold text-slate-800 text-sm">2b. Pareto — Detail Ketidaksesuaian</h4>
+            <section id="paretoDetailCard" class="card shadow-sm border border-[#e3e6f0] rounded overflow-hidden scroll-mt-6">
+                <div class="card-header py-3 px-4 bg-[#f8f9fc] border-b border-[#e3e6f0] flex flex-wrap items-center justify-between gap-2">
+                    <h6 class="m-0 font-bold text-[#4e73df] text-sm flex items-center gap-2">
+                        <i class="fas fa-chart-bar text-[#f6c23e]"></i>
+                        <span>Diagram Pareto — Detail Ketidaksesuaian</span>
+                    </h6>
+                    <span class="badge badge-warning text-dark font-bold text-xs px-2.5 py-1">Prioritas Cacat Spesifik</span>
                 </div>
-                @include('partials._pareto_detail_filter')
-                <div class="relative h-72 mt-2">
-                    @if (empty($paretoDetail['labels']))
-                        <div class="absolute inset-0 flex items-center justify-center text-sm text-slate-400">Tidak ada data pada periode ini.</div>
-                    @else
-                        <canvas id="paretoDetailChart"></canvas>
-                    @endif
+                <div class="card-body p-4 bg-white">
+                    @include('partials._pareto_detail_filter')
+                    <div class="relative h-80 md:h-96 w-full mt-2">
+                        @if (empty($paretoDetail['labels']))
+                            <div class="absolute inset-0 flex items-center justify-center text-sm text-[#858796] italic">
+                                <i class="fas fa-info-circle mr-1.5"></i> Tidak ada data pada periode ini.
+                            </div>
+                        @else
+                            <canvas id="paretoDetailChart"></canvas>
+                        @endif
+                    </div>
                 </div>
             </section>
 
             <!-- 2c. PARETO CUSTOMER -->
-            <section id="paretoCustCard" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 scroll-mt-6">
-                <div class="flex items-center justify-between mb-2">
-                    <h4 class="font-bold text-slate-800 text-sm">2c. Pareto — Frekuensi Customer</h4>
+            <section id="paretoCustCard" class="card shadow-sm border border-[#e3e6f0] rounded overflow-hidden scroll-mt-6">
+                <div class="card-header py-3 px-4 bg-[#f8f9fc] border-b border-[#e3e6f0] flex flex-wrap items-center justify-between gap-2">
+                    <h6 class="m-0 font-bold text-[#4e73df] text-sm flex items-center gap-2">
+                        <i class="fas fa-users text-[#36b9cc]"></i>
+                        <span>Diagram Pareto — Frekuensi Customer</span>
+                    </h6>
+                    <span class="badge badge-info font-bold text-xs px-2.5 py-1">Prioritas Akun Customer</span>
                 </div>
-                @include('partials._pareto_cust_filter')
-                <div class="relative h-72 mt-2">
-                    @if (empty($paretoCust['labels']))
-                        <div class="absolute inset-0 flex items-center justify-center text-sm text-slate-400">Tidak ada data pada periode ini.</div>
-                    @else
-                        <canvas id="paretoCustChart"></canvas>
-                    @endif
+                <div class="card-body p-4 bg-white">
+                    @include('partials._pareto_cust_filter')
+                    <div class="relative h-80 md:h-96 w-full mt-2">
+                        @if (empty($paretoCust['labels']))
+                            <div class="absolute inset-0 flex items-center justify-center text-sm text-[#858796] italic">
+                                <i class="fas fa-info-circle mr-1.5"></i> Tidak ada data pada periode ini.
+                            </div>
+                        @else
+                            <canvas id="paretoCustChart"></canvas>
+                        @endif
+                    </div>
                 </div>
             </section>
 
             <!-- 2d. PARETO PENYEBAB -->
-            <section id="paretoCauseCard" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 scroll-mt-6">
-                <div class="flex items-center justify-between mb-2">
-                    <h4 class="font-bold text-slate-800 text-sm">2d. Pareto — Akar Penyebab Dominan</h4>
+            <section id="paretoCauseCard" class="card shadow-sm border border-[#e3e6f0] rounded overflow-hidden scroll-mt-6">
+                <div class="card-header py-3 px-4 bg-[#f8f9fc] border-b border-[#e3e6f0] flex flex-wrap items-center justify-between gap-2">
+                    <h6 class="m-0 font-bold text-[#4e73df] text-sm flex items-center gap-2">
+                        <i class="fas fa-exclamation-triangle text-[#1cc88a]"></i>
+                        <span>Diagram Pareto — Akar Penyebab Dominan</span>
+                    </h6>
+                    <span class="badge badge-success font-bold text-xs px-2.5 py-1">Prioritas Akar Penyebab (6M)</span>
                 </div>
-                @include('partials._pareto_cause_filter')
-                <div class="relative h-72 mt-2">
-                    @if (empty($paretoCause['labels']))
-                        <div class="absolute inset-0 flex items-center justify-center text-sm text-slate-400">Tidak ada data pada periode ini.</div>
-                    @else
-                        <canvas id="paretoCauseChart"></canvas>
-                    @endif
+                <div class="card-body p-4 bg-white">
+                    @include('partials._pareto_cause_filter')
+                    <div class="relative h-80 md:h-96 w-full mt-2">
+                        @if (empty($paretoCause['labels']))
+                            <div class="absolute inset-0 flex items-center justify-center text-sm text-[#858796] italic">
+                                <i class="fas fa-info-circle mr-1.5"></i> Tidak ada data pada periode ini.
+                            </div>
+                        @else
+                            <canvas id="paretoCauseChart"></canvas>
+                        @endif
+                    </div>
                 </div>
             </section>
         </div>
     </div>
-
+</section>
 
     <!-- 3. FISHBONE / ISHIKAWA (6M) -->
-    <section id="fishbone-section" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-6">
-        {!! tool_header(3, 'Diagram Sebab-Akibat (Fishbone / Ishikawa 6M)', 'Analisis struktur akar masalah penyebab komplain berdasarkan kerangka 6M. Klik cabang penyebab untuk penelusuran transaksi komplain.') !!}
+    <section id="fishbone-section" class="mb-6">
+        <div class="card-sb border border-[#e3e6f0] rounded shadow-sm overflow-hidden">
+            <!-- Header Rapi & Kompak: Judul + Filter Inline (Tanpa Box Bertumpuk) -->
+            <div class="card-sb-header py-3 px-4 bg-[#f8f9fc] border-b border-[#e3e6f0] flex flex-col md:flex-row md:items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-6 h-6 rounded bg-[#4e73df] text-white flex items-center justify-center font-bold text-xs shrink-0">3</span>
+                    <div>
+                        <h6 class="m-0 font-bold text-[#4e73df] text-sm leading-tight">Diagram Sebab-Akibat Ishikawa (6M)</h6>
+                        <small class="text-xs text-[#858796] block mt-0.5">Pilih salah satu penyebab di bawah untuk menyorot tindakan perbaikan (CAPA)</small>
+                    </div>
+                </div>
 
-        <!-- Control Filter Bar (Clean & Spacious) -->
-        <form method="GET" action="{{ route('seven-tools') }}#fishbone-section" class="bg-slate-50/80 p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center justify-between gap-4 shadow-sm">
-            @if(request('cs_mode')) <input type="hidden" name="cs_mode" value="{{ request('cs_mode') }}"> @endif
-            @if(request('pareto_year')) <input type="hidden" name="pareto_year" value="{{ request('pareto_year') }}"> @endif
-            @if(request('pareto_month')) <input type="hidden" name="pareto_month" value="{{ request('pareto_month') }}"> @endif
-            @if(request('pareto_detail_year')) <input type="hidden" name="pareto_detail_year" value="{{ request('pareto_detail_year') }}"> @endif
-            @if(request('pareto_detail_month')) <input type="hidden" name="pareto_detail_month" value="{{ request('pareto_detail_month') }}"> @endif
-            @if(request('pareto_cust_year')) <input type="hidden" name="pareto_cust_year" value="{{ request('pareto_cust_year') }}"> @endif
-            @if(request('pareto_cust_month')) <input type="hidden" name="pareto_cust_month" value="{{ request('pareto_cust_month') }}"> @endif
-            @if(request('pareto_cause_year')) <input type="hidden" name="pareto_cause_year" value="{{ request('pareto_cause_year') }}"> @endif
-            @if(request('pareto_cause_month')) <input type="hidden" name="pareto_cause_month" value="{{ request('pareto_cause_month') }}"> @endif
+                <!-- Form Filter Ringkas Inline (Hanya 1 baris di header) -->
+                <form method="GET" action="{{ route('seven-tools') }}#fishbone-section" class="flex flex-wrap items-center gap-2 m-0">
+                    @if(request('cs_mode')) <input type="hidden" name="cs_mode" value="{{ request('cs_mode') }}"> @endif
+                    @if(request('pareto_year')) <input type="hidden" name="pareto_year" value="{{ request('pareto_year') }}"> @endif
+                    @if(request('pareto_month')) <input type="hidden" name="pareto_month" value="{{ request('pareto_month') }}"> @endif
+                    @if(request('pareto_detail_year')) <input type="hidden" name="pareto_detail_year" value="{{ request('pareto_detail_year') }}"> @endif
+                    @if(request('pareto_detail_month')) <input type="hidden" name="pareto_detail_month" value="{{ request('pareto_detail_month') }}"> @endif
+                    @if(request('pareto_cust_year')) <input type="hidden" name="pareto_cust_year" value="{{ request('pareto_cust_year') }}"> @endif
+                    @if(request('pareto_cust_month')) <input type="hidden" name="pareto_cust_month" value="{{ request('pareto_cust_month') }}"> @endif
+                    @if(request('pareto_cause_year')) <input type="hidden" name="pareto_cause_year" value="{{ request('pareto_cause_year') }}"> @endif
+                    @if(request('pareto_cause_month')) <input type="hidden" name="pareto_cause_month" value="{{ request('pareto_cause_month') }}"> @endif
 
-            <!-- Left Controls: Dropdown Fokus Akibat -->
-            <div class="flex flex-wrap items-center gap-2">
-                <label for="fishbone_efek" class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5 whitespace-nowrap">
-                    <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.586V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.414L3.293 6.707A1 1 0 013 6V4z"/></svg>
-                    Fokus Akibat:
-                </label>
-                <select name="fishbone_efek" id="fishbone_efek" onchange="this.form.submit()" class="bg-white text-slate-800 text-xs font-semibold px-3 py-2 rounded-xl border border-slate-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 cursor-pointer min-w-[280px]">
-                    <option value="AUTO" {{ ($fishbone['selected_efek'] ?? 'AUTO') === 'AUTO' ? 'selected' : '' }}>
-                        ⚡ Auto Pareto (Kasus Tertinggi: {{ $fishbone['top_efek'] ?? '-' }})
-                    </option>
-                    <option value="ALL" {{ ($fishbone['selected_efek'] ?? '') === 'ALL' ? 'selected' : '' }}>
-                        🌐 Semua Masalah / Global
-                    </option>
-
-                    @if(!empty($fishbone['available_jenis']))
-                        <optgroup label="📌 Jenis Ketidaksesuaian">
-                            @foreach ($fishbone['available_jenis'] as $jOpt)
-                                <option value="{{ $jOpt }}" {{ ($fishbone['selected_efek'] ?? '') === $jOpt ? 'selected' : '' }}>
-                                    🏷️ {{ $jOpt }}
-                                </option>
-                            @endforeach
-                        </optgroup>
-                    @endif
-
-                    @if(!empty($fishbone['available_detail']))
-                        <optgroup label="🔍 Detail Ketidaksesuaian (Cacat Spesifik)">
-                            @foreach ($fishbone['available_detail'] as $dOpt)
-                                <option value="{{ $dOpt }}" {{ ($fishbone['selected_efek'] ?? '') === $dOpt ? 'selected' : '' }}>
-                                    🔍 {{ $dOpt }}
-                                </option>
-                            @endforeach
-                        </optgroup>
-                    @endif
-                </select>
-            </div>
-
-            <!-- Right Controls: Level Penyebab (Detail Spesifik vs Kategori Umum) -->
-            <div class="inline-flex rounded-xl border border-slate-300 bg-white p-1 shadow-sm">
-                <button type="submit" name="fishbone_level" value="detail" class="px-3.5 py-1.5 text-xs font-bold rounded-lg transition {{ ($fishbone['level'] ?? 'detail') === 'detail' ? 'bg-sky-500 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900' }}">
-                    🔍 Detail Spesifik
-                </button>
-                <button type="submit" name="fishbone_level" value="general" class="px-3.5 py-1.5 text-xs font-bold rounded-lg transition {{ ($fishbone['level'] ?? '') === 'general' ? 'bg-sky-500 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900' }}">
-                    📊 Kategori Umum
-                </button>
-            </div>
-        </form>
-
-        <!-- DIAGRAM TULANG IKAN (SKELETON DARK BLUE GRADIENT) -->
-        <div class="space-y-4">
-            <div class="overflow-x-auto pb-4">
-                <div class="min-w-[960px] bg-slate-950 text-white rounded-3xl p-8 relative border border-slate-800 shadow-2xl overflow-hidden">
-                    <!-- Subtle Glow Effect -->
-                    <div class="absolute -right-16 -top-16 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-                    <!-- Diagram Top Header Bar -->
-                    <div class="flex items-center justify-between mb-8 pb-4 border-b border-slate-800/80">
-                        <div class="flex items-center gap-2.5">
-                            <span class="w-2.5 h-2.5 rounded-full bg-sky-400 animate-pulse"></span>
-                            <h4 class="text-xs font-mono font-bold uppercase tracking-widest text-sky-400">DIAGRAM SEBAB-AKIBAT ISHIKAWA 6M</h4>
-                        </div>
-                        <div class="text-xs font-semibold text-sky-200 bg-sky-950/90 border border-sky-800/70 px-4 py-1.5 rounded-full font-mono shadow-inner">
-                            Fokus Akibat: <strong class="text-white">{{ $fishbone['efek'] }}</strong>
-                        </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-xs text-[#858796] font-semibold">Akibat:</span>
+                        <select name="fishbone_efek" id="fishbone_efek" onchange="this.form.submit()" class="text-xs font-semibold px-2.5 py-1 rounded border border-[#d1d3e2] bg-white text-[#5a5c69] focus:outline-none focus:border-[#4e73df] cursor-pointer shadow-none max-w-[220px]">
+                            <option value="AUTO" {{ ($fishbone['selected_efek'] ?? 'AUTO') === 'AUTO' ? 'selected' : '' }}>
+                                Auto: {{ $fishbone['top_efek'] ?? 'Tertinggi' }}
+                            </option>
+                            <option value="ALL" {{ ($fishbone['selected_efek'] ?? '') === 'ALL' ? 'selected' : '' }}>
+                                Semua Masalah (Global)
+                            </option>
+                            @if(!empty($fishbone['available_jenis']))
+                                <optgroup label="Jenis Ketidaksesuaian">
+                                    @foreach ($fishbone['available_jenis'] as $jOpt)
+                                        <option value="{{ $jOpt }}" {{ ($fishbone['selected_efek'] ?? '') === $jOpt ? 'selected' : '' }}>
+                                            {{ $jOpt }}
+                                        </option>
+                                    @endforeach
+                                </optgroup>
+                            @endif
+                            @if(!empty($fishbone['available_detail']))
+                                <optgroup label="Detail Cacat Spesifik">
+                                    @foreach ($fishbone['available_detail'] as $dOpt)
+                                        <option value="{{ $dOpt }}" {{ ($fishbone['selected_efek'] ?? '') === $dOpt ? 'selected' : '' }}>
+                                            {{ $dOpt }}
+                                        </option>
+                                    @endforeach
+                                </optgroup>
+                            @endif
+                        </select>
                     </div>
 
-                    <!-- FISHBONE SKELETON LAYOUT -->
-                    <div class="grid grid-cols-12 gap-6 items-center relative py-4">
-                        
-                        <!-- LEFT BODY: 6M BRANCH CARDS IN DARK BLUE GRADIENT (9 COLS) -->
-                        <div class="col-span-9 space-y-6">
-                            
-                            <!-- UPPER BRANCHES (MAN, MATERIAL, ENVIRONMENT) -->
-                            <div class="grid grid-cols-3 gap-5">
-                                @foreach (['Man', 'Material', 'Environment'] as $catKey)
-                                    @php $cData = collect($fishbone['categories'])->firstWhere('kategori', $catKey); @endphp
-                                    <div class="bg-gradient-to-br from-slate-900 via-slate-850 to-sky-950 border border-sky-500/30 rounded-2xl p-4 shadow-lg text-white flex flex-col justify-between hover:border-sky-400/60 transition-all">
-                                        <div>
-                                            <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-800">
-                                                <span class="font-bold text-xs text-sky-400 uppercase tracking-wider font-mono flex items-center gap-1.5">
-                                                    <span class="w-2 h-2 rounded-full bg-sky-400"></span> {{ $catKey }}
-                                                </span>
-                                                <span class="text-[10px] bg-sky-950 text-sky-300 font-mono px-2 py-0.5 rounded-full border border-sky-800 font-bold">
-                                                    {{ $cData['total'] ?? 0 }} isu
-                                                </span>
-                                            </div>
-                                            <ul class="space-y-2">
-                                                @forelse ($cData['top_causes'] ?? [] as $c)
-                                                    <li>
-                                                        <button type="button" onclick='showFishboneModal(@json($c), "{{ $catKey }}")' class="w-full text-left p-2.5 rounded-xl text-xs flex items-center justify-between transition group {{ $loop->first ? 'bg-sky-500/20 border-2 border-sky-400 text-white font-bold shadow-md hover:bg-sky-500/30' : 'bg-slate-800/90 border border-slate-700/80 text-slate-200 hover:bg-slate-700/90' }}">
-                                                            <span class="whitespace-normal break-words text-left leading-snug flex-1 pr-2 flex items-center gap-1.5">
-                                                                @if($loop->first) <span class="text-[11px] text-amber-400 shrink-0" title="Penyebab Utama Dominan">🔥</span> @endif
-                                                                <span>{{ $c['nama'] }}</span>
+                    <input type="hidden" name="fishbone_level" value="detail">
+
+                    <span class="badge badge-primary font-bold text-xs px-2.5 py-1">
+                        {{ array_sum(array_column($fishbone['categories'], 'total')) }} Isu
+                    </span>
+                </form>
+            </div>
+
+            <!-- Body: Grid 6 Kategori 6M -->
+            <div class="p-4 bg-[#f8f9fc]">
+                @php
+                    $categoriesConfig = [
+                        'Man' => [
+                            'title' => 'Man (Tenaga Kerja)',
+                            'border' => 'border-left-primary',
+                            'text_color' => 'text-[#4e73df]',
+                            'icon' => 'fa-user',
+                            'badge' => 'badge-primary'
+                        ],
+                        'Material' => [
+                            'title' => 'Material (Bahan Baku)',
+                            'border' => 'border-left-success',
+                            'text_color' => 'text-[#1cc88a]',
+                            'icon' => 'fa-boxes',
+                            'badge' => 'badge-success'
+                        ],
+                        'Machine' => [
+                            'title' => 'Machine (Mesin & Alat)',
+                            'border' => 'border-left-warning',
+                            'text_color' => 'text-[#f6c23e]',
+                            'icon' => 'fa-cogs',
+                            'badge' => 'badge-warning text-dark'
+                        ],
+                        'Method' => [
+                            'title' => 'Method (Metode Kerja)',
+                            'border' => 'border-left-danger',
+                            'text_color' => 'text-[#e74a3b]',
+                            'icon' => 'fa-tasks',
+                            'badge' => 'badge-danger'
+                        ],
+                        'Measurement' => [
+                            'title' => 'Measurement (Pengukuran)',
+                            'border' => 'border-left-purple',
+                            'text_color' => 'text-[#6f42c1]',
+                            'icon' => 'fa-ruler-combined',
+                            'badge' => 'badge-purple'
+                        ],
+                        'Environment' => [
+                            'title' => 'Environment (Lingkungan)',
+                            'border' => 'border-left-info',
+                            'text_color' => 'text-[#36b9cc]',
+                            'icon' => 'fa-leaf',
+                            'badge' => 'badge-info'
+                        ],
+                    ];
+                @endphp
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @foreach ($categoriesConfig as $catKey => $cfg)
+                        @php $cData = collect($fishbone['categories'])->firstWhere('kategori', $catKey); @endphp
+                        <div class="bg-white border border-[#e3e6f0] {{ $cfg['border'] }} shadow-sm rounded flex flex-col justify-between h-full transition hover:shadow">
+                            <!-- Category Header -->
+                            <div class="px-4 py-2.5 border-b border-[#e3e6f0] flex items-center justify-between bg-white">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas {{ $cfg['icon'] }} {{ $cfg['text_color'] }} text-sm"></i>
+                                    <span class="font-bold text-xs uppercase tracking-wide {{ $cfg['text_color'] }}">
+                                        {{ $cfg['title'] }}
+                                    </span>
+                                </div>
+                                <span class="badge {{ ($cData['total'] ?? 0) > 0 ? $cfg['badge'] : 'badge-light border text-[#858796]' }} font-bold text-[11px] px-2 py-0.5">
+                                    {{ $cData['total'] ?? 0 }} isu
+                                </span>
+                            </div>
+
+                            <!-- Causes List (Klik untuk Sorot Penyebab + CAPA) -->
+                            <div class="p-3 flex-1 flex flex-col justify-between">
+                                <ul class="space-y-2">
+                                    @forelse ($cData['top_causes'] ?? [] as $c)
+                                        <li>
+                                            <button type="button" 
+                                                    onclick='showFishboneModal(@json($c), "{{ $catKey }}")'
+                                                    class="w-full text-left p-2.5 rounded border border-[#e3e6f0] bg-white hover:bg-[#f8f9fc] hover:border-[#4e73df] flex items-center justify-between transition group cursor-pointer">
+                                                <div class="flex-1 pr-2">
+                                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                                        @if($loop->first && ($c['jumlah'] ?? 0) > 0)
+                                                            <span class="badge badge-warning text-dark text-[9px] px-1.5 py-0.5 font-bold">
+                                                                <i class="fas fa-fire mr-0.5"></i>Top
                                                             </span>
-                                                            <span class="text-[11px] font-bold text-sky-300 bg-slate-900 px-2 py-0.5 rounded-md font-mono shrink-0 border border-sky-800/70">{{ $c['jumlah'] }}</span>
-                                                        </button>
-                                                    </li>
-                                                @empty
-                                                    <li class="text-[11px] text-slate-500 italic text-center py-2">Tidak ada isu</li>
-                                                @endforelse
-                                            </ul>
-                                        </div>
-
-                                        @if(($cData['other_count'] ?? 0) > 0)
-                                            <div class="mt-3 pt-2 border-t border-slate-800 text-center">
-                                                <button type="button" onclick='showFishboneCategoryAllModal(@json($cData), "{{ $catKey }}")' class="text-[10px] font-bold text-sky-400 hover:text-sky-300 hover:underline">
-                                                    + {{ $cData['other_count'] }} penyebab minor lainnya
-                                                </button>
-                                            </div>
-                                        @endif
-                                    </div>
-                                @endforeach
-                            </div>
-
-                            <!-- CENTRAL HORIZONTAL SPINE LINE (PANAH TULANG UTAMA) -->
-                            <div class="relative py-2 flex items-center">
-                                <div class="w-full h-2 bg-gradient-to-r from-slate-700 via-sky-500 to-sky-400 rounded-full shadow-lg shadow-sky-500/20"></div>
-                                <div class="text-sky-400 -ml-1">
-                                    <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                </div>
-                            </div>
-
-                            <!-- LOWER BRANCHES (MACHINE, METHOD, MEASUREMENT) -->
-                            <div class="grid grid-cols-3 gap-5">
-                                @foreach (['Machine', 'Method', 'Measurement'] as $catKey)
-                                    @php $cData = collect($fishbone['categories'])->firstWhere('kategori', $catKey); @endphp
-                                    <div class="bg-gradient-to-br from-slate-900 via-slate-850 to-indigo-950 border border-indigo-500/30 rounded-2xl p-4 shadow-lg text-white flex flex-col justify-between hover:border-indigo-400/60 transition-all">
-                                        <div>
-                                            <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-800">
-                                                <span class="font-bold text-xs text-indigo-400 uppercase tracking-wider font-mono flex items-center gap-1.5">
-                                                    <span class="w-2 h-2 rounded-full bg-indigo-400"></span> {{ $catKey }}
+                                                        @endif
+                                                        <span class="text-xs text-[#5a5c69] font-medium leading-snug group-hover:text-[#4e73df] transition">
+                                                            {{ $c['nama'] }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <span class="badge badge-light border border-[#d1d3e2] text-[#4e73df] font-bold text-xs px-2 py-1 shrink-0">
+                                                    {{ $c['jumlah'] }}
                                                 </span>
-                                                <span class="text-[10px] bg-indigo-950 text-indigo-300 font-mono px-2 py-0.5 rounded-full border border-indigo-800 font-bold">
-                                                    {{ $cData['total'] ?? 0 }} isu
-                                                </span>
-                                            </div>
-                                            <ul class="space-y-2">
-                                                @forelse ($cData['top_causes'] ?? [] as $c)
-                                                    <li>
-                                                        <button type="button" onclick='showFishboneModal(@json($c), "{{ $catKey }}")' class="w-full text-left p-2.5 rounded-xl text-xs flex items-center justify-between transition group {{ $loop->first ? 'bg-indigo-500/20 border-2 border-indigo-400 text-white font-bold shadow-md hover:bg-indigo-500/30' : 'bg-slate-800/90 border border-slate-700/80 text-slate-200 hover:bg-slate-700/90' }}">
-                                                            <span class="whitespace-normal break-words text-left leading-snug flex-1 pr-2 flex items-center gap-1.5">
-                                                                @if($loop->first) <span class="text-[11px] text-amber-400 shrink-0" title="Penyebab Utama Dominan">🔥</span> @endif
-                                                                <span>{{ $c['nama'] }}</span>
-                                                            </span>
-                                                            <span class="text-[11px] font-bold text-indigo-300 bg-slate-900 px-2 py-0.5 rounded-md font-mono shrink-0 border border-indigo-800/70">{{ $c['jumlah'] }}</span>
-                                                        </button>
-                                                    </li>
-                                                @empty
-                                                    <li class="text-[11px] text-slate-500 italic text-center py-2">Tidak ada isu</li>
-                                                @endforelse
-                                            </ul>
-                                        </div>
+                                            </button>
+                                        </li>
+                                    @empty
+                                        <li class="py-5 text-center">
+                                            <i class="fas fa-check-circle text-emerald-400 text-sm mb-1 block"></i>
+                                            <span class="text-xs text-[#858796] italic">Tidak ada isu terdeteksi</span>
+                                        </li>
+                                    @endforelse
+                                </ul>
 
-                                        @if(($cData['other_count'] ?? 0) > 0)
-                                            <div class="mt-3 pt-2 border-t border-slate-800 text-center">
-                                                <button type="button" onclick='showFishboneCategoryAllModal(@json($cData), "{{ $catKey }}")' class="text-[10px] font-bold text-indigo-400 hover:text-indigo-300 hover:underline">
-                                                    + {{ $cData['other_count'] }} penyebab minor lainnya
-                                                </button>
-                                            </div>
-                                        @endif
+                                @if(($cData['other_count'] ?? 0) > 0)
+                                    <div class="mt-3 pt-2.5 border-t border-[#e3e6f0] text-center">
+                                        <button type="button" onclick='showFishboneCategoryAllModal(@json($cData), "{{ $catKey }}")' class="text-xs font-bold text-[#4e73df] hover:underline flex items-center justify-center gap-1.5 w-full py-1">
+                                            <i class="fas fa-list-ul"></i>
+                                            <span>Lihat +{{ $cData['other_count'] }} penyebab lainnya</span>
+                                        </button>
                                     </div>
-                                @endforeach
-                            </div>
-
-                        </div>
-
-                        <!-- RIGHT HEAD: FISH HEAD CARD (3 COLS) -->
-                        <div class="col-span-3 pl-2">
-                            <div class="bg-gradient-to-b from-slate-900 via-slate-900 to-sky-950 text-white p-6 rounded-3xl shadow-2xl text-center border-2 border-sky-400 relative overflow-hidden group">
-                                <div class="text-[10px] font-mono tracking-widest text-sky-400 font-bold uppercase mb-1">AKIBAT (PROBLEM HEAD)</div>
-                                <div class="text-base font-black text-white leading-snug drop-shadow-sm break-words my-2">
-                                    {{ $fishbone['efek'] }}
-                                </div>
-                                <div class="mt-4 inline-block bg-sky-950 text-sky-300 border border-sky-800 text-[11px] font-bold font-mono px-3 py-1 rounded-full shadow-inner">
-                                    Total 6M Isu: {{ array_sum(array_column($fishbone['categories'], 'total')) }}
-                                </div>
+                                @endif
                             </div>
                         </div>
-
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- MODAL LAPORAN PENELUSURAN MASALAH SPESIFIK -->
-    <div id="fishboneDetailModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full border border-slate-200 overflow-hidden transform transition-all my-8">
-            <!-- Modal Header -->
-            <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between border-b border-slate-800">
-                <div class="flex items-center gap-3">
-                    <span id="modalCategoryBadge" class="bg-sky-500 text-white text-xs font-mono font-bold px-3 py-1 rounded-full uppercase">MACHINE</span>
-                    <div>
-                        <h3 class="font-bold text-base text-white flex items-center gap-2">
-                            Laporan Penelusuran Masalah Spesifik
-                        </h3>
-                        <p class="text-xs text-sky-300">Penyebab: <strong id="modalCauseTitle" class="text-white">MC Tidak Stabil</strong></p>
-                    </div>
-                </div>
-                <button type="button" onclick="closeFishboneModal()" class="text-slate-400 hover:text-white transition p-1 rounded-lg hover:bg-slate-800">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
-            </div>
+</div>
 
-            <!-- Modal Content (Table of Specific Complaints & Actions) -->
-            <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
-                <div class="flex items-center justify-between text-xs text-slate-500 pb-2 border-b border-slate-100">
-                    <span>Daftar Transaksi Komplain & Tindakan Perbaikan Lengkap</span>
-                    <span id="modalTotalCount" class="font-bold text-slate-800 font-mono">Total 0 Komplain</span>
-                </div>
-
-                <div class="overflow-x-auto border border-slate-200 rounded-xl shadow-sm">
-                    <table class="w-full text-xs text-left">
-                        <thead class="bg-slate-50 text-slate-700 uppercase font-mono font-bold text-[11px] border-b border-slate-200">
-                            <tr>
-                                <th class="px-3 py-3">No. NCR & Customer</th>
-                                <th class="px-3 py-3">Tanggal & Area</th>
-                                <th class="px-3 py-3">Cacat Spesifik</th>
-                                <th class="px-3 py-3 text-right">Qty</th>
-                                <th class="px-3 py-3">Tindakan Perbaikan (Corrective & Preventive Action)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="modalTableBody" class="divide-y divide-slate-100 text-slate-700">
-                            <!-- Populated dynamically via JS -->
-                        </tbody>
-                    </table>
+<!-- MODAL LAPORAN PENELUSURAN MASALAH SPESIFIK (SB ADMIN 2 THEME) -->
+<div id="fishboneDetailModal"
+     class="fixed inset-0 !m-0 z-[9999] hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+     onclick="if (event.target === this) closeFishboneModal()">
+    <div class="bg-white rounded max-w-4xl w-full border border-[#e3e6f0] shadow-2xl overflow-hidden transform transition-all my-8"
+         onclick="event.stopPropagation()">
+        <!-- Modal Header SB Admin 2 -->
+        <div class="bg-[#f8f9fc] text-[#5a5c69] px-4 py-3 flex items-center justify-between border-b border-[#e3e6f0]">
+            <div class="flex items-center gap-2.5">
+                <span id="modalCategoryBadge" class="badge badge-primary uppercase font-bold text-xs px-2.5 py-1">MACHINE</span>
+                <div>
+                    <h6 class="font-bold text-sm text-[#4e73df] m-0 flex items-center gap-1.5">
+                        <i class="fas fa-list-alt"></i>
+                        <span>Laporan Penelusuran Masalah Spesifik</span>
+                    </h6>
+                    <small class="text-xs text-[#858796]">Penyebab: <strong id="modalCauseTitle" class="text-[#5a5c69]">MC Tidak Stabil</strong></small>
                 </div>
             </div>
+            <button type="button" onclick="closeFishboneModal()" class="text-[#858796] hover:text-[#5a5c69] text-2xl font-bold leading-none px-2">&times;</button>
+        </div>
 
-            <!-- Modal Footer -->
-            <div class="bg-slate-50 px-6 py-3 border-t border-slate-200 flex items-center justify-end">
-                <button type="button" onclick="closeFishboneModal()" class="px-4 py-2 bg-slate-800 text-white text-xs font-bold rounded-xl hover:bg-slate-900 transition">
-                    Tutup Laporan
-                </button>
+        <!-- Modal Content -->
+        <div class="p-4 space-y-3 max-h-[70vh] overflow-y-auto">
+            <div class="flex items-center justify-between text-xs text-[#858796] pb-2 border-b border-[#e3e6f0]">
+                <span>Daftar Transaksi Komplain &amp; Tindakan Perbaikan Lengkap</span>
+                <span id="modalTotalCount" class="badge badge-light border font-bold text-[#5a5c69]">Total 0 Komplain</span>
+            </div>
+
+            <div class="overflow-x-auto border border-[#e3e6f0] rounded">
+                <table class="w-full text-xs text-left">
+                    <thead class="bg-[#f8f9fc] text-[#5a5c69] uppercase font-bold text-[11px] border-b border-[#e3e6f0]">
+                        <tr>
+                            <th class="px-3 py-2.5">No. NCR &amp; Customer</th>
+                            <th class="px-3 py-2.5">Tanggal &amp; Area</th>
+                            <th class="px-3 py-2.5">Cacat Spesifik</th>
+                            <th class="px-3 py-2.5 text-right">Qty</th>
+                            <th class="px-3 py-2.5">Tindakan Perbaikan (CAPA)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modalTableBody" class="divide-y divide-[#e3e6f0] text-[#5a5c69]">
+                        <!-- Populated dynamically via JS -->
+                    </tbody>
+                </table>
             </div>
         </div>
-    </div>
 
+        <!-- Modal Footer -->
+        <div class="bg-[#f8f9fc] px-4 py-2.5 border-t border-[#e3e6f0] flex items-center justify-end">
+            <button type="button" onclick="closeFishboneModal()" class="btn btn-secondary btn-sm">
+                Tutup Laporan
+            </button>
+        </div>
+    </div>
 </div>
 
 @push('scripts')
@@ -417,31 +443,31 @@ function showFishboneModal(causeData, categoryName) {
     total.innerText = `Total ${complaints.length} Kasus Komplain`;
 
     if (complaints.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-6 text-center text-slate-400 italic">Tidak ada rincian data komplain untuk penyebab ini.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-6 text-center text-[#858796] italic">Tidak ada rincian data komplain untuk penyebab ini.</td></tr>`;
     } else {
         tbody.innerHTML = complaints.map(c => `
-            <tr class="hover:bg-sky-50/50 transition">
-                <td class="px-3 py-3 font-medium">
-                    <div class="font-bold text-slate-900">${c.no_customer || '-'}</div>
-                    <div class="text-sky-600 font-semibold">${c.nama_customer || '-'}</div>
+            <tr class="hover:bg-slate-50 transition">
+                <td class="px-3 py-2.5 font-medium">
+                    <div class="font-bold text-[#4e73df]">${c.no_customer || '-'}</div>
+                    <div class="text-[#5a5c69] font-semibold">${c.nama_customer || '-'}</div>
                 </td>
-                <td class="px-3 py-3">
-                    <div>📅 ${c.tanggal_complain || '-'}</div>
-                    <div class="text-[11px] text-slate-500 font-mono">📍 ${c.area || '-'}</div>
+                <td class="px-3 py-2.5 text-[#5a5c69]">
+                    <div class="flex items-center gap-1.5"><i class="fas fa-calendar-alt text-[#858796]"></i> <span>${c.tanggal_complain || '-'}</span></div>
+                    <div class="text-[11px] text-[#858796] flex items-center gap-1.5 mt-0.5"><i class="fas fa-map-marker-alt text-[#858796]"></i> <span>${c.area || '-'}</span></div>
                 </td>
-                <td class="px-3 py-3">
-                    <span class="inline-block bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded font-mono">${c.jenis_ketidaksesuaian || '-'}</span>
-                    <div class="text-slate-600 mt-1 font-medium">${c.detail_ketidaksesuaian || '-'}</div>
+                <td class="px-3 py-2.5">
+                    <span class="badge badge-warning text-dark text-[10px] font-bold">${c.jenis_ketidaksesuaian || '-'}</span>
+                    <div class="text-[#5a5c69] mt-1 font-medium">${c.detail_ketidaksesuaian || '-'}</div>
                 </td>
-                <td class="px-3 py-3 text-right font-mono font-bold text-slate-900">
+                <td class="px-3 py-2.5 text-right font-bold text-[#5a5c69]">
                     ${c.qty ? c.qty.toLocaleString() : '-'}
                 </td>
-                <td class="px-3 py-3 space-y-1 text-[11px]">
-                    <div class="bg-emerald-50 text-emerald-900 p-2 rounded border border-emerald-200/60">
-                        <strong class="text-emerald-700">Corrective:</strong> ${c.corrective_action}
+                <td class="px-3 py-2.5 space-y-1 text-[11px]">
+                    <div class="bg-emerald-50 text-emerald-900 p-2 rounded border border-emerald-200">
+                        <strong class="text-emerald-700">Corrective:</strong> ${c.corrective_action || '-'}
                     </div>
-                    <div class="bg-blue-50 text-blue-900 p-2 rounded border border-blue-200/60">
-                        <strong class="text-blue-700">Preventive:</strong> ${c.preventive_action}
+                    <div class="bg-blue-50 text-blue-900 p-2 rounded border border-blue-200">
+                        <strong class="text-blue-700">Preventive:</strong> ${c.preventive_action || '-'}
                     </div>
                 </td>
             </tr>
@@ -449,6 +475,7 @@ function showFishboneModal(causeData, categoryName) {
     }
 
     modal.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
 }
 
 function showFishboneCategoryAllModal(cData, categoryName) {
@@ -466,8 +493,28 @@ function showFishboneCategoryAllModal(cData, categoryName) {
 
 function closeFishboneModal() {
     const modal = document.getElementById('fishboneDetailModal');
-    if (modal) modal.classList.add('hidden');
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
 }
+
+// Tutup modal otomatis saat klik area latar belakang (luar dialog) atau tekan Escape
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('fishboneDetailModal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeFishboneModal();
+            }
+        });
+    }
+});
+window.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeFishboneModal();
+    }
+});
 
 const pareto = @json($pareto);
 const paretoDetail = @json($paretoDetail);
@@ -484,14 +531,19 @@ const PALET = ['#0ea5e9','#6366f1','#10b981','#f59e0b','#ef4444','#ec4899','#14b
 const paretoCanvas = document.getElementById('paretoChart');
 if (paretoCanvas && pareto.labels && pareto.labels.length) {
     new Chart(paretoCanvas, {
+        type: 'bar',
         data: { labels: pareto.labels, datasets: [
-            { type:'bar', label:'Jumlah Kasus', data: pareto.values, backgroundColor:'#0ea5e9', yAxisID:'y', order:2, borderRadius: 6 },
-            { type:'line', label:'Kumulatif %', data: pareto.cumulative, borderColor:'#ef4444', backgroundColor:'#ef4444', yAxisID:'y1', tension:.3, order:1, pointRadius: 3 }
+            { type:'bar', label:'Jumlah Kasus', data: pareto.values, backgroundColor:'#4e73df', yAxisID:'y', order:2, borderRadius: 4, barPercentage: 0.6 },
+            { type:'line', label:'Kumulatif %', data: pareto.cumulative, borderColor:'#e74a3b', backgroundColor:'#e74a3b', yAxisID:'y1', tension:.3, order:1, pointRadius: 4, pointHoverRadius: 6 }
         ]},
         options: { responsive:true, maintainAspectRatio:false,
-            plugins:{ legend:{ labels:{ boxWidth:12, font:{size:11} } } },
-            scales:{ x:{ ticks:{ font:{size:9}, maxRotation:60, minRotation:45 } },
-                y:{ beginAtZero:true }, y1:{ beginAtZero:true, max:100, position:'right', grid:{drawOnChartArea:false} } } }
+            plugins:{ legend:{ labels:{ boxWidth:12, font:{size:11, family:"Nunito, sans-serif", weight:'bold'} } } },
+            scales:{ 
+                x:{ grid:{ color:'#eaecf4' }, ticks:{ font:{size:11, family:"Nunito, sans-serif"}, maxRotation:45, minRotation:0 } },
+                y:{ beginAtZero:true, grid:{ color:'#eaecf4' }, ticks:{ font:{size:11, family:"Nunito, sans-serif"} }, title:{ display:true, text:'Jumlah Kasus', font:{size:11, weight:'bold'} } }, 
+                y1:{ beginAtZero:true, max:100, position:'right', grid:{drawOnChartArea:false}, ticks:{ font:{size:11, family:"Nunito, sans-serif"}, callback: v => v + '%' }, title:{ display:true, text:'Persentase Kumulatif', font:{size:11, weight:'bold'} } } 
+            } 
+        }
     });
 }
 
@@ -499,14 +551,19 @@ if (paretoCanvas && pareto.labels && pareto.labels.length) {
 const paretoDetailCanvas = document.getElementById('paretoDetailChart');
 if (paretoDetailCanvas && paretoDetail.labels && paretoDetail.labels.length) {
     new Chart(paretoDetailCanvas, {
+        type: 'bar',
         data: { labels: paretoDetail.labels, datasets: [
-            { type:'bar', label:'Jumlah', data: paretoDetail.values, backgroundColor:'#f59e0b', yAxisID:'y', order:2, borderRadius: 6 },
-            { type:'line', label:'Kumulatif %', data: paretoDetail.cumulative, borderColor:'#ef4444', backgroundColor:'#ef4444', yAxisID:'y1', tension:.3, order:1, pointRadius: 3 }
+            { type:'bar', label:'Jumlah Kasus', data: paretoDetail.values, backgroundColor:'#f6c23e', yAxisID:'y', order:2, borderRadius: 4, barPercentage: 0.6 },
+            { type:'line', label:'Kumulatif %', data: paretoDetail.cumulative, borderColor:'#e74a3b', backgroundColor:'#e74a3b', yAxisID:'y1', tension:.3, order:1, pointRadius: 4, pointHoverRadius: 6 }
         ]},
         options: { responsive:true, maintainAspectRatio:false,
-            plugins:{ legend:{ labels:{ boxWidth:12, font:{size:11} } } },
-            scales:{ x:{ ticks:{ font:{size:9}, maxRotation:60, minRotation:45 } },
-                y:{ beginAtZero:true }, y1:{ beginAtZero:true, max:100, position:'right', grid:{drawOnChartArea:false} } } }
+            plugins:{ legend:{ labels:{ boxWidth:12, font:{size:11, family:"Nunito, sans-serif", weight:'bold'} } } },
+            scales:{ 
+                x:{ grid:{ color:'#eaecf4' }, ticks:{ font:{size:11, family:"Nunito, sans-serif"}, maxRotation:45, minRotation:0 } },
+                y:{ beginAtZero:true, grid:{ color:'#eaecf4' }, ticks:{ font:{size:11, family:"Nunito, sans-serif"} }, title:{ display:true, text:'Jumlah Kasus', font:{size:11, weight:'bold'} } }, 
+                y1:{ beginAtZero:true, max:100, position:'right', grid:{drawOnChartArea:false}, ticks:{ font:{size:11, family:"Nunito, sans-serif"}, callback: v => v + '%' }, title:{ display:true, text:'Persentase Kumulatif', font:{size:11, weight:'bold'} } } 
+            } 
+        }
     });
 }
 
@@ -514,14 +571,19 @@ if (paretoDetailCanvas && paretoDetail.labels && paretoDetail.labels.length) {
 const paretoCustCanvas = document.getElementById('paretoCustChart');
 if (paretoCustCanvas && paretoCust.labels && paretoCust.labels.length) {
     new Chart(paretoCustCanvas, {
+        type: 'bar',
         data: { labels: paretoCust.labels, datasets: [
-            { type:'bar', label:'Jumlah Complaint', data: paretoCust.values, backgroundColor:'#6366f1', yAxisID:'y', order:2, borderRadius: 6 },
-            { type:'line', label:'Kumulatif %', data: paretoCust.cumulative, borderColor:'#ef4444', backgroundColor:'#ef4444', yAxisID:'y1', tension:.3, order:1, pointRadius: 3 }
+            { type:'bar', label:'Jumlah Komplain', data: paretoCust.values, backgroundColor:'#36b9cc', yAxisID:'y', order:2, borderRadius: 4, barPercentage: 0.6 },
+            { type:'line', label:'Kumulatif %', data: paretoCust.cumulative, borderColor:'#e74a3b', backgroundColor:'#e74a3b', yAxisID:'y1', tension:.3, order:1, pointRadius: 4, pointHoverRadius: 6 }
         ]},
         options: { responsive:true, maintainAspectRatio:false,
-            plugins:{ legend:{ labels:{ boxWidth:12, font:{size:11} } } },
-            scales:{ x:{ ticks:{ font:{size:9}, maxRotation:60, minRotation:45 } },
-                y:{ beginAtZero:true }, y1:{ beginAtZero:true, max:100, position:'right', grid:{drawOnChartArea:false} } } }
+            plugins:{ legend:{ labels:{ boxWidth:12, font:{size:11, family:"Nunito, sans-serif", weight:'bold'} } } },
+            scales:{ 
+                x:{ grid:{ color:'#eaecf4' }, ticks:{ font:{size:11, family:"Nunito, sans-serif"}, maxRotation:45, minRotation:0 } },
+                y:{ beginAtZero:true, grid:{ color:'#eaecf4' }, ticks:{ font:{size:11, family:"Nunito, sans-serif"} }, title:{ display:true, text:'Jumlah Kasus Komplain', font:{size:11, weight:'bold'} } }, 
+                y1:{ beginAtZero:true, max:100, position:'right', grid:{drawOnChartArea:false}, ticks:{ font:{size:11, family:"Nunito, sans-serif"}, callback: v => v + '%' }, title:{ display:true, text:'Persentase Kumulatif', font:{size:11, weight:'bold'} } } 
+            } 
+        }
     });
 }
 
@@ -529,14 +591,19 @@ if (paretoCustCanvas && paretoCust.labels && paretoCust.labels.length) {
 const paretoCauseCanvas = document.getElementById('paretoCauseChart');
 if (paretoCauseCanvas && paretoCause.labels && paretoCause.labels.length) {
     new Chart(paretoCauseCanvas, {
+        type: 'bar',
         data: { labels: paretoCause.labels, datasets: [
-            { type:'bar', label:'Jumlah', data: paretoCause.values, backgroundColor:'#10b981', yAxisID:'y', order:2, borderRadius: 6 },
-            { type:'line', label:'Kumulatif %', data: paretoCause.cumulative, borderColor:'#ef4444', backgroundColor:'#ef4444', yAxisID:'y1', tension:.3, order:1, pointRadius: 3 }
+            { type:'bar', label:'Jumlah Kemunculan', data: paretoCause.values, backgroundColor:'#1cc88a', yAxisID:'y', order:2, borderRadius: 4, barPercentage: 0.6 },
+            { type:'line', label:'Kumulatif %', data: paretoCause.cumulative, borderColor:'#e74a3b', backgroundColor:'#e74a3b', yAxisID:'y1', tension:.3, order:1, pointRadius: 4, pointHoverRadius: 6 }
         ]},
         options: { responsive:true, maintainAspectRatio:false,
-            plugins:{ legend:{ labels:{ boxWidth:12, font:{size:11} } } },
-            scales:{ x:{ ticks:{ font:{size:9}, maxRotation:60, minRotation:45 } },
-                y:{ beginAtZero:true }, y1:{ beginAtZero:true, max:100, position:'right', grid:{drawOnChartArea:false} } } }
+            plugins:{ legend:{ labels:{ boxWidth:12, font:{size:11, family:"Nunito, sans-serif", weight:'bold'} } } },
+            scales:{ 
+                x:{ grid:{ color:'#eaecf4' }, ticks:{ font:{size:11, family:"Nunito, sans-serif"}, maxRotation:45, minRotation:0 } },
+                y:{ beginAtZero:true, grid:{ color:'#eaecf4' }, ticks:{ font:{size:11, family:"Nunito, sans-serif"} }, title:{ display:true, text:'Jumlah Kasus', font:{size:11, weight:'bold'} } }, 
+                y1:{ beginAtZero:true, max:100, position:'right', grid:{drawOnChartArea:false}, ticks:{ font:{size:11, family:"Nunito, sans-serif"}, callback: v => v + '%' }, title:{ display:true, text:'Persentase Kumulatif', font:{size:11, weight:'bold'} } } 
+            } 
+        }
     });
 }
 

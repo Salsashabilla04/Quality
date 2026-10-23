@@ -7,18 +7,16 @@
 
     <title>Login · Monitoring Complaint & NCR</title>
 
-    <!-- Google Font -->
+    <!-- Google Font: Nunito (SB Admin 2) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
         * {
-            font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+            font-family: 'Nunito', ui-sans-serif, system-ui, sans-serif;
             box-sizing: border-box;
         }
 
@@ -88,12 +86,15 @@
         }
 
         .brand-logo {
-            width: 150px;
-            height: 150px;
+            width: 155px;
+            height: 155px;
 
             object-fit: contain;
+            transform: translateY(-25px);
+           
         }
 
+        
         .brand-text {
             line-height: 1.1;
         }
@@ -278,34 +279,37 @@
 
         .btn-login {
             width: 100%;
-            height: 52px;
+            height: 50px;
 
             border: none;
-            border-radius: 28px;
+            border-radius: 10rem;
 
-            background: #1F3768;
+            background: #4e73df;
+            background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
 
             color: #ffffff;
 
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 700;
+            letter-spacing: 0.025em;
 
             cursor: pointer;
 
-            transition: all .2s ease;
+            transition: all .15s ease-in-out;
+            box-shadow: 0 0.25rem 0.5rem rgba(78, 115, 223, 0.25);
         }
 
         .btn-login:hover {
-            background: #172B52;
+            background-image: linear-gradient(180deg, #2e59d9 10%, #1a3cb0 100%);
 
             transform: translateY(-1px);
 
-            box-shadow:
-                0 8px 20px rgba(40, 75, 179, 0.2);
+            box-shadow: 0 0.5rem 1rem rgba(78, 115, 223, 0.35);
         }
 
         .btn-login:active {
             transform: translateY(0);
+            box-shadow: 0 0.15rem 0.25rem rgba(78, 115, 223, 0.2);
         }
 
         /* =========================================
@@ -394,10 +398,6 @@
 
         <div class="brand">
 
-            <!--
-                Kalau punya logo perusahaan,
-                ganti src ini.
-            -->
 
             <img
                 src="/images/logowb.png"
@@ -536,7 +536,6 @@
                         <input
                             type="password"
                             name="password"
-                            value="password"
                             required
                             placeholder="••••••••"
                             class="input-field"
@@ -573,7 +572,7 @@
                     type="submit"
                     class="btn-login"
                 >
-                    Masuk ke Sistem
+                    Login
                 </button>
 
             </form>

@@ -19,7 +19,7 @@ class ExportController extends Controller
     // ============== EXCEL: HASIL APRIORI ==============
     public function aprioriExcel(): StreamedResponse
     {
-        $service = (new AprioriService(0.05, 0.5))->buildTransactions(ComplaintItem::all());
+        $service = (new AprioriService(0.015, 0.5))->buildTransactions(ComplaintItem::all());
         $frequent = $service->frequentItemsets();
         $rules = $service->associationRules($frequent);
 
@@ -43,19 +43,36 @@ class ExportController extends Controller
         // Sheet 2: Association Rules
         $s2 = $ss->createSheet();
         $s2->setTitle('Association Rules');
-        $this->headerRow($s2, ['Antecedent (Jika)', 'Consequent (Maka)', 'Support', 'Confidence', 'Lift', 'Kekuatan', 'Interpretasi']);
+        $this->headerRow($s2, [
+            'Antecedent (Jika)',
+            'Consequent (Maka)',
+            'Jumlah Kejadian',
+            'Support',
+            'Confidence',
+            'Lift',
+            'Kekuatan Hubungan',
+            'Kategori Prioritas',
+            'Rekomendasi Tindak Lanjut',
+            'Interpretasi',
+        ]);
         $r = 2;
         foreach ($rules as $rule) {
             $s2->fromArray([
-                $rule['antecedents'], $rule['consequents'],
+                $rule['antecedents'],
+                $rule['consequents'],
+                $rule['count'] ?? '-',
                 round($rule['support'] * 100, 2) . '%',
                 round($rule['confidence'] * 100, 2) . '%',
-                round($rule['lift'], 2), $rule['kekuatan'], $rule['interpretasi'],
+                round($rule['lift'], 2),
+                $rule['kekuatan'],
+                $rule['prioritas'] ?? '-',
+                $rule['tindak_lanjut'] ?? '-',
+                $rule['interpretasi'],
             ], null, "A{$r}");
             $r++;
         }
-        foreach (['A', 'B', 'C', 'D', 'E', 'F'] as $col) $s2->getColumnDimension($col)->setAutoSize(true);
-        $s2->getColumnDimension('G')->setWidth(70);
+        foreach (['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'] as $col) $s2->getColumnDimension($col)->setAutoSize(true);
+        $s2->getColumnDimension('J')->setWidth(70);
 
         return $this->streamXlsx($ss, 'hasil_apriori_' . date('Ymd') . '.xlsx');
     }
@@ -102,9 +119,10 @@ class ExportController extends Controller
         }
 
         if ($request->boolean('anomali')) {
-            $query->whereNotNull('tanggal_complain')
-                  ->whereNotNull('tanggal_produksi')
-                  ->whereColumn('tanggal_complain', '<', 'tanggal_produksi');
+            // Definisi anomali terpusat di scope Complaint::anomali()
+            // (lead_time > 100 hari ATAU tanggal complain < tanggal produksi),
+            // sama seperti yang dipakai daftar complaint.
+            $query->anomali();
         }
 
         return $query;
@@ -150,25 +168,51 @@ class ExportController extends Controller
         return $this->streamXlsx($ss, 'data_complaint' . ($filenameSuffix ?: '_' . date('Ymd')) . '.xlsx');
     }
 
-    // ============== PDF: LAPORAN ANALISIS (FILTERABLE) ==============
+    // ============== PDF: LAPORAN ANALISIS LENGKAP (7 TOOLS QC + APRIORI + KPI) ==============
     public function laporanPdf(Request $request)
     {
         $data = $this->buildFilteredQuery($request)->get();
         $tools = SevenToolsService::make($data);
-        $service = (new AprioriService(0.05, 0.5))->buildTransactions(ComplaintItem::whereIn('complaint_id', $data->pluck('id'))->get());
+        
+        $items = ComplaintItem::whereIn('complaint_id', $data->pluck('id'))->get();
+        $service = (new AprioriService(0.015, 0.5))->buildTransactions($items);
+
+        $namaBulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+        $filterInfo = [
+            'tahun'    => $request->input('tahun'),
+            'bulan'    => $request->filled('bulan') ? ($namaBulan[$request->integer('bulan')] ?? 'Bulan ' . $request->input('bulan')) : null,
+            'customer' => $request->input('customer'),
+            'status'   => $request->input('status'),
+            'q'        => $request->input('q'),
+        ];
 
         $pdf = Pdf::loadView('exports.laporan', [
-            'kpi'        => $tools->kpi(),
-            'pareto'     => $tools->pareto(),
-            'paretoCause'=> $tools->pareto('penyebab'),
-            'fishbone'   => $tools->fishbone(),
-            'frequent'   => $service->frequentItemsets(),
-            'rules'      => $service->associationRules(),
-            'totalTrx'   => $service->transactionCount(),
-            'tanggal'    => now()->format('d F Y'),
+            'tanggal'        => now()->format('d F Y'),
+            'filterInfo'     => $filterInfo,
+            'totalData'      => $data->count(),
+
+            // 1. KPI Eksekutif (Tanpa Lead Time sesuai request)
+            'kpi'            => $tools->kpi(),
+
+            // 2. Analisis Pareto: Jenis Ketidaksesuaian, Detail Ketidaksesuaian & Customer
+            'pareto'         => $tools->pareto('jenis_ketidaksesuaian'),
+            'paretoDetail'   => $tools->pareto('detail_ketidaksesuaian'),
+            'paretoCustomer' => $tools->paretoCustomer(),
+
+            // 3. Seluruh Hasil Analisis Algoritma Apriori
+            'frequent'       => $service->frequentItemsets(),
+            'rules'          => $service->associationRules(),
+            'totalTrx'       => $service->transactionCount(),
+            'minSupport'     => 1.5,
+            'minConfidence'  => 50.0,
         ])->setPaper('a4', 'portrait');
 
-        return $pdf->download('laporan_analisis_' . date('Ymd') . '.pdf');
+        $filenameSuffix = '';
+        if ($request->filled('tahun')) $filenameSuffix .= '_' . $request->input('tahun');
+        if ($request->filled('bulan')) $filenameSuffix .= '_bln' . $request->input('bulan');
+
+        return $pdf->download('laporan_analisis_qc' . ($filenameSuffix ?: '_' . date('Ymd')) . '.pdf');
     }
 
     // ============== PDF: SURAT NCR per complaint (hal.1 form + hal.2 fishbone) ==============

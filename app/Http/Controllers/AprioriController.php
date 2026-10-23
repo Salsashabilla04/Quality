@@ -11,9 +11,9 @@ class AprioriController extends Controller
     public function index(Request $request)
     {
         // parameter bisa diatur dari form (persen)
-        $minSupport    = (float) $request->input('min_support', 5) / 100;
+        $minSupport    = (float) $request->input('min_support', 1.5) / 100;
         $minConfidence = (float) $request->input('min_confidence', 50) / 100;
-        $minSupport    = min(max($minSupport, 0.01), 1);
+        $minSupport    = min(max($minSupport, 0.005), 1);
         $minConfidence = min(max($minConfidence, 0.01), 1);
 
         // Filter tanggal
