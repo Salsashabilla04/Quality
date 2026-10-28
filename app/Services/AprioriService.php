@@ -24,6 +24,9 @@ class AprioriService
     /** @var Collection|null simpan raw items untuk extract detail breakdown */
     protected ?Collection $rawItems = null;
 
+    /** @var array{ket: array<string, array>, pen: array<string, array>}|null indeks item per nilai (untuk breakdown cepat) */
+    protected ?array $itemIndex = null;
+
     /**
      * Cache hasil perhitungan Apriori menggunakan Laravel Cache (Memory/Redis).
      * Mencegah pemrosesan ulang (on-the-fly) yang berat jika data komplain sangat besar.
@@ -32,7 +35,7 @@ class AprioriService
      */
     public static function getCachedResult(float $minSupport = 0.015, float $minConfidence = 0.5): array
     {
-        $key = "apriori_results_v4_{$minSupport}_{$minConfidence}";
+        $key = 'apriori_results_v4_' . self::cacheVersion() . "_{$minSupport}_{$minConfidence}";
 
         return \Illuminate\Support\Facades\Cache::remember($key, now()->addHours(2), function () use ($minSupport, $minConfidence) {
             $service = (new self($minSupport, $minConfidence))->buildTransactions();
@@ -51,10 +54,16 @@ class AprioriService
     /**
      * Hapus Cache Apriori otomatis ketika ada data komplain baru ditambah/diperbarui/dihapus.
      */
-    public static function clearCache(float $minSupport = 0.015, float $minConfidence = 0.5): void
+    public static function clearCache(?float $minSupport = null, ?float $minConfidence = null): void
     {
-        // Kunci harus sama dengan yang dipakai di getCachedResult()
-        \Illuminate\Support\Facades\Cache::forget("apriori_results_v4_{$minSupport}_{$minConfidence}");
+        // Naikkan versi global => semua kombinasi parameter min support/confidence ikut tidak berlaku.
+        // (Parameter dipertahankan demi kompatibilitas pemanggil lama.)
+        \Illuminate\Support\Facades\Cache::forever('apriori_cache_version', self::cacheVersion() + 1);
+    }
+
+    protected static function cacheVersion(): int
+    {
+        return (int) \Illuminate\Support\Facades\Cache::get('apriori_cache_version', 1);
     }
 
     public function __construct(float $minSupport = 0.015, float $minConfidence = 0.5)
@@ -72,6 +81,7 @@ class AprioriService
     public function buildTransactions(?Collection $items = null): self
     {
         $this->rawItems = $items ?? ComplaintItem::all();
+        $this->itemIndex = null;
         $grouped = $this->rawItems->groupBy('complaint_id');
 
         $this->transactions = [];
@@ -348,23 +358,41 @@ class AprioriService
             return ['detail_ketidaksesuaian' => [], 'detail_penyebab' => [], 'total_matching' => 0];
         }
 
-        $matching = $this->rawItems->filter(function ($item) use ($antecedent, $consequent) {
-            $ket = trim((string) ($item->jenis_ketidaksesuaian ?? ''));
-            $pen = trim((string) ($item->penyebab ?? ''));
-
-            $aMatch = ($ket !== '' && (str_contains($antecedent, $ket) || str_contains($consequent, $ket)));
-            $pMatch = ($pen !== '' && (str_contains($antecedent, $pen) || str_contains($consequent, $pen)));
-
-            return $aMatch && $pMatch;
-        });
-
-        if ($matching->isEmpty()) {
-            $matching = $this->rawItems->filter(function ($item) use ($antecedent, $consequent) {
-                $ket = trim((string) ($item->jenis_ketidaksesuaian ?? ''));
-                $pen = trim((string) ($item->penyebab ?? ''));
-                return ($ket !== '' && str_contains($antecedent, $ket)) || ($pen !== '' && str_contains($consequent, $pen));
-            });
+        // Indeks item per nilai (dibangun sekali, dipakai ulang oleh semua rule)
+        if ($this->itemIndex === null) {
+            $this->itemIndex = ['ket' => [], 'pen' => []];
+            foreach ($this->rawItems as $item) {
+                $k = trim((string) ($item->jenis_ketidaksesuaian ?? ''));
+                $p = trim((string) ($item->penyebab ?? ''));
+                if ($k !== '') $this->itemIndex['ket'][$k][] = $item;
+                if ($p !== '') $this->itemIndex['pen'][$p][] = $item;
+            }
         }
+
+        $pair = [trim($antecedent), trim($consequent)];
+
+        // Prioritas 1: item yang memuat KEDUA sisi aturan (kecocokan persis, bukan substring)
+        $matching = [];
+        foreach ($pair as $v) {
+            foreach ($this->itemIndex['ket'][$v] ?? [] as $item) {
+                if (in_array(trim((string) ($item->penyebab ?? '')), $pair, true)) {
+                    $matching[spl_object_id($item)] = $item;
+                }
+            }
+        }
+
+        // Fallback: item yang memuat salah satu sisi (kasus ketidaksesuaian & penyebab ada di baris berbeda)
+        if (empty($matching)) {
+            foreach ($pair as $v) {
+                foreach ($this->itemIndex['ket'][$v] ?? [] as $item) {
+                    $matching[spl_object_id($item)] = $item;
+                }
+                foreach ($this->itemIndex['pen'][$v] ?? [] as $item) {
+                    $matching[spl_object_id($item)] = $item;
+                }
+            }
+        }
+        $matching = collect(array_values($matching));
 
         $totalMatching = $matching->count();
         $divisor = $totalMatching > 0 ? $totalMatching : 1;

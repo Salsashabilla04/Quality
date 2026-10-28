@@ -9,6 +9,10 @@ class CustomerController extends Controller
 {
     public function index(Request $request)
     {
+        if (auth()->user()?->role === 'supervisor') {
+            abort(403, 'Akses Ditolak: Fitur Daftar Customer hanya dapat diakses oleh Staff QA.');
+        }
+
         $q = $request->input('q');
         $tahun = $request->integer('tahun');
         $bulan = $request->integer('bulan');
@@ -36,7 +40,7 @@ class CustomerController extends Controller
         // Daftar tahun untuk dropdown
         $years = Complaint::query()
             ->whereNotNull('tanggal_complain')
-            ->selectRaw('YEAR(tanggal_complain) as y')
+            ->selectRaw(\App\Models\Complaint::sqlDatePart('YEAR', 'tanggal_complain') . ' as y')
             ->distinct()
             ->orderBy('y')
             ->pluck('y')

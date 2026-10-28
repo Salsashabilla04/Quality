@@ -3,64 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Complaint;
-use App\Models\ComplaintItem;
 use App\Services\AprioriService;
 use App\Services\SevenToolsService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $role = auth()->user()->role;
-
-        // ── Supervisor / Admin → dashboard khusus manajerial ──────────────
-        if (in_array($role, ['supervisor', 'admin'])) {
-            return $this->supervisorDashboard($request);
-        }
-
-        // ── Staff QA → dashboard operasional (existing) ───────────────────
-        $data  = Complaint::with('items')->get();
-        $tools = SevenToolsService::make($data);
-
-        $bundle = SevenToolsService::paretoBundle(
-            $data,
-            $request->integer('pareto_year') ?: null,
-            $request->integer('pareto_month') ?: null,
-        );
-
-        $bundleDetail = SevenToolsService::paretoBundleDetail(
-            $data,
-            $request->integer('pareto_detail_year') ?: null,
-            $request->integer('pareto_detail_month') ?: null,
-        );
-
-        $bundleCust = SevenToolsService::paretoBundleCustomer(
-            $data,
-            $request->integer('pareto_cust_year') ?: null,
-            $request->integer('pareto_cust_month') ?: null,
-        );
-
-        $cachedApriori = AprioriService::getCachedResult(0.015, 0.5);
-        $rules = $cachedApriori['rules'];
-
-        $trendType = $request->input('trend_type', 'bulan');
-
-        return view('dashboard', [
-            'kpi'                => $tools->kpi(),
-            'pareto'             => $bundle['pareto'],
-            'paretoFilter'       => $bundle['filter'],
-            'paretoDetail'       => $bundleDetail['pareto'],
-            'paretoDetailFilter' => $bundleDetail['filter'],
-            'paretoCust'         => $bundleCust['pareto'],
-            'paretoCustFilter'   => $bundleCust['filter'],
-            'trend'              => $tools->trendChart($trendType),
-            'trendType'          => $trendType,
-            'strat'              => $tools->stratifikasi(),
-            'topRules'           => array_slice($rules, 0, 5),
-            'totalTrx'           => $cachedApriori['totalTrx'],
-        ]);
+        // Seluruh role (QA, Supervisor, Admin) menggunakan dashboard komprehensif terpadu
+        return $this->supervisorDashboard($request);
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -131,7 +83,7 @@ class DashboardController extends Controller
 
         // ── Laporan Visual (Rentang tahun maksimal 10 tahun) ──
         $dbYears = Complaint::whereNotNull('tanggal_complain')
-            ->selectRaw('YEAR(tanggal_complain) as y')
+            ->selectRaw(\App\Models\Complaint::sqlDatePart('YEAR', 'tanggal_complain') . ' as y')
             ->distinct()
             ->pluck('y')
             ->map(fn($y) => (int)$y)
@@ -201,14 +153,14 @@ class DashboardController extends Controller
         // ── Trend Tahunan (rentang >1 tahun, maks 10 batang) ────────────────
         $rangeYears  = range($fromYear, $toYear);
         $yearlyRaw   = (clone $baseQ)
-            ->selectRaw('YEAR(tanggal_complain) as tahun_no, COUNT(*) as total')
+            ->selectRaw(\App\Models\Complaint::sqlDatePart('YEAR', 'tanggal_complain') . ' as tahun_no, COUNT(*) as total')
             ->groupBy('tahun_no')
             ->pluck('total', 'tahun_no');
         $trendYearly = array_map(fn($y) => (int) ($yearlyRaw[$y] ?? 0), $rangeYears);
 
         // ── Bulan tertinggi dalam periode ───────────────────────────────────
         $peak = (clone $baseQ)
-            ->selectRaw('YEAR(tanggal_complain) as y, MONTH(tanggal_complain) as m, COUNT(*) as total')
+            ->selectRaw(\App\Models\Complaint::sqlDatePart('YEAR', 'tanggal_complain') . ' as y, ' . \App\Models\Complaint::sqlDatePart('MONTH', 'tanggal_complain') . ' as m, COUNT(*) as total')
             ->groupBy('y', 'm')
             ->orderByDesc('total')
             ->first();

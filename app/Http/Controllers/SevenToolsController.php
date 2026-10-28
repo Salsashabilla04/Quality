@@ -13,11 +13,14 @@ class SevenToolsController extends Controller
         $data = Complaint::with('items')->get();
         $tools = SevenToolsService::make($data);
 
-        // --- CheckSheet mode ---
+        // --- CheckSheet mode & filter tahun ---
         $csMode = $request->input('cs_mode', 'jenis_ketidaksesuaian');
         if (!in_array($csMode, ['jenis_ketidaksesuaian', 'detail_ketidaksesuaian'])) {
             $csMode = 'jenis_ketidaksesuaian';
         }
+        $csYear = $request->integer('cs_year') ?: null;
+        $csYears = $data->pluck('tanggal_complain')->filter()
+            ->map(fn ($d) => (int) $d->format('Y'))->unique()->sortDesc()->values()->all();
 
         // --- Pareto Defect filters (periode) ---
         $bundle = SevenToolsService::paretoBundle(
@@ -53,8 +56,10 @@ class SevenToolsController extends Controller
         $fishboneLimit = $request->integer('fishbone_limit', 3);
 
         return view('seven-tools', [
-            'checkSheet'        => $tools->checkSheetByField($csMode),
+            'checkSheet'        => $tools->checkSheetByField($csMode, $csYear),
             'csMode'            => $csMode,
+            'csYear'            => $csYear,
+            'csYears'           => $csYears,
             'pareto'            => $bundle['pareto'],
             'paretoFilter'      => $bundle['filter'],
             'paretoDetail'      => $bundleDetail['pareto'],

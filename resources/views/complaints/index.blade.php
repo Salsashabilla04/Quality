@@ -323,9 +323,9 @@
                                             <span>Validasi SPV</span>
                                         </button>
                                     @else
-                                        <span class="btn btn-light btn-sm w-[150px] border border-blue-200 text-blue-700 font-bold"
+                                        <span class="inline-flex items-center justify-center gap-1.5 w-[140px] py-1.5 px-3 rounded-md text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-200 cursor-default select-none shadow-none"
                                               title="Menunggu Validasi CAPA dari Supervisor QC">
-                                            <i class="fas fa-clock text-blue-500"></i>
+                                            <i class="fas fa-clock text-sky-500"></i>
                                             <span>Sedang Diajukan</span>
                                         </span>
                                     @endcan
@@ -339,7 +339,7 @@
                                         </a>
                                     @else
                                         <button type="button"
-                                            class="btn-validasi-spv btn btn-outline-danger btn-sm w-[150px] cursor-pointer"
+                                            class="btn-validasi-spv btn btn-danger btn-sm w-[150px] shadow-sm cursor-pointer"
                                             title="Klik untuk meninjau ulang status revisi"
                                             data-id="{{ $c->id }}"
                                             data-no="{{ $c->no_customer }}"
@@ -376,8 +376,9 @@
                                             </button>
                                         </form>
                                     @else
-                                        <span class="btn btn-light btn-sm w-[150px] border border-gray-200 text-gray-500 font-bold">
-                                            <i class="fas fa-file text-gray-400"></i>
+                                        <span class="inline-flex items-center justify-center gap-1.5 w-[140px] py-1.5 px-3 rounded-md text-xs font-semibold bg-slate-100 text-slate-400 border border-slate-200 cursor-default select-none shadow-none"
+                                              title="Kasus masih dalam proses investigasi oleh Staff QA dan belum diajukan">
+                                            <i class="fas fa-file text-slate-300"></i>
                                             <span>Draft (Open)</span>
                                         </span>
                                     @endcan

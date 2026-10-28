@@ -30,8 +30,10 @@
         {{-- Mode CheckSheet Filter Bar --}}
         <div class="px-4 py-2.5 border-b border-[#e3e6f0] bg-[#f8f9fc] flex flex-wrap items-center justify-between gap-3 text-xs">
             <form method="GET" action="{{ url()->current() }}" class="flex flex-wrap items-center gap-2">
-                @foreach (['pareto_year','pareto_month','pareto_detail_year','pareto_detail_month','pareto_cust_year','pareto_cust_month','pareto_cause_year','pareto_cause_month'] as $p)
-                    @if (request($p))<input type="hidden" name="{{ $p }}" value="{{ request($p) }}">@endif
+                @foreach (request()->except(['cs_mode', 'cs_year']) as $k => $v)
+                    @if (!is_array($v))
+                        <input type="hidden" name="{{ $k }}" value="{{ $v }}">
+                    @endif
                 @endforeach
 
                 <label class="text-gray-600 font-bold uppercase tracking-wide text-[11px] m-0">Tabulasi Berdasarkan:</label>
@@ -40,10 +42,29 @@
                     <option value="jenis_ketidaksesuaian" @selected($csMode === 'jenis_ketidaksesuaian')>Jenis Ketidaksesuaian</option>
                     <option value="detail_ketidaksesuaian" @selected($csMode === 'detail_ketidaksesuaian')>Detail Ketidaksesuaian</option>
                 </select>
+
+                <span class="text-gray-300 mx-1">|</span>
+
+                <label class="text-gray-600 font-bold uppercase tracking-wide text-[11px] m-0">Tahun:</label>
+                <select name="cs_year" onchange="this.form.submit()"
+                        class="rounded-md border border-gray-300 px-3 py-1 text-xs font-semibold focus:ring-[#4e73df] focus:border-[#4e73df] bg-white h-8 text-gray-700 cursor-pointer shadow-2xs">
+                    <option value="">Semua Tahun</option>
+                    @foreach ($csYears as $y)
+                        <option value="{{ $y }}" @selected((int) $csYear === (int) $y)>{{ $y }}</option>
+                    @endforeach
+                </select>
+
+                @if ($csYear)
+                    <a href="{{ url()->current() }}?{{ http_build_query(request()->except('cs_year')) }}"
+                       class="btn btn-outline-danger btn-sm h-8 rounded px-2 text-xs inline-flex items-center gap-1 shadow-none"
+                       title="Tampilkan semua tahun">
+                        <i class="fas fa-undo"></i> Reset
+                    </a>
+                @endif
             </form>
 
             <div class="text-xs text-gray-500">
-                Total Komplain: <b class="text-[#4e73df] font-bold">{{ $checkSheet['grand_total'] }}</b> Kasus
+                Total Komplain: <b class="text-[#4e73df] font-bold">{{ $checkSheet['grand_total'] }}</b> Kasus {{ $csYear ? "($csYear)" : '' }}
             </div>
         </div>
 

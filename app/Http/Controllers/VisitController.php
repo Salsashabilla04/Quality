@@ -63,7 +63,7 @@ class VisitController extends Controller
         }
 
         // Years list for filter
-        $years = Complaint::selectRaw('YEAR(tanggal_complain) as yr')
+        $years = Complaint::selectRaw(\App\Models\Complaint::sqlDatePart('YEAR', 'tanggal_complain') . ' as yr')
             ->distinct()
             ->pluck('yr')
             ->filter()

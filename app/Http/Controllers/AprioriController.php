@@ -32,7 +32,7 @@ class AprioriController extends Controller
         // Daftar tahun untuk dropdown
         $years = \App\Models\Complaint::query()
             ->whereNotNull('tanggal_complain')
-            ->selectRaw('YEAR(tanggal_complain) as y')
+            ->selectRaw(\App\Models\Complaint::sqlDatePart('YEAR', 'tanggal_complain') . ' as y')
             ->distinct()
             ->orderBy('y')
             ->pluck('y')

@@ -1,6 +1,13 @@
 @extends('layouts.app')
-@section('title', 'Dashboard Supervisor QC')
-@section('subtitle', 'Monitoring Manajerial · NCR Approval · Kunjungan · Analisis Kualitas')
+@php
+    $currentRole = auth()->user()->role ?? 'qa';
+    $roleTitle = match($currentRole) {
+        'supervisor' => 'Dashboard Supervisor QC',
+        default      => 'Dashboard QA',
+    };
+@endphp
+@section('title', $roleTitle)
+@section('subtitle', 'Monitoring Kualitas · Analisis Tren · Seven Tools QC · Apriori')
 
 @section('actions')
     <div class="flex items-center gap-2">
@@ -21,7 +28,7 @@
      BARIS 1 — ACTION BANNERS
 ════════════════════════════════════════════════════ --}}
 
-{{-- NCR Menunggu Approval --}}
+{{-- NCR Menunggu Approval / Validasi --}}
 @if($ncrPending > 0)
 <div class="mb-4 bg-white border-l-4 border-l-[#6f42c1] rounded shadow-sm p-4 flex flex-wrap items-center justify-between gap-4">
     <div class="flex items-center gap-3">
@@ -29,10 +36,17 @@
             <i class="fas fa-clock text-lg"></i>
         </div>
         <div>
-            <div class="text-sm font-bold text-gray-800">
-                Approval Pending: {{ $ncrPending }} Dokumen NCR Menunggu Persetujuan Anda!
-            </div>
-             <div class="text-xs text-gray-500 mt-0.5">Tinjau kelayakan data investigasi 6M &amp; CAPA sebelum memberikan approval.</div>
+            @if($currentRole === 'qa')
+                <div class="text-sm font-bold text-gray-800">
+                    Menunggu Validasi: {{ $ncrPending }} Dokumen NCR Sedang Ditinjau Supervisor QC!
+                </div>
+                <div class="text-xs text-gray-500 mt-0.5">Dokumen telah diajukan dan sedang dalam antrean evaluasi kelayakan investigasi 6M/CAPA.</div>
+            @else
+                <div class="text-sm font-bold text-gray-800">
+                    Approval Pending: {{ $ncrPending }} Dokumen NCR Menunggu Persetujuan Anda!
+                </div>
+                <div class="text-xs text-gray-500 mt-0.5">Tinjau kelayakan data investigasi 6M &amp; CAPA sebelum memberikan approval.</div>
+            @endif
         </div>
     </div>
     <a href="{{ route('complaints.index', ['approval' => 'Pending']) }}" class="btn btn-info btn-sm whitespace-nowrap">
@@ -50,21 +64,29 @@
             <i class="fas fa-exclamation-triangle text-lg"></i>
         </div>
         <div>
-            <div class="text-sm font-bold text-gray-800">
-                {{ $ncrRejected }} Dokumen NCR telah Anda kembalikan untuk Perbaikan Staff QA
-            </div>
-            <div class="text-xs text-gray-500 mt-0.5">Pantau proses revisi — dokumen akan kembali ke antrian approval setelah diperbaiki.</div>
+            @if($currentRole === 'qa')
+                <div class="text-sm font-bold text-gray-800">
+                    PERHATIAN QA: {{ $ncrRejected }} Dokumen NCR Dikembalikan untuk Perbaikan!
+                </div>
+                <div class="text-xs text-gray-500 mt-0.5">Supervisor QC telah memberikan catatan revisi pada investigasi 6M/CAPA. Segera perbaiki dokumen.</div>
+            @else
+                <div class="text-sm font-bold text-gray-800">
+                    {{ $ncrRejected }} Dokumen NCR telah Anda kembalikan untuk Perbaikan Staff QA
+                </div>
+                <div class="text-xs text-gray-500 mt-0.5">Pantau proses revisi — dokumen akan kembali ke antrian approval setelah diperbaiki.</div>
+            @endif
         </div>
     </div>
     <a href="{{ route('complaints.index', ['approval' => 'Rejected']) }}" class="btn btn-danger btn-sm whitespace-nowrap">
-        <span>Pantau Revisi</span>
+        <span>{{ $currentRole === 'qa' ? 'Perbaiki Dokumen' : 'Pantau Revisi' }}</span>
         <i class="fas fa-arrow-right"></i>
     </a>
 </div>
 @endif
 
 {{-- Kunjungan Terdekat Alert --}}
-@if($visitActiveTotal > 0)
+{{-- Kunjungan Terdekat Alert (Khusus Supervisor) --}}
+@if($currentRole !== 'qa' && $visitActiveTotal > 0)
 @php $soonestVisit = $upcomingVisits->first(); @endphp
 <div class="mb-4 bg-white border-l-4 border-l-[#36b9cc] rounded shadow-sm p-4 flex flex-wrap items-center justify-between gap-3">
     <div class="flex items-center gap-3">
@@ -97,16 +119,31 @@
      BARIS 2 — KPI CARDS EXECUTIVE (SB ADMIN 2 STYLE)
 ════════════════════════════════════════════════════ --}}
 @php
-$kpiCards = [
-    ['Total Complaint',    $kpi['total_complaint'],                         'kasus (all time)',      'border-left-primary', 'text-[#4e73df]', 'fa-clipboard-list',   route('complaints.index')],
-    ['NCR Divalidasi',     $ncrApproved,                                    'dokumen approved',      'border-left-success', 'text-[#1cc88a]', 'fa-check-circle',      route('complaints.index', ['approval' => 'Approved'])],
-    ['NCR Pending',        $ncrPending,                                     'menunggu review',       'border-left-purple',  'text-[#6f42c1]', 'fa-clock',             route('complaints.index', ['approval' => 'Pending'])],
-    ['NCR Revisi',         $ncrRejected,                                    'dikembalikan ke QA',    'border-left-danger',  'text-[#e74a3b]', 'fa-exclamation-triangle', route('complaints.index', ['approval' => 'Rejected'])],
-    ['Status Close',       $kpi['close'].' / '.$kpi['total_complaint'],     $kpi['persen_close'].'% selesai', 'border-left-info', 'text-[#36b9cc]', 'fa-tasks',   route('complaints.index', ['status' => 'Close'])],
-    ['Jumlah Customer',    $kpi['jumlah_customer'],                         'pihak/klien',           'border-left-primary', 'text-[#4e73df]', 'fa-users',           route('customers.index')],
-    ['Total Qty NG',       number_format($kpi['total_qty']),                'pcs terdeteksi',        'border-left-orange',  'text-[#fd7e14]', 'fa-boxes',           null],
-    ['Visit Aktif',        $visitActiveTotal,                               'agenda kunjungan',      'border-left-indigo',  'text-[#5a5c69]', 'fa-truck',           route('visit.index')],
-];
+if ($currentRole === 'qa') {
+    // KPI Cards Operasional untuk QA (sesuai KPI QA sebelumnya)
+    $kpiCards = [
+        ['Total Complaint',    $kpi['total_complaint'],                     'kasus (all time)',      'border-left-primary', 'text-[#4e73df]', 'fa-clipboard-list',        route('complaints.index')],
+        ['NCR Divalidasi',     $ncrApproved,                                'divalidasi SPV',        'border-left-success', 'text-[#1cc88a]', 'fa-check-circle',           route('complaints.index', ['approval' => 'Approved'])],
+        ['NCR Belum Validasi', $ncrPending,                                 'menunggu review SPV',   'border-left-purple',  'text-[#6f42c1]', 'fa-clock',                  route('complaints.index', ['approval' => 'Pending'])],
+        ['NCR Butuh Revisi',   $ncrRejected,                                'dikembalikan ke QA',    'border-left-danger',  'text-[#e74a3b]', 'fa-exclamation-triangle',     route('complaints.index', ['revisi' => 1])],
+        ['Status Open',        $kpi['open'],                                'belum selesai',         'border-left-warning', 'text-[#f6c23e]', 'fa-folder-open',            route('complaints.index', ['status' => 'Open'])],
+        ['Status Close',       $kpi['close'].' / '.$kpi['total_complaint'], $kpi['persen_close'].'% selesai', 'border-left-info', 'text-[#36b9cc]', 'fa-tasks',        route('complaints.index', ['status' => 'Close'])],
+        ['Jumlah Customer',    $kpi['jumlah_customer'],                     'pihak/klien',           'border-left-primary', 'text-[#4e73df]', 'fa-users',                route('customers.index')],
+        ['Total Qty NG',       number_format($kpi['total_qty']),            'pcs terdeteksi',        'border-left-orange',  'text-[#fd7e14]', 'fa-boxes',                null],
+    ];
+} else {
+    // KPI Cards Manajerial untuk Supervisor QC (tanpa akses customer, fokus validasi & visit)
+    $kpiCards = [
+        ['Total Complaint',    $kpi['total_complaint'],                     'kasus (all time)',      'border-left-primary', 'text-[#4e73df]', 'fa-clipboard-list',        route('complaints.index')],
+        ['NCR Pending',        $ncrPending,                                 'menunggu review',       'border-left-purple',  'text-[#6f42c1]', 'fa-clock',                  route('complaints.index', ['approval' => 'Pending'])],
+        ['NCR Divalidasi',     $ncrApproved,                                'dokumen approved',      'border-left-success', 'text-[#1cc88a]', 'fa-check-circle',           route('complaints.index', ['approval' => 'Approved'])],
+        ['NCR Revisi',         $ncrRejected,                                'dikembalikan ke QA',    'border-left-danger',  'text-[#e74a3b]', 'fa-exclamation-triangle',     route('complaints.index', ['approval' => 'Rejected'])],
+        ['Visit Aktif',        $visitActiveTotal,                           'agenda kunjungan',      'border-left-indigo',  'text-[#5a5c69]', 'fa-truck',                route('visit.index')],
+        ['Status Open',        $kpi['open'],                                'belum selesai',         'border-left-warning', 'text-[#f6c23e]', 'fa-folder-open',            route('complaints.index', ['status' => 'Open'])],
+        ['Status Close',       $kpi['close'].' / '.$kpi['total_complaint'], $kpi['persen_close'].'% selesai', 'border-left-info', 'text-[#36b9cc]', 'fa-tasks',        route('complaints.index', ['status' => 'Close'])],
+        ['Total Qty NG',       number_format($kpi['total_qty']),            'pcs terdeteksi',        'border-left-orange',  'text-[#fd7e14]', 'fa-boxes',                null],
+    ];
+}
 @endphp
 
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -333,7 +370,9 @@ $kpiCards = [
                         @endforeach
                     </div>
                     @endif
-                    <a href="{{ route('customers.index') }}" class="inline-block mt-3 text-xs text-sky-600 hover:underline font-medium">Lihat semua customer →</a>
+                    @if($currentRole === 'qa')
+                    <a href="{{ route('customers.index') }}" class="inline-block mt-3 text-xs text-sky-600 hover:underline font-medium">Lihat semua customer &rarr;</a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -860,7 +899,7 @@ if (trendCanvas) {
         if (trendMonthlyPrev) {
             datasets.push({
                 type: 'line',
-                label: 'Periode sebelumnya (' + (fromYearTrend - 1) + ')',
+                label: 'Tahun ' + (fromYearTrend - 1),
                 data: trendMonthlyPrev,
                 borderColor: '#94a3b8',
                 borderDash: [5, 4],

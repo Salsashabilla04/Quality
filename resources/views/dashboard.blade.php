@@ -132,7 +132,12 @@
 <div class="bg-white rounded shadow-sm border border-gray-200 mb-6 overflow-hidden">
     <div class="bg-[#f8f9fc] border-b border-gray-200 py-3 px-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h2 class="font-bold text-[#4e73df] text-base mb-0.5">Trend Complaint</h2>
+            <div class="flex items-center gap-2 mb-0.5">
+                <h2 class="font-bold text-[#4e73df] text-base">Trend Complaint</h2>
+                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                    <i class="fas fa-layer-group text-[9px]"></i> Level: {{ $trendType === 'tahun' ? 'Per Tahun' : 'Per Bulan' }}
+                </span>
+            </div>
             <p class="text-xs text-gray-500">Menampilkan perkembangan jumlah customer complaint sebagai indikator performa kualitas produk.</p>
         </div>
         <form method="GET" action="{{ route('dashboard') }}" class="flex items-center gap-2">
@@ -310,18 +315,41 @@ if (paretoCustCanvas) new Chart(paretoCustCanvas, {
 });
 
 new Chart(document.getElementById('trendChart'), {
-    type: 'line',
+    type: 'bar',
     data: {
         labels: trend.labels,
-        datasets: [
-            { label: 'Jumlah Complaint', data: trend.values, borderColor: '#0ea5e9', backgroundColor: 'rgba(14,165,233,.1)',
-              tension: 0.25, fill: true, pointBackgroundColor: '#0ea5e9', pointRadius: 4 }
-        ]
+        datasets: [{
+            label: '{{ $trendType === "tahun" ? "Total Komplain per Tahun" : "Jumlah Komplain per Bulan" }}',
+            data: trend.values,
+            backgroundColor: '#4e73df',
+            hoverBackgroundColor: '#2e59d9',
+            borderRadius: 4,
+            maxBarThickness: 34,
+        }]
     },
     options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { labels: { boxWidth: 12, font: { size: 11 } } } },
-        scales: { x: { ticks: { font: { size: 10 } } }, y: { beginAtZero: true } }
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+                align: 'start',
+                labels: { boxWidth: 12, font: { size: 11, weight: '600' } }
+            },
+            datalabels: { display: false }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: { precision: 0 },
+                grid: { color: '#f1f5f9' },
+                title: { display: true, text: 'Jumlah Kasus', font: { size: 11 } }
+            },
+            x: {
+                grid: { display: false },
+                ticks: { font: { size: 11 } }
+            }
+        }
     }
 });
 

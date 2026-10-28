@@ -12,10 +12,6 @@ class ComplaintController extends Controller
     {
         $q = Complaint::with('items');
 
-        if (auth()->check() && auth()->user()->role === 'customer') {
-            $q->where('nama_customer', auth()->user()->name);
-        }
-
         if ($s = $request->input('q')) {
             $q->where(function ($w) use ($s) {
                 $w->where('nama_customer', 'like', "%{$s}%")
@@ -70,7 +66,7 @@ class ComplaintController extends Controller
         // Daftar tahun untuk dropdown
         $years = Complaint::query()
             ->whereNotNull('tanggal_complain')
-            ->selectRaw('YEAR(tanggal_complain) as y')
+            ->selectRaw(\App\Models\Complaint::sqlDatePart('YEAR', 'tanggal_complain') . ' as y')
             ->distinct()
             ->orderBy('y')
             ->pluck('y')
@@ -104,9 +100,8 @@ class ComplaintController extends Controller
     {
         \Illuminate\Support\Facades\Gate::authorize('submit-complaints');
 
-        if (!$request->has('status')) {
-            $request->merge(['status' => 'Open']);
-        }
+        // Complaint baru selalu 'Open' — abaikan status kiriman klien agar alur validasi SPV tidak terlewati.
+        $request->merge(['status' => 'Open']);
         if (!$request->input('tanggal_complain')) {
             $request->merge(['tanggal_complain' => now()->toDateString()]);
         }
@@ -145,7 +140,7 @@ class ComplaintController extends Controller
             'catatan_supervisor' => ['nullable', 'string', 'max:1000'],
             'keterangan'         => ['nullable', 'in:Feedback,Retur'],
             'perlu_visit'        => ['nullable', 'boolean'],
-            'tanggal_visit'      => ['nullable', 'date', 'after_or_equal:today'],
+            'tanggal_visit'      => $this->visitDateRules($request, $complaint),
             'jam_visit'          => ['nullable', 'date_format:H:i'],
             'catatan_visit'      => ['nullable', 'string', 'max:1000'],
         ]);
@@ -178,6 +173,7 @@ class ComplaintController extends Controller
         }
 
         $complaint->update($updateData);
+        \App\Services\AprioriService::clearCache();
 
         $keteranganText = '';
         if ($status === 'Approved' && $request->input('keterangan')) {
@@ -202,6 +198,7 @@ class ComplaintController extends Controller
             'status'              => 'Diproses',
             'supervisor_approval' => 'Pending',
         ]);
+        \App\Services\AprioriService::clearCache();
 
         return redirect()->back()
             ->with('success', "Kasus komplain {$complaint->no_customer} berhasil diajukan ke Supervisor QC untuk validasi CAPA & penerbitan NCR.");
@@ -227,7 +224,7 @@ class ComplaintController extends Controller
     {
         \Illuminate\Support\Facades\Gate::authorize('manage-complaints');
 
-        $data  = $this->validateData($request);
+        $data  = $this->validateData($request, $complaint);
         $items = $this->resolveItems($request);
         $data['fishbone'] = $this->resolveFishbone($request, $items);
         $data['deskripsi_customer'] = $request->input('deskripsi_customer', $complaint->deskripsi_customer);
@@ -267,7 +264,8 @@ class ComplaintController extends Controller
         $complaint->update(['status' => 'Close']);
         
         Complaint::recalculateTransactionNumbers();
-        
+        \App\Services\AprioriService::clearCache();
+
         return back()->with('success', "Complaint {$complaint->no_customer} berhasil ditutup (Close).");
     }
 
@@ -387,7 +385,18 @@ class ComplaintController extends Controller
         return $fb;
     }
 
-    protected function validateData(Request $request): array
+    /** tanggal_visit tidak boleh di masa lalu, kecuali nilainya tidak berubah dari data tersimpan. */
+    protected function visitDateRules(Request $request, ?Complaint $complaint = null): array
+    {
+        $new = $request->input('tanggal_visit');
+        if ($complaint && $new && $complaint->tanggal_visit
+            && \Illuminate\Support\Carbon::parse($new)->toDateString() === \Illuminate\Support\Carbon::parse($complaint->tanggal_visit)->toDateString()) {
+            return ['nullable', 'date'];
+        }
+        return ['nullable', 'date', 'after_or_equal:today'];
+    }
+
+    protected function validateData(Request $request, ?Complaint $complaint = null): array
     {
         return $request->validate([
             'nama_customer'      => ['required', 'string', 'max:255'],
@@ -404,7 +413,7 @@ class ComplaintController extends Controller
             'keterangan'         => ['nullable', 'string', 'max:255'],
             'status'             => ['nullable', 'in:Open,Diproses,Close'],
             'perlu_visit'        => ['nullable', 'boolean'],
-            'tanggal_visit'      => ['nullable', 'date', 'after_or_equal:today'],
+            'tanggal_visit'      => $this->visitDateRules($request, $complaint),
             'jam_visit'          => ['nullable', 'date_format:H:i'],
             'catatan_visit'      => ['nullable', 'string', 'max:1000'],
             'complaint_items'              => ['nullable', 'array'],

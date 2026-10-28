@@ -10,6 +10,19 @@ use Illuminate\Support\Carbon;
 
 class Complaint extends Model
 {
+    /**
+     * Ekspresi SQL portable untuk mengambil bagian tanggal (YEAR / MONTH),
+     * agar query tidak hanya jalan di MySQL/MariaDB (SQLite tidak punya YEAR()).
+     */
+    public static function sqlDatePart(string $part, string $column): string
+    {
+        $part = strtoupper($part);
+        if (\Illuminate\Support\Facades\DB::connection()->getDriverName() === 'sqlite') {
+            $fmt = $part === 'MONTH' ? '%m' : '%Y';
+            return "CAST(strftime('{$fmt}', {$column}) AS INTEGER)";
+        }
+        return "{$part}({$column})";
+    }
     protected $fillable = [
         'user_id',
         'no_customer',
@@ -23,7 +36,6 @@ class Complaint extends Model
         'tanggal_kirim',
         'tanggal_produksi',
         'area',
-        'foto_bukti',
         'deskripsi_customer',
         'deskripsi_penyebab',
         'keterangan',
@@ -48,7 +60,6 @@ class Complaint extends Model
         'qty'              => 'integer',
         'lead_time'        => 'integer',
         'fishbone'         => 'array',
-        'foto_bukti'       => 'array',
     ];
 
     /**
@@ -420,17 +431,6 @@ class Complaint extends Model
     }
 
     // ===================== Accessors =====================
-
-    /** Array string jenis ketidaksesuaian (dari relasi items). */
-    public function ketidaksesuaianTags(): array
-    {
-        return $this->items
-            ->pluck('jenis_ketidaksesuaian')
-            ->filter()
-            ->unique()
-            ->values()
-            ->all();
-    }
 
     /** Array string penyebab (dari relasi items). */
     public function penyebabTags(): array

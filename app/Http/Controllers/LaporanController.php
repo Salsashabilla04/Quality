@@ -96,7 +96,7 @@ class LaporanController extends Controller
 
         // --- Years available ---
         $years = Complaint::whereNotNull('tanggal_complain')
-            ->selectRaw('YEAR(tanggal_complain) as y')
+            ->selectRaw(\App\Models\Complaint::sqlDatePart('YEAR', 'tanggal_complain') . ' as y')
             ->distinct()
             ->orderBy('y')
             ->pluck('y')

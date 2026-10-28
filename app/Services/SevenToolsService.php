@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Complaint;
-use App\Models\ComplaintItem;
 use Illuminate\Support\Collection;
 
 /**
@@ -104,14 +103,20 @@ class SevenToolsService
      * Check Sheet berdasarkan field tertentu dari complaint_items.
      * Mode 'jenis_ketidaksesuaian' = tabulasi per jenis ketidaksesuaian.
      * Mode 'detail_ketidaksesuaian' = tabulasi per detail ketidaksesuaian.
+     * Parameter $year = filter berdasarkan tahun tertentu (12 bulan: Jan s/d Des).
      */
-    public function checkSheetByField(string $field = 'jenis_ketidaksesuaian'): array
+    public function checkSheetByField(string $field = 'jenis_ketidaksesuaian', ?int $year = null): array
     {
-        $bulanLabels = $this->bulanLabels();
+        $bulanLabels = $this->bulanLabels($year);
 
         $matrix = [];
         $grandTotal = 0;
-        foreach ($this->data as $c) {
+
+        $sourceData = $year
+            ? $this->data->filter(fn ($c) => $c->tanggal_complain && (int) $c->tanggal_complain->format('Y') === $year)
+            : $this->data;
+
+        foreach ($sourceData as $c) {
             $k = $c->tanggal_complain?->format('Y-m');
             foreach ($c->items as $item) {
                 $value = trim((string) $item->{$field});
@@ -607,24 +612,21 @@ class SevenToolsService
 
     // ===================== helper =====================
 
-    /**
-     * Daftar distinct detail_ketidaksesuaian dari complaint_items (untuk dropdown filter).
-     */
-    public static function detailKetidaksesuaianList(): array
+    /** Daftar bulan (Y-m => label) dari rentang data atau 12 bulan jika filter tahun ditentukan. */
+    protected function bulanLabels(?int $year = null): array
     {
-        return \App\Models\ComplaintItem::query()
-            ->whereNotNull('detail_ketidaksesuaian')
-            ->where('detail_ketidaksesuaian', '!=', '')
-            ->where('detail_ketidaksesuaian', '!=', '-')
-            ->distinct()
-            ->orderBy('detail_ketidaksesuaian')
-            ->pluck('detail_ketidaksesuaian')
-            ->all();
-    }
+        $namaBulan = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
 
-    /** Daftar bulan (Y-m => label) dari rentang data. */
-    protected function bulanLabels(): array
-    {
+        if ($year) {
+            $labels = [];
+            $y2 = substr((string)$year, -2);
+            for ($m = 1; $m <= 12; $m++) {
+                $k = sprintf('%04d-%02d', $year, $m);
+                $labels[$k] = $namaBulan[$m - 1] . ' ' . $y2;
+            }
+            return $labels;
+        }
+
         $dates = $this->data->pluck('tanggal_complain')->filter();
         if ($dates->isEmpty()) return [];
 
@@ -633,7 +635,6 @@ class SevenToolsService
         $labels = [];
         $cursor = $min->copy()->startOfMonth();
         $end = $max->copy()->startOfMonth();
-        $namaBulan = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
         while ($cursor <= $end) {
             $labels[$cursor->format('Y-m')] = $namaBulan[$cursor->month - 1] . ' ' . $cursor->format('y');
             $cursor->addMonth();
