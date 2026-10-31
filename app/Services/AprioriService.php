@@ -496,7 +496,7 @@ class AprioriService
      * Klasifikasi prioritas aturan asosiasi berdasarkan matriks:
      * - Prioritas: Jumlah kejadian >= 5 dan Lift >= 3
      * - Dipertimbangkan: Jumlah kejadian >= 5 dan 1,5 <= Lift < 3
-     * - Dipantau: Jumlah kejadian 3 sampai 4 (atau data awal)
+     * - Dipantau: selain Prioritas dan Dipertimbangkan (jumlah kejadian < 5 atau lift < 1,5)
      */
     public function kategoriPrioritas(int $count, float $lift): string
     {

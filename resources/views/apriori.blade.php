@@ -34,15 +34,17 @@
         </div>
         <div>
             <label class="block text-xs font-bold text-gray-600 mb-1 uppercase tracking-wide" title="Frekuensi minimal pola harus muncul dari total komplain">Min. Support (%)</label>
-            <input type="number" name="min_support" value="{{ $minSupport }}" step="0.5" min="0.5" max="100"
+            <input type="number" name="min_support" value="{{ old('min_support', $minSupport) }}" step="0.01" min="0.5" max="100"
                    class="w-32 rounded-md border-gray-300 text-xs font-semibold focus:ring-[#4e73df] focus:border-[#4e73df] border px-3 py-1.5 h-9 bg-white"
                    title="Contoh: 1.5% berarti pola harus muncul minimal 1.5% dari seluruh kasus">
+            @error('min_support')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
         </div>
         <div>
             <label class="block text-xs font-bold text-gray-600 mb-1 uppercase tracking-wide" title="Tingkat kepastian minimal hubungan sebab-akibat">Min. Confidence (%)</label>
-            <input type="number" name="min_confidence" value="{{ $minConfidence }}" step="5" min="10" max="100"
+            <input type="number" name="min_confidence" value="{{ old('min_confidence', $minConfidence) }}" step="0.01" min="10" max="100"
                    class="w-32 rounded-md border-gray-300 text-xs font-semibold focus:ring-[#4e73df] focus:border-[#4e73df] border px-3 py-1.5 h-9 bg-white"
                    title="Contoh: 50% berarti jika cacat muncul, minimal 50% disebabkan oleh faktor tersebut">
+            @error('min_confidence')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
         </div>
         <button class="btn btn-primary btn-sm h-9 rounded-md">
             <i class="fas fa-search fa-sm"></i>
